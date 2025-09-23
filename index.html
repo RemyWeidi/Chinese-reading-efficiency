@@ -116,6 +116,85 @@ textarea{
 }
 textarea:focus{ border-color:var(--brand); box-shadow:0 0 0 4px var(--ring) }
 
+.editor-actions{
+  margin-top: 6px;
+  display: flex;
+  justify-content: space-between; /* croix à gauche / crayon à droite */
+  align-items: center;
+}
+
+.editor-btn{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #f3f4f6;
+  box-shadow: 0 1px 3px rgba(0,0,0,.15);
+  color: #111827;
+  transition: background 0.2s, color 0.2s;
+  transform: translateY(-3px)
+}
+
+.editor-btn:hover {
+  background: #e5e7eb;
+}
+
+/* bouton "effacer" = croix simple sans fond */
+#clearText{
+  background: none;
+  box-shadow: none;
+  color: #dc2626;
+}
+
+#clearText .icon {
+width: 28px;   /* ✅ un peu plus grande que le crayon */
+  height: 28px;
+  stroke: currentColor;   /* utilise la couleur du bouton */
+  fill: none;             /* pas de remplissage */
+}
+
+
+#clearText:hover {
+  background: none;
+  color: #b91c1c;   /* rouge plus foncé au survol */
+}
+.icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  display: block;
+}
+
+#toggleEdit {
+  background: none;
+  box-shadow: none;
+  color: var(--brand);
+}
+#toggleEdit:hover {
+  color: #0066cc;
+}
+
+
+#toggleEdit.icon {
+  fill: currentColor;     /* utilise la couleur du bouton */
+  stroke: none;
+}
+
+/* Icônes SVG */
+.editor-btn .icon{
+  width: 22px;   /* taille augmentée */
+  height: 22px;
+  display: block;
+  flex-shrink: 0;
+  pointer-events: none;
+  fill: currentColor;    /* ✅ couleur héritée du bouton */
+  stroke: currentColor;  /* ✅ pour les traits */
+}
+
 .segmented-box{
   border:1px dashed #d8dee9;
   border-radius:12px;
@@ -146,20 +225,6 @@ textarea:focus{ border-color:var(--brand); box-shadow:0 0 0 4px var(--ring) }
 .token:hover{ transform:translateY(-1px) }
 #segmentedText .selected{ background:#ef4444; color:#fff; transform:scale(1.04) }
 
-/* Crayon / validateur (bouton en bas de textarea) */
-#toggleEdit{
-  position:absolute;
-  right:7px;
-  bottom:7px;
-  background:transparent;
-  border:none;
-  box-shadow:none;
-  font-size:20px;
-  cursor:pointer;
-  color:#007bff;
-  transition:transform .15s ease, color .2s ease;
-}
-#toggleEdit:hover{ transform:scale(1.15); color:#0056b3 }
 
 /* Fieldsets */
 fieldset{
@@ -222,28 +287,55 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
 /* =====================================================
    Selection overlay
    ===================================================== */
-#selectionOverlay{
-  position:fixed; inset:0;
-  background:rgba(0,0,0,.45);
-  z-index:1000; display:none;
-  align-items:flex-start; justify-content:center;
-  padding:40px 12px; overflow-y:auto;
+#selectionOverlay .overlay-content {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.2);
+  width: 100%;
+  max-width: 760px;
+  padding: 0; /* on déplace le padding sur les sous-sections */
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh; /* limite la taille */
 }
 #selectionOverlay .overlay-content{
-  background:#fff; border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,.2);
+  border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,.2);
   width:100%; max-width:760px; padding:16px; display:flex; flex-direction:column;
 }
 #overlayHeader{
-  display:flex; justify-content:flex-end; padding:12px;
-  background:#f5f5f5; border-bottom:1px solid #ddd;
+    flex-shrink: 0;
+  padding: 12px;
+  background:#f5f5f5;
+  border-bottom:1px solid #ddd;
 }
 #closeOverlay{ background:transparent; border:none; font-size:28px; cursor:pointer; color:#444 }
-#segmentedOverlayText{ flex:1; overflow-y:auto; padding:16px; white-space:normal; line-height:1.8 }
+#segmentedOverlayText {
+  flex: 1;                 /* occupe tout l’espace dispo */
+  overflow-y: auto;         /* ✅ scroll uniquement ici */
+  padding: 16px;
+  white-space: normal;
+  line-height: 1.8;
+}
 #segmentedOverlayText span{
   display:inline-block; margin:6px 8px; padding:8px 12px;
   border-radius:6px; background:#f1f5f9; font-size:22px; font-weight:600; cursor:pointer;
 }
 #segmentedOverlayText span.selected{ background:#ef4444; color:#fff }
+
+.bar-hidden {
+  opacity: 0;
+  pointer-events: none;  /* évite les clics fantômes */
+  transform: translateY(20px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+/* État visible du menu */
+.bar-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
 
 /* =====================================================
    Reading page (fullscreen)
@@ -280,89 +372,283 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
 #defs{   top:calc(50% + 18vh); font-size:clamp(16px,4.4vw,24px); font-weight:600; color:#0f172ac7 }
 #pinyin, #defs{ pointer-events:none } /* clic passe au caractère */
 
-/* =====================================================
-   Collapsible controls
-   ===================================================== */
-/* small floating button (always visible) */
-.floating-toggle {
-  position: fixed;
-  left: 50%;
-  bottom: calc(env(safe-area-inset-bottom, 0) + 24px); /* avant 0 */
-  transform: translateX(-50%);
-  z-index: 3000;
-  background: #111827;
-  color: #fff;
-  display: flex;  
-  border: none;
-  border-radius: 50%;
-  font-weight: 900;           /* gras pour bien centrer */
-  line-height: 1; 
-  width: 48px;
-  height: 48px;
-  font-size: 22px;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,.3);
+
+/* === New reading controls (two bars + arrows) === */
+:root{
+  --maxWidth: 760px;
+  --safe: env(safe-area-inset-bottom, 0px);
+  --gap:10px; --padX:12px; --slotH1:62px; --slotH2:54px; --radius:14px;
+  --blur: 10px; --elev: 0 6px 20px rgba(0,0,0,.12);
+  --alpha1:.18; --alpha2:.26; --stroke:.55;
+}
+.bar{ position:absolute; left:50%; transform:translateX(-50%); width:100%; max-width:var(--maxWidth); padding:0 var(--padX); display:flex; gap:var(--gap); }
+.bar-default{ bottom: calc(var(--safe) + 0px); }
+.bar-extra{ bottom: calc(var(--safe) + var(--slotH1) + 10px); display:none; }
+
+.slot{ 
+  flex:1; display:flex; align-items:center; justify-content:center; border-radius: var(--radius);
+  background: rgba(255,255,255,0.1); /* léger fond au lieu de transparent */
+  box-shadow: var(--elev);
+  border:1px solid; cursor:pointer; user-select:none; height:var(--slotH1); 
 }
 
-.floating-toggle span {
-  display: inline-block;
-  transform: translateX(-1px); /* ajuste la flèche vers la gauche */
-  font-size: 22px;
-  line-height: 1;
+.bar-extra .slot{ height:var(--slotH2); }
+.icon{ width:24px; height:24px; display:block } .icon-sm{ width:20px; height:20px; display:block }
+
+.arrow-cluster{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  bottom: calc(var(--safe) + var(--slotH1) + 10px); /* ← au lieu de + 4px */
+  display:flex;
+  gap:14px;
+  align-items:center;
+  z-index:3;
 }
 
-/* Barre centrée au-dessus du bouton */
-#controls {
-  display: none !important;
-  position: fixed !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  bottom: calc(env(safe-area-inset-bottom, 0) + 24px + 60px) !important; /* bouton + marge */
-  background: rgba(17,24,39,0.92);
-  border-radius: 12px;
-  padding: 10px;
-  gap: 10px;
+.arrow-btn, .arrow-collapse-top{ 
+  width:36px; 
+  height:26px; 
+  border-radius:999px; 
+  cursor:pointer; 
+  border:1px solid;
+  backdrop-filter: blur(var(--blur)); 
+  -webkit-backdrop-filter: blur(var(--blur)); 
+  box-shadow: var(--elev);
+  /* Centrage parfait */
+  display: flex;
+  align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
-  z-index: 2999;
-}
-/* visible when body has the flag */
-body.controls-open #controls{ display:flex !important }
-/* lift the toggle a bit when open (optional) */
-
-
-/* buttons in the control bar */
-#controls .ctrl-btn{
-  all:unset;
-  -webkit-appearance:none; appearance:none;
-  display:flex; align-items:center; justify-content:center;
-  width:64px; height:64px;
-  border-radius:14px;
-  background:#111827; color:#fff;
-  font-size:28px; font-weight:900;
-  cursor:pointer; text-align:center; line-height:1;
-}
-#controls .ctrl-btn:focus{ outline:none }
-
-/* glyph for restart button */
-#startTextBtn{ display:grid; place-items:center }
-#startTextBtn::before{
-  content:"⟳";
-  display:block;
-  font-size:44px; font-weight:900;
-  font-family:"Segoe UI Symbol","Noto Sans Symbols 2","Arial Unicode MS",sans-serif;
-  line-height:1;
-  transform:translateY(-0.10em);
+  line-height: 0;
+  padding: 0;
+  margin: 0;
+  position: relative;
 }
 
-/* force pause button look the same as others */
-#pauseBtn{
-  -webkit-appearance:none !important; appearance:none !important;
-  background:#111827 !important; color:#fff !important;
-  font-size:32px !important; font-weight:900 !important; line-height:1 !important;
-  border:none !important; outline:none !important; box-shadow:none !important;
+/* Position spécifique pour le bouton collapse - POSITION ORIGINALE */
+.arrow-collapse-top{ 
+  position:absolute; 
+  left:50%; 
+  transform:translateX(-50%); 
+  bottom: calc(var(--safe) + var(--slotH1) + 10px + var(--slotH2) + 8px); 
+  display:none; 
+  z-index: 4;
 }
 
+/* Centrage des SVG - règle générale pour les autres boutons */
+.arrow-btn svg,
+.arrow-collapse-top svg{
+  display: block;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Rotation pour le triangle vers le bas du bouton collapse-top */
+.arrow-collapse-top svg {
+  transform: translate(-50%, -50%) rotate(180deg);
+}
+
+
+
+
+/* RÈGLES SPÉCIFIQUES avec priorité élevée */
+.arrow-cluster #arrowToggle svg {
+  position: absolute !important;
+  top: 50% !important;
+  left: 48% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 18px !important;
+  height: 18px !important;
+  display: block !important;
+  margin: 0 !important;
+}
+
+.arrow-cluster #arrowHide svg {
+  position: absolute !important;
+  top: 50% !important;
+  left: 48% !important;
+  transform: translate(-50%, -50%) rotate(180deg) !important;
+  width: 18px !important;
+  height: 18px !important;
+  display: block !important;
+  margin: 0 !important;
+}
+
+.bottom-hit{ 
+  position:absolute; 
+  left:0; 
+  right:0; 
+  bottom:0; 
+  height:72px; 
+  display:none; 
+  cursor:pointer; 
+  z-index:2; 
+}
+/* theme helpers */
+.onLightBorder{ border-color: rgba(0,0,0,var(--stroke)); }
+.onDarkBorder { border-color: rgba(255,255,255,var(--stroke)); }
+.defOnLight { background: rgba(0,0,0,var(--alpha1)); color:#000; }
+.defOnDark  { background: rgba(255,255,255,var(--alpha1)); color:#fff; }
+.extOnLight { background: rgba(0,0,0,var(--alpha2)); color:#000; }
+.extOnDark  { background: rgba(255,255,255,var(--alpha2)); color:#fff; }
+
+.overlay-footer {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 12px 16px;
+  border-top: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+.overlay-footer .info-btn {
+  appearance: none;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.overlay-footer .info-cancel {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.overlay-footer .info-validate {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+#selectionOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;              /* caché par défaut */
+  align-items: center;        /* centre vertical */
+  justify-content: center;    /* centre horizontal */
+  background: rgba(0,0,0,.45);/* masque semi-transparent */
+}
+
+/* ===== Info Overlay ===== */
+#infoOverlay{
+  position:fixed; inset:0; z-index:1100;
+  display:none; align-items:center; justify-content:center;
+  padding:16px;
+  background:rgba(0,0,0,.45);
+}
+#infoOverlay .info-card{
+  width:100%; max-width:860px; max-height:86dvh;
+  border-radius:14px; box-shadow:0 10px 28px rgba(0,0,0,.26);
+  display:flex; flex-direction:column; overflow:hidden;
+  /* Couleurs injectées en JS (fond + texte) */
+  background:var(--info-bg,#ffffff); color:var(--info-fg,#111);
+}
+#infoOverlay .info-header{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 16px; font-weight:800;
+  background:color-mix(in oklab, var(--info-bg,#fff) 88%, #000 0%);
+  border-bottom:1px solid color-mix(in oklab, var(--info-fg,#111) 10%, transparent);
+}
+
+
+#infoOverlay .info-close{
+  background:transparent; border:none; font-size:20px; cursor:pointer; color:inherit;
+}
+#infoOverlay .info-body{
+  padding:14px 14px 6px; overflow:auto; line-height:1.9;
+}
+.info-word {
+  display:inline-block;
+  margin:6px 6px;
+  padding:8px 12px;
+  border-radius:8px;
+  font-family:"Noto Sans SC","Inter",sans-serif;
+  font-weight:700;
+  font-size:22px;
+  background:color-mix(in oklab, var(--info-bg,#fff) 85%, #000 0%);
+  color: var(--info-fg,#111);  /* ✅ texte normal hérité de la page */
+  border:1px solid color-mix(in oklab, var(--info-fg,#111) 10%, transparent);
+  user-select:none;
+}
+.info-word.selectable{ cursor: pointer !important;
+  pointer-events: auto !important; }
+.info-word.current{
+  outline: 2px solid color-mix(in oklab, var(--info-fg, #111) 40%, transparent);
+  outline-offset: 2px; 
+}
+.info-word.chosen {
+  background: #ef4444;
+  color: #ffffff;
+  border-color: rgba(255,255,255,0.25);
+}
+
+.info-word.initialSelected {
+  color: #dc2626 !important;
+  background: inherit;
+  border: inherit;
+}
+
+#infoOverlay .info-footer{
+  display:flex; gap:12px; justify-content:flex-end; padding:12px 16px;
+  border-top:1px solid color-mix(in oklab, var(--info-fg,#111) 10%, transparent);
+  background:color-mix(in oklab, var(--info-bg,#fff) 92%, #000 0%);
+}
+.info-btn{
+  appearance:none; border:none; border-radius:12px; padding:12px 18px;
+  font-weight:800; cursor:pointer;
+}
+.info-btn.info-cancel{
+  background: color-mix(in oklab, var(--info-fg,#111) 10%, transparent);
+  color: var(--info-fg,#111);
+}
+.info-btn.info-validate {
+  background: #ef4444;
+  color: #ffffff;
+}
+.info-word.initialSelected {
+  color: #dc2626 !important;   /* rouge */
+  background: inherit;
+  border: 1px solid color-mix(in oklab, var(--info-fg,#111) 10%, transparent);
+}
+
+.info-word.initialSelected.chosen,
+#segmentedOverlayText span.selected.initialSelected {
+  background: #ef4444;
+  color: #ffffff !important;
+  border-color: rgba(255,255,255,0.25);
+}
+#hamburger {
+  position: absolute;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + var(--slotH1) + 6px);
+
+  /* On se cale sur la position du bouton i */
+  right: var(--padX);
+  transform: translateX(-50%); /* centre horizontalement */
+
+  background: none;
+  border: none;
+  box-shadow: none;
+  width: auto;
+  height: auto;
+  padding: 0;
+}
+
+#hamburger svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+@media (max-width:560px){
+  :root{ --slotH1:58px; --slotH2:50px; --gap:8px; --padX:10px; }
+}
 /* =====================================================
    Mobile tweaks
    ===================================================== */
@@ -385,6 +671,69 @@ body.controls-open #controls{ display:flex !important }
   #pinyin{ top:calc(50% + 8vh) }
   #defs{   top:calc(50% + 12vh) }
 }
+
+/* === Single bottom bar (5 zones) === */
+.bar.bar-default{
+  position:absolute; left:50%; transform:translateX(-50%);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 0px);
+  width:100%; max-width:760px; padding:0 12px;
+  display:grid; grid-template-columns: 1fr 2fr 2fr 2fr 1fr auto; gap: 10px;
+}
+.bar.bar-default .slot{
+  height: 62px;
+  display:flex; align-items:center; justify-content:center;
+  border-radius:14px; border:1px solid;
+  backdrop-filter: saturate(120%) blur(10px); -webkit-backdrop-filter: saturate(120%) blur(10px);
+  box-shadow: 0 6px 20px rgba(0,0,0,.12);
+}
+.bar.bar-default .slot,
+#hamburger {
+  border: none !important;   /* supprime totalement la bordure */
+  outline: none !important;  /* sécurité si un outline était appliqué */
+}
+
+.bar.bar-default .icon{ width:24px; height:24px; display:block }
+
+#ghostBar{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 0px);
+  width:100%;
+  max-width:760px;
+  padding:0 12px;
+
+  /* 3 zones égales : Prev | Play | Next */
+  display:none;                          /* caché quand menu par défaut visible */
+  grid-template-columns: 1fr 1fr 1fr;
+  gap:10px;
+
+  /* invisible visuellement */
+  background:transparent;
+  z-index:3;                             /* au-dessus de la barre par défaut */
+}
+#ghostBar button{
+  height:62px;                           /* même hauteur que .slot */
+  background:transparent;
+  border:none;
+  pointer-events:auto;                   /* capte les clics quand #ghostBar est affiché */
+}
+
+/* Hamburger */
+#hamburger{
+  width:36px; height:36px;
+  border-radius:999px; border:1px solid;
+  display:flex; align-items:center; justify-content:center;
+  background: transparent; /* fond transparent */
+  box-shadow: 0 6px 20px rgba(0,0,0,.12);
+}
+
+/* helpers (if missing) */
+.onLightBorder{ border-color: rgba(0,0,0,.55); }
+.onDarkBorder { border-color: rgba(255,255,255,.55); }
+.defOnLight { background: rgba(0,0,0,.18); color:#000; }
+.defOnDark  { background: rgba(255,255,255,.18); color:#fff; }
+
 </style>
 </head>
 
@@ -394,14 +743,31 @@ body.controls-open #controls{ display:flex !important }
       <h1>Lecteur chinois mot-à-mot</h1>
 
       <div class="input-wrap">
-        <div id="editorArea">
-          <textarea id="inputText">你好，我们是学生。老师喜欢中国。</textarea>
-        </div>
-        <div id="segmentedArea" style="display:none;">
-          <div id="segmentedText" class="segmented-box"></div>
-        </div>
-        <button id="toggleEdit" aria-label="Basculer édition/segmentation">✏️</button>
-      </div>
+  <div id="editorArea">
+    <textarea id="inputText">你好，我们是学生。老师喜欢中国。</textarea>
+  </div>
+  <div id="segmentedArea" style="display:none;">
+    <div id="segmentedText" class="segmented-box"></div>
+  </div>
+  <!-- barre d’actions -->
+<div class="editor-actions">
+  <!-- Croix (effacer) -->
+  <button id="clearText" class="editor-btn" title="Effacer le texte">
+    <svg viewBox="0 0 24 24" class="icon" xmlns="http://www.w3.org/2000/svg">
+      <line x1="18" y1="6" x2="6" y2="18" stroke-width="2" stroke-linecap="round"/>
+      <line x1="6" y1="6" x2="18" y2="18" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </button>
+
+  <!-- Crayon (modifier) -->
+  <button id="toggleEdit" class="editor-btn" title="Basculer édition/segmentation">
+    <svg viewBox="0 0 24 24" class="icon" xmlns="http://www.w3.org/2000/svg">
+      <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/>
+      <path d="M20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 
+               1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"/>
+    </svg>
+  </button>
+</div>
 
       <fieldset>
         <legend>Paramètres de lecture</legend>
@@ -415,6 +781,10 @@ body.controls-open #controls{ display:flex !important }
         <div class="opt">
           <input type="checkbox" id="showDefs"><span>Afficher la traduction</span>
         </div>
+      <div class="opt">
+          <input type="checkbox" id="alwaysShowSelected">
+      <span>Tout afficher sur la sélection</span>
+      </div>
       </fieldset>
 
       <fieldset>
@@ -454,13 +824,34 @@ body.controls-open #controls{ display:flex !important }
 
   <!-- Overlay plein écran pour la sélection -->
   <div id="selectionOverlay">
-    <div class="overlay-content">
-      <div id="overlayHeader">
-        <button id="closeOverlay" aria-label="Fermer la sélection">✖</button>
-      </div>
-      <div id="segmentedOverlayText"></div>
+  <div class="overlay-content">
+    <div id="overlayHeader">
+      <button id="closeOverlay" aria-label="Fermer la sélection">✖</button>
+    </div>
+    <div id="segmentedOverlayText"></div>
+    <!-- ✅ footer boutons -->
+    <div class="overlay-footer">
+      <button id="overlayCancelBtn" class="info-btn info-cancel">Annuler</button>
+      <button id="overlayValidateBtn" class="info-btn info-validate">Valider</button>
     </div>
   </div>
+</div>
+  
+  <!-- Overlay "Info" (nouveau) -->
+  <div id="infoOverlay" style="display:none">
+    <div class="info-card">
+      <div class="info-header">
+        <strong>Aperçu du texte</strong>
+        <button class="info-close" id="infoCloseBtn" aria-label="Fermer">✖</button>
+      </div>
+      <div class="info-body" id="infoWords"></div>
+      <div class="info-footer">
+        <button class="info-btn info-cancel" id="infoCancelBtn">Annuler</button>
+        <button class="info-btn info-validate" id="infoValidateBtn">Valider</button>
+      </div>
+    </div>
+  </div>
+  
 
   <!-- Page de lecture -->
   <div id="displayPage">
@@ -471,20 +862,52 @@ body.controls-open #controls{ display:flex !important }
     </div>
 
     <!-- bouton toggle + barre -->
-    <button id="toggleControls" class="floating-toggle" aria-label="Ouvrir les contrôles">
-  <span id="toggleArrow">▲</span>
-</button>
-    <div id="controls">
-      <button id="startTextBtn"    class="ctrl-btn" title="Revenir au début"></button>
-      <button id="prevSentenceBtn" class="ctrl-btn" title="Phrase précédente">&lt;&lt;</button>
-      <button id="sentenceStartBtn"class="ctrl-btn" title="Début de phrase">|&lt;</button>
-      <button id="prevWordBtn"     class="ctrl-btn" title="Mot précédent">&lt;</button>
-      <button id="pauseBtn"        class="ctrl-btn" title="Lecture/Pause">▶</button>
-      <button id="nextWordBtn"     class="ctrl-btn" title="Mot suivant">&gt;</button>
-      <button id="nextSentenceBtn" class="ctrl-btn" title="Phrase suivante">&gt;&gt;</button>
-      <button id="quitBtn"         class="ctrl-btn" title="Quitter">✖</button>
-    </div>
-  </div>
+    
+    <!-- New controls -->
+    <!-- bar-extra removed -->
+
+<!-- Single bottom bar (6 zones): Quit | Prev | Play | Next | Info | Hamburger -->
+<div class="bar bar-default" id="barDefault" aria-label="Menu de base">
+  <button class="slot slot-quit" id="quitBtn" title="Quitter" aria-label="Quitter">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6"  y1="6" x2="18" y2="18"></line>
+    </svg>
+  </button>
+  <button class="slot slot-prev" id="prevWordBtn" title="Mot précédent" aria-label="Mot précédent">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+  </button>
+  <button class="slot slot-play" id="pauseBtn" title="Lecture/Pause" aria-label="Lecture/Pause">
+    <svg id="pauseIcon" class="icon" viewBox="0 0 24 24" fill="currentColor">
+      <polygon points="8,6 18,12 8,18"></polygon>
+    </svg>
+  </button>
+  <button class="slot slot-next" id="nextWordBtn" title="Mot suivant" aria-label="Mot suivant">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </button>
+  <button class="slot slot-info" id="infoBtn" title="Infos" aria-label="Infos">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <line x1="12" y1="17" x2="12" y2="11"></line>
+      <line x1="12" y1="7"  x2="12" y2="7"></line>
+    </svg>
+  </button>
+  <button class="slot slot-hamburger" id="hamburger" title="Afficher/Masquer le menu">
+    <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M4 7h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
+    </svg>
+  </button>
+</div>
+
+<!-- Menu fantôme (invisible) : Prev | Play | Next -->
+<div id="ghostBar" aria-hidden="true" inert>
+  <button id="ghostPrev"  aria-label="Mot précédent"></button>
+  <button id="ghostPause" aria-label="Lecture/Pause"></button>
+  <button id="ghostNext"  aria-label="Mot suivant"></button>
+</div>
 
 <script>
 // ========= État global =========
@@ -496,6 +919,9 @@ let playing = true;
 let highlightWords = [];
 let currentToken = null;
 let editMode = true;
+let infoChosenIndex = null;
+let infoWasPlaying  = false;
+let __menuHiddenByUser = false;   // true seulement si le hamburger a caché le menu
 
 // ========= Utilitaires =========
 function numericToDiacriticPinyin(pinyin){
@@ -509,10 +935,24 @@ function numericToDiacriticPinyin(pinyin){
   return normalized.replace(/([A-Za-zü:]+)([0-5])/g,(m,sy,t)=>{const tone=+t; if(tone===0||tone===5) return sy.replace(/:/g,''); return applyMark(sy,tone-1);});
 }
 function normalizeChineseText(text){
-  text=text.replace(/[\u200B-\u200D\uFEFF]/g,'');
-  text=text.replace(/([\p{Script=Han}])\p{White_Space}+(?=[\p{Script=Han}])/gu,'$1');
-  text=text.replace(/\p{White_Space}+([，。！？、；：,.!?;:])/gu,'$1').replace(/([，。！？、；：,.!?;:])\p{White_Space}+/gu,'$1');
-  return text;
+  if(!text) return '';
+
+  // supprimer caractères invisibles
+  text = text.replace(/[\u200B-\u200D\uFEFF]/g,'');
+
+  // unifier les retours à la ligne → espace unique
+  text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  text = text.replace(/\n+/g, ' ');
+
+  // enlever espaces entre deux Han
+  text = text.replace(/([\p{Script=Han}])\p{White_Space}+(?=[\p{Script=Han}])/gu,'$1');
+
+  // enlever espaces mal placés autour de la ponctuation (inclut guillemets chinois)
+  text = text
+    .replace(/\p{White_Space}+([，。！？、；：,.!?;:“”《》])/gu,'$1')
+    .replace(/([，。！？、；：,.!?;:“”《》])\p{White_Space}+/gu,'$1');
+
+  return text.trim();
 }
 function parseCedict(raw){
   const entries=new Map(), wordSet=new Set(); let maxLen=1;
@@ -528,28 +968,82 @@ function parseCedict(raw){
 const isHan = ch => /[\u3400-\u9FFF\uF900-\uFAFF]/.test(ch);
 
 function segmentText(text, wordSet, maxLen){
-  const t=[]; let i=0;
-  while(i<text.length){
-    const ch=text[i];
-    if(isHan(ch)){
-      let matched=null;
-      for(let L=Math.min(maxLen,text.length-i); L>=1; L--){
-        const cand=text.slice(i,i+L);
-        if(wordSet.has(cand)){ matched=cand; break; }
-      }
-      if(matched){
-        t.push({type:'han', text:matched});
-        i+=matched.length;
-        if(/[。！？,.，!?]/.test(text[i])){ t[t.length-1].text+=text[i]; i++; }
-      }else{
-        t.push({type:'han', text:ch}); i++;
-      }
-    }else{
-      t.push({type:'other', text:ch}); i++;
+  // Guillemets & ponctuation (plein largeur + ASCII)
+  const OPEN  = /[“‘«《「『（(〈]/u;
+  const CLOSE = /[”’»》」』）)〉]/u;
+  const PUNC  = /[，、：；。！？,.!?;…—\-‧·･•‥？]/u; // inclut le "？" plein largeur
+
+  const isOpen   = ch => OPEN.test(ch);
+  const isAfter  = ch => CLOSE.test(ch) || PUNC.test(ch);
+
+  const result = [];
+  let i = 0;
+  let prefix = ""; // on accumule les guillemets ouvrants ici
+
+  while (i < text.length){
+    let ch = text[i];
+
+    // espaces → on saute
+    if (/\s/.test(ch)) { i++; continue; }
+
+    // guillemets ouvrants : on les stocke en préfixe, puis on continue
+    if (isOpen(ch)) { prefix += ch; i++; continue; }
+
+    // essai de match glouton dans le dictionnaire
+    let match = null;
+    let len = Math.min(maxLen, text.length - i);
+    while (len > 0){
+      const cand = text.substr(i, len);
+      if (wordSet.has(cand)) { match = cand; break; }
+      len--;
     }
+
+    if (match){
+      // on colle le préfixe ouvrant au mot trouvé
+      result.push({ text: prefix + match, type:'han' });
+      prefix = "";
+      i += match.length;
+
+      // on absorbe toute ponctuation/guillemets fermants qui suivent
+      while (i < text.length && isAfter(text[i])) {
+        result[result.length - 1].text += text[i];
+        i++;
+      }
+      continue;
+    }
+
+    // pas de match dict → fallback caractère par caractère
+    ch = text[i];
+
+    // ponctuation/fermeture → on l'attache au token précédent si possible
+    if (isAfter(ch)) {
+      if (result.length) {
+        result[result.length - 1].text += (prefix + ch);
+      } else {
+        result.push({ text: prefix + ch, type: 'punc' });
+      }
+      prefix = "";
+      i++;
+      continue;
+    }
+
+    // caractère "han" isolé ou autre
+    result.push({ text: prefix + ch, type: /[\u3400-\u9FFF\uF900-\uFAFF]/.test(ch) ? 'han' : 'punc' });
+    prefix = "";
+    i++;
   }
-  return t;
+
+  // si un préfixe restait (rare), on le rattache proprement
+  if (prefix){
+    if (result.length) result[result.length - 1].text = prefix + result[result.length - 1].text;
+    else result.push({ text: prefix, type: 'punc' });
+  }
+
+  return result;
 }
+
+
+
 function attachDictInfo(tokens, dictMap){
   return tokens.map(tok=>{
     if(tok.type==='han'){
@@ -623,20 +1117,21 @@ function showToken(token) {
   const dEl  = document.getElementById('defs');
   const cont = document.getElementById('charContainer');
 
+  // reset zone
   cd.innerHTML = '';
   pEl.textContent = '';
   dEl.textContent = '';
   pEl.style.display = '';
   dEl.style.display = '';
 
-  // --- ponctuation finale ---
+  // --- découpe ponctuation finale (。,！…)
   let han = token.text, punc = '';
   if (/[。！？,.，!?]$/.test(token.text)) {
     han  = token.text.slice(0, -1);
     punc = token.text.slice(-1);
   }
 
-  // --- caractères ---
+  // --- écriture des caractères
   if (han) {
     for (const ch of han) {
       const s = document.createElement('span');
@@ -655,44 +1150,58 @@ function showToken(token) {
     cd.classList.remove('shifted');
   }
 
-  // --- couleurs dynamiques ---
-  const normalBg      = (bgColorPicker?.getColor()?.toHEXA().toString())           || '#ffffff';
-  const normalText    = (textColorPicker?.getColor()?.toHEXA().toString())         || '#000000';
-  const highlightBg   = (highlightBgColorPicker?.getColor()?.toHEXA().toString())  || '#000000';
-  const highlightText = (highlightColorPicker?.getColor()?.toHEXA().toString())    || '#ffffff';
+  // --- couleurs dynamiques (pickr)
+  const normalBg      = (bgColorPicker?.getColor()?.toHEXA().toString())          || '#ffffff';
+  const normalText    = (textColorPicker?.getColor()?.toHEXA().toString())        || '#000000';
+  const highlightBg   = (highlightBgColorPicker?.getColor()?.toHEXA().toString()) || '#000000';
+  const highlightText = (highlightColorPicker?.getColor()?.toHEXA().toString())   || '#ffffff';
 
   const clean = token.text.replace(/[。！？,.，!?]$/, '');
   const isH   = highlightWords.includes(clean);
 
-  cd.style.color = isH ? highlightText : normalText;
-  document.getElementById('displayPage').style.backgroundColor = isH ? highlightBg : normalBg;
+  // couleurs page + caractères selon surlignage
+  const pageBg   = isH ? highlightBg   : normalBg;
+  const textCol  = isH ? highlightText : normalText;
+  cd.style.color = textCol;
+  const dp = document.getElementById('displayPage');
+  dp.style.backgroundColor = pageBg;
+  applyControlsTheme(getContrastingColor(pageBg));
 
-  const contrast = getContrastingColor(isH ? highlightBg : normalBg);
+
+  // contraste pour pinyin / defs
+  const contrast = getContrastingColor(pageBg);
   pEl.style.color = contrast;
   dEl.style.color = contrast;
 
-  // --- écriture du contenu ---
+  // --- contenu pinyin/defs
   if (token.pinyin) pEl.textContent = token.pinyin;
   if (token.defs)   dEl.textContent = token.defs.join(', ');
 
-  // --- affichage selon cases cochées ---
-  const initShowPinyin = document.getElementById('showPinyin').checked;
-  const initShowDefs   = document.getElementById('showDefs').checked;
-  pEl.style.display = initShowPinyin ? '' : 'none';
-  dEl.style.display = initShowDefs   ? '' : 'none';
+  // --- affichage selon cases cochées
+  const optShowPinyin = !!document.getElementById('showPinyin')?.checked;
+  const optShowDefs   = !!document.getElementById('showDefs')?.checked;
+  const alwaysShowSel = !!document.getElementById('alwaysShowSelected')?.checked;
 
-  // --- taille dynamique ---
+  if (alwaysShowSel && isH) {
+    pEl.style.display = '';
+    dEl.style.display = '';
+  } else {
+    pEl.style.display = optShowPinyin ? '' : 'none';
+    dEl.style.display = optShowDefs   ? '' : 'none';
+  }
+
+  // --- taille dynamique
   const totalLen = han.length + (punc ? 1 : 0);
   if (totalLen >= 5) cd.classList.add('long-seq'); else cd.classList.remove('long-seq');
   if (typeof fitCharLine === 'function') fitCharLine();
 
-  // --- clic sur le conteneur ---
+  // --- clic sur le conteneur : toggle local
   cont.dataset.toggled = '0';
   cont.onclick = (e) => {
-    e.stopPropagation(); // ✅ évite conflit avec document.onclick
+    e.stopPropagation();
 
-    const showPinyin = document.getElementById('showPinyin').checked;
-    const showDefs   = document.getElementById('showDefs').checked;
+    const showPinyin = !!document.getElementById('showPinyin')?.checked;
+    const showDefs   = !!document.getElementById('showDefs')?.checked;
     const toggled    = cont.dataset.toggled === '1';
 
     if (!showPinyin && !showDefs) {
@@ -719,16 +1228,49 @@ function showToken(token) {
       cont.dataset.toggled = '0';
     }
   };
+
+  // --- (important) : garder l’état du menu en bas
+  try { enforceMenuState(); } catch (_) {}
 }
+
+function applyControlsTheme(contrastColor){
+  const isDarkBg = (contrastColor === '#ffffff'); // si contraste = blanc, alors bg sombre
+  const elemColor = isDarkBg ? '#ffffff' : '#000000'; // blanc sur fond sombre, noir sur fond clair
+  const borderColor = isDarkBg ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)';
+
+  const barDefault = document.getElementById('barDefault');
+  const hamburger = document.getElementById('hamburger');
+  
+  if (barDefault) {
+    barDefault.querySelectorAll('.slot, #hamburger').forEach(slot => {
+      slot.style.color = elemColor;
+      slot.style.borderColor = borderColor;
+    });
+  }
+}
+
+
 
 
 // ========= Page de lecture =========
 function startDisplay() {
+  // cacher la page d’accueil
   document.getElementById('homePage').style.display = 'none';
+
+  // afficher la page de jeu
   const dp = document.getElementById('displayPage');
   dp.style.display = 'block';
   dp.style.visibility = 'visible';
 
+  // appliquer un thème initial aux boutons/menus AVANT le premier showToken
+  const initialBg  = (bgColorPicker?.getColor()?.toHEXA().toString()) || '#ffffff';
+  const contrast0  = getContrastingColor(initialBg);
+  applyControlsTheme(contrast0);
+
+  // 👇 câblage des boutons Info/Valider/Annuler/✖
+  wireInfoOverlayControls();
+
+  // segmenter le texte
   const text = normalizeChineseText(document.getElementById('inputText').value);
   tokens = attachDictInfo(segmentText(text, dict.wordSet, dict.maxLen), dict.entries);
   idx = 0;
@@ -737,10 +1279,15 @@ function startDisplay() {
     alert("Aucun mot à afficher. Vérifie ton texte ou ta segmentation.");
     return;
   }
+
+  // reset du timer
   clearInterval(timer);
+
+  // premier affichage
   showToken(tokens[idx]);
-  fitCharLine && fitCharLine();
+  if (typeof fitCharLine === 'function') fitCharLine();
 }
+
 function stopDisplay(){ clearInterval(timer); }
 
 // ========= Navigation par phrase =========
@@ -792,14 +1339,14 @@ function restartFrom(index){
 function forcePause(){
   playing = false;
   clearInterval(timer);
-  const pb = document.getElementById('pauseBtn');
-  if (pb) pb.textContent = '▶';
+  const pb = document.getElementById('pauseIcon');
+  if (pb) pb.innerHTML = '<polygon points="8,6 18,12 8,18"></polygon>';
 }
 function forcePlay(){
   if (!tokens || !tokens.length) return;
   playing = true;
-  const pb = document.getElementById('pauseBtn');
-  if (pb) pb.textContent = '⏸';
+  const pb = document.getElementById('pauseIcon');
+  if (pb) pb.innerHTML = '<rect x="7" y="6" width="3" height="12" fill="currentColor"></rect><rect x="14" y="6" width="3" height="12" fill="currentColor"></rect>';
   showToken(tokens[idx]);
   startLoop();
 }
@@ -907,48 +1454,43 @@ function closeSelectionOverlay() {
 window.addEventListener('resize', fitCharLine);
 window.addEventListener('orientationchange', ()=> setTimeout(fitCharLine, 50));
 
+// Fonction utilitaire
+function wireGhostBar() {
+  const map = {
+    ghostPrev:  'prevWordBtn',
+    ghostPause: 'pauseBtn',
+    ghostNext:  'nextWordBtn'
+  };
+  for (const [ghostId, realId] of Object.entries(map)) {
+    const g = document.getElementById(ghostId);
+    const r = document.getElementById(realId);
+    if (g && r) g.onclick = (e)=>{ e.preventDefault(); r.click(); };
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const $ = s => document.querySelector(s);
 
-  // Vitesse
+  // === Vitesse ===
   $('#speed')?.addEventListener('input', e=>{
     $('#speedLabel').textContent = e.target.value;
     if (playing) startLoop();
   });
 
-  // Démarrer
+  // === Démarrer ===
   $('#startBtn')?.addEventListener('click', ()=>{
     startDisplay();
     forcePlay();
   });
 
-  // Play/Pause
+  // === Play / Pause ===
   $('#pauseBtn')?.addEventListener('click', ()=>{
     if (!tokens || !tokens.length) return;
     if (idx >= tokens.length - 1) { restartFrom(0); forcePlay(); return; }
     if (playing) forcePause(); else forcePlay();
   });
 
-  // Toggle controls (one button, global class on body)
-const toggleBtn = document.getElementById('toggleControls');
-const toggleArrow = document.getElementById('toggleArrow');
-const controls  = document.getElementById('controls');
-
-if (toggleBtn && controls){
-  toggleBtn.addEventListener('click', (e)=>{
-    e.stopPropagation();
-    document.body.classList.toggle('controls-open');
-    toggleArrow.textContent = document.body.classList.contains('controls-open') ? '▼' : '▲';
-  });
-  document.addEventListener('click', ()=>{
-    if (document.body.classList.contains('controls-open')){
-      document.body.classList.remove('controls-open');
-      toggleArrow.textContent = '▲';
-    }
-  });
-  controls.addEventListener('click', (e)=> e.stopPropagation());
-}
-  // Navigation
+  // === Navigation mots / phrases ===
   $('#startTextBtn')?.addEventListener('click', ()=>{ restartFrom(0); forcePause(); });
   $('#prevSentenceBtn')?.addEventListener('click', ()=>{ 
     if (!tokens.length) return;
@@ -962,7 +1504,7 @@ if (toggleBtn && controls){
   $('#nextWordBtn')?.addEventListener('click', ()=>{ if (!tokens.length) return; restartFrom(Math.min(tokens.length-1, idx+1)); forcePause(); });
   $('#nextSentenceBtn')?.addEventListener('click', ()=>{ if (!tokens.length) return; restartFrom(findNextSentenceStart(tokens, idx)); forcePause(); });
 
-  // Quitter
+  // === Quitter ===
   $('#quitBtn')?.addEventListener('click', ()=>{
     forcePause();
     document.getElementById('charDisplay').innerHTML = '';
@@ -973,11 +1515,45 @@ if (toggleBtn && controls){
     document.getElementById('homePage').style.display = 'block';
   });
 
-  // Éditeur / overlay
+  // === Overlay sélection (accueil) ===
   $('#toggleEdit')?.addEventListener('click', openSelectionOverlay);
   $('#closeOverlay')?.addEventListener('click', closeSelectionOverlay);
+  $('#overlayCancelBtn')?.addEventListener('click', closeSelectionOverlay);
+  $('#overlayValidateBtn')?.addEventListener('click', () => {
+    renderSegmented();
+    closeSelectionOverlay();
+  });
 
-  // Saisie / collage
+  // === Bouton effacer texte ===
+  $('#clearText')?.addEventListener('click', () => {
+    const input = document.getElementById('inputText');
+    if (!input) return;
+    input.value = '';
+    renderSegmented();
+  });
+
+  // === Gestion Hamburger (menu lecture) ===
+  let hamburgerTimeout = null;
+  const hamburger = document.getElementById('hamburger');
+  if (hamburger) {
+    hamburger.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      if (hamburgerTimeout) return; // ignore clics rapides
+      hamburgerTimeout = setTimeout(() => hamburgerTimeout = null, 200);
+      
+      if (__menuHiddenByUser) {
+        showMenu();
+        __menuHiddenByUser = false;
+      } else {
+        hideMenu();
+        __menuHiddenByUser = true;
+      }
+    });
+  }
+
+  // === Saisie / collage ===
   $('#inputText')?.addEventListener('paste', ()=>{ setTimeout(()=>{
     const input = document.getElementById('inputText');
     input.value = normalizeChineseText(input.value);
@@ -990,7 +1566,7 @@ if (toggleBtn && controls){
     renderSegmented();
   });
 
-  // Dictionnaire
+  // === Dictionnaire ===
   $('#loadDict')?.addEventListener('click', ()=> $('#dictFile').click());
   $('#dictFile')?.addEventListener('change', e=>{
     const file=e.target.files[0]; if(!file) return;
@@ -1003,9 +1579,23 @@ if (toggleBtn && controls){
     reader.readAsText(file,'utf-8');
   });
 
-  // Premier rendu
+  // === Premier rendu ===
   renderSegmented();
+  wireGhostBar();
+  showMenu();
+
+  // === Icônes flèches si besoin ===
+  (function ensureArrowIcons(){
+    const up   = document.getElementById('arrowToggle');
+    const hide = document.getElementById('arrowHide');
+    const top  = document.getElementById('arrowCollapseTop');
+    if (up   && !up.querySelector('svg'))   up.innerHTML   = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 7l7 10H5z"/></svg>';
+    if (hide && !hide.querySelector('svg')) hide.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="transform:rotate(180deg)"><path d="M12 7l7 10H5z"/></svg>';
+    if (top  && !top.querySelector('svg'))  top.innerHTML  = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="transform:rotate(180deg)"><path d="M12 7l7 10H5z"/></svg>';
+    wireGhostBar();
+  })();
 });
+
 
 // ========= Pickr defaults =========
 const bgColorPicker = Pickr.create({
@@ -1032,6 +1622,283 @@ const highlightColorPicker = Pickr.create({
   default: '#FFE103',
   components: { preview: true, opacity: true, hue: true, interaction: { hex: true, rgba: true, input: true, save: true } }
 });
+
+function hexFromAny(c){
+  if(!c) return '#000000';
+  const s=String(c).trim();
+  if(s.startsWith('#')){
+    return s.length===4 ? '#'+[1,2,3].map(i=>s[i]+s[i]).join('') : s.toLowerCase();
+  }
+  if(s.startsWith('rgb')){
+    const m = s.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
+    if(m){
+      const r=(+m[1]).toString(16).padStart(2,'0');
+      const g=(+m[2]).toString(16).padStart(2,'0');
+      const b=(+m[3]).toString(16).padStart(2,'0');
+      return `#${r}${g}${b}`;
+    }
+  }
+  return '#000000';
+}
+
+function computeReadableRed(bgHex){
+  // détermine si fond clair/sombre
+  const hex = bgHex.replace('#','');
+  const r = parseInt(hex.slice(0,2),16), g=parseInt(hex.slice(2,4),16), b=parseInt(hex.slice(4,6),16);
+  const Y = (0.299*r + 0.587*g + 0.114*b) / 255;
+  const lightBg = Y > 0.6;
+  // rouge adapté (plus profond sur fond clair, un peu plus vif sur fond sombre)
+  const redBg = lightBg ? '#dc2626' : '#ef4444';
+  const redFg = '#ffffff';
+  return { redBg, redFg, lightBg };
+}
+
+function openInfoOverlay() {
+  const overlay = document.getElementById('infoOverlay');
+  const body    = document.getElementById('infoWords');
+  if (!overlay || !body) return;
+  
+  // État de lecture -> pause
+  infoWasPlaying = (typeof playing !== 'undefined') ? !!playing : false;
+  try { if (typeof forcePause === 'function') forcePause(); } catch(_) {}
+  
+  // Nettoie le contenu
+  body.innerHTML = '';
+  
+  // Palette actuelle (mêmes pickers que showToken)
+  const normalBg      = (bgColorPicker?.getColor()?.toHEXA().toString())          || '#ffffff';
+  const normalText    = (textColorPicker?.getColor()?.toHEXA().toString())        || '#000000';
+  const highlightBg   = (highlightBgColorPicker?.getColor()?.toHEXA().toString()) || '#ef4444';
+  const highlightText = (highlightColorPicker?.getColor()?.toHEXA().toString())   || '#ffffff';
+  
+  // Page actuellement surlignée ?
+  const cleanCurrent = tokens[idx]?.text?.replace(/[。！？、，；：,.!?\u201D]$/u,'') || '';
+  const isH = Array.isArray(highlightWords) && highlightWords.includes(cleanCurrent);
+  
+  // Thème de la page de jeu en cours
+  const pageBg = isH ? highlightBg  : normalBg;
+  const pageFg = isH ? highlightText: normalText;
+  
+  const readableRed = getReadableRed(pageBg);
+  overlay.style.setProperty('--readable-red', readableRed);
+  
+  // Pousse les couleurs dans l'overlay (héritage CSS)
+  overlay.style.setProperty('--info-bg', pageBg);
+  overlay.style.setProperty('--info-fg', pageFg);
+  overlay.style.setProperty('--info-red-bg', highlightBg);
+  overlay.style.setProperty('--info-red-fg', getContrastingColor(highlightBg));
+  
+  // ✅ masque adaptatif autour de l’overlay
+  const contrast = getContrastingColor(pageBg);
+  if (contrast === '#000000') {
+    overlay.style.background = 'rgba(0,0,0,0.45)';   // fond clair → masque noir
+  } else {
+    overlay.style.background = 'rgba(255,255,255,0.25)'; // fond sombre → masque blanc
+  }
+  
+  // Construit les mots
+  tokens.forEach((tok, i) => {
+    const span = document.createElement('span');
+    span.textContent = tok.text;
+    
+    // D'abord la classe de base et selectable
+    span.className = 'info-word selectable';
+    
+    const clean = tok.text.replace(/[。！？、，；：,.!?\u201D]$/u,'');
+    
+    // Événement de clic (avant les classes visuelles)
+    span.onclick = () => {
+      infoChosenIndex = i;
+      body.querySelectorAll('.info-word.chosen')
+          .forEach(el => el.classList.remove('chosen'));
+      span.classList.add('chosen');
+    };
+    
+    // Puis ajouter les classes visuelles
+    if (Array.isArray(highlightWords) && highlightWords.includes(clean)) {
+      span.classList.add('initialSelected');
+    }
+    
+    if (i === idx) {
+      span.classList.add('current');
+    }
+    
+    if (i === infoChosenIndex) {
+      span.classList.add('chosen');
+    }
+    
+    body.appendChild(span);
+  });
+  
+  // Affiche l'overlay
+  overlay.style.display = 'flex';
+}
+
+
+
+
+function closeInfoOverlay(){
+  const ov = document.getElementById('infoOverlay');
+  ov.style.display = 'none';
+}
+
+// Brancher les boutons Info / Valider / Annuler / ✖
+document.addEventListener('DOMContentLoaded', ()=>{
+  const infoBtn = document.getElementById('infoBtn');
+  const infoValidateBtn = document.getElementById('infoValidateBtn');
+  const infoCancelBtn = document.getElementById('infoCancelBtn');
+  const infoCloseBtn = document.getElementById('infoCloseBtn');
+
+  infoBtn?.addEventListener('click', openInfoOverlay);
+
+  infoValidateBtn?.addEventListener('click', ()=>{
+    if(infoChosenIndex != null){
+      restartFrom(infoChosenIndex);  // saute au mot choisi
+      forcePause();                  // reste en pause comme demandé
+    }
+    closeInfoOverlay();
+  });
+
+  const cancelOverlay = ()=>{
+    closeInfoOverlay();
+    // revenir comme avant si on lisait (sinon on reste en pause)
+    if(infoWasPlaying) forcePlay();
+  };
+  infoCancelBtn?.addEventListener('click', cancelOverlay);
+  infoCloseBtn?.addEventListener('click', cancelOverlay);
+});
+
+function showMenu(){
+  __menuHiddenByUser = false;
+
+  // afficher les slots normaux (sauf le burger qui reste)
+  document.querySelectorAll('#barDefault .slot:not(#hamburger)').forEach(s=>{
+    s.style.display = 'flex';
+  });
+
+  // désactiver le fantôme
+  const ghost = document.getElementById('ghostBar');
+  if (ghost){
+    ghost.style.display = 'none';
+    ghost.setAttribute('aria-hidden','true');
+    ghost.setAttribute('inert','');           // évite tout clic (fallback : display none)
+  }
+}
+
+function hideMenu(){
+  __menuHiddenByUser = true;
+
+  // masquer les slots normaux (laisser le burger visible)
+  document.querySelectorAll('#barDefault .slot:not(#hamburger)').forEach(s=>{
+    s.style.display = 'none';
+  });
+
+  // activer le fantôme (cliquable mais invisible)
+  const ghost = document.getElementById('ghostBar');
+  if (ghost){
+    ghost.style.display = 'grid';
+    ghost.removeAttribute('inert');           // redevient fonctionnel
+    ghost.setAttribute('aria-hidden','false');
+  }
+}
+
+// --- à appeler après le rendu d’un token pour garantir l’état
+function enforceMenuState() {
+  if (__menuHiddenByUser) {
+    // l’utilisateur a demandé de cacher : on respecte
+    hideMenu();
+  } else {
+    // personne n’a demandé : on s’assure que le menu est visible
+    showMenu();
+  }
+}
+
+// À placer avec tes globals
+window.infoChosenIndex = null;   // index choisi dans l’overlay
+window.infoWasPlaying  = false;  // on mémorise si la lecture était en cours
+
+// Câblage des boutons de l'overlay "Info" + bouton i
+function wireInfoOverlayControls() {
+  const infoBtn         = document.getElementById('infoBtn');
+  const infoValidateBtn = document.getElementById('infoValidateBtn');
+  const infoCancelBtn   = document.getElementById('infoCancelBtn');
+  const infoCloseBtn    = document.getElementById('infoCloseBtn');
+
+  // sécurité : si un des éléments manque, on sort silencieusement
+  if (!infoBtn || !infoValidateBtn || !infoCancelBtn || !infoCloseBtn) return;
+
+  // on évite les doubles-écoutes si la fonction est rappelée
+  infoBtn.onclick = null;
+  infoValidateBtn.onclick = null;
+  infoCancelBtn.onclick = null;
+  infoCloseBtn.onclick = null;
+
+  // Ouvrir l’overlay via le bouton "i"
+  infoBtn.onclick = () => {
+    // mémoriser l'état de lecture et mettre en pause
+    try {
+      // si tu as une variable globale "playing" ou une fonction isPlaying()
+      const was = (typeof isPlaying === 'function') ? isPlaying()
+                : (typeof playing  !== 'undefined' ? !!playing : false);
+      window.infoWasPlaying = was;
+      if (typeof forcePause === 'function') forcePause();
+    } catch (_) {}
+
+    if (typeof openInfoOverlay === 'function') openInfoOverlay();
+  };
+
+  // Valider : sauter au mot choisi, rester en pause
+  infoValidateBtn.onclick = () => {
+    try {
+      if (window.infoChosenIndex != null && typeof restartFrom === 'function') {
+        restartFrom(window.infoChosenIndex);
+      }
+      if (typeof forcePause === 'function') forcePause();
+    } catch (_) {}
+    if (typeof closeInfoOverlay === 'function') closeInfoOverlay();
+  };
+
+  // Annuler/fermer : fermer l’overlay et, si on lisait, reprendre
+  const cancelOverlay = () => {
+    if (typeof closeInfoOverlay === 'function') closeInfoOverlay();
+    try {
+      if (window.infoWasPlaying && typeof forcePlay === 'function') {
+        forcePlay();
+      }
+    } catch (_) {}
+    // reset
+    window.infoWasPlaying  = false;
+    window.infoChosenIndex = null;
+  };
+
+  infoCancelBtn.onclick = cancelOverlay;
+  infoCloseBtn.onclick  = cancelOverlay;
+}
+
+function getReadableRed(bgColor) {
+  const hex = bgColor.replace('#', '');
+  const r = parseInt(hex.slice(0,2), 16);
+  const g = parseInt(hex.slice(2,4), 16); 
+  const b = parseInt(hex.slice(4,6), 16);
+  const luminance = (0.299*r + 0.587*g + 0.114*b) / 255;
+  
+  return luminance > 0.6 ? '#dc2626' : '#f87171';
+}
+
+
+function link(idGhost, idReal) {
+  const g = document.getElementById(idGhost);
+  const r = document.getElementById(idReal);
+  if (g && r) g.addEventListener('click', () => r.click());
+}
+
+// ✅ Relie chaque zone invisible au vrai bouton
+link('g_quit','quitBtn');
+link('g_prev','prevWordBtn');
+link('g_play','pauseBtn');
+link('g_next','nextWordBtn');
+link('g_info','infoBtn');
 </script>
+
 </body>
 </html>
