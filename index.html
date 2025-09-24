@@ -1342,24 +1342,13 @@ function forcePause(){
   const pb = document.getElementById('pauseIcon');
   if (pb) pb.innerHTML = '<polygon points="8,6 18,12 8,18"></polygon>';
 }
-function forcePlay(skipFirst = false){
+function forcePlay(){
   if (!tokens || !tokens.length) return;
   playing = true;
   const pb = document.getElementById('pauseIcon');
   if (pb) pb.innerHTML = '<rect x="7" y="6" width="3" height="12" fill="currentColor"></rect><rect x="14" y="6" width="3" height="12" fill="currentColor"></rect>';
-  
-  if (!skipFirst) showToken(tokens[idx]);
-  
-  // ✅ CORRECTIF : Vérifier si le mot actuel est sélectionné AVANT de démarrer la boucle
-  if (tokens[idx]) {
-    const clean = tokens[idx].text.replace(/[。！？,.，!?]$/, '');
-    if (highlightWords.includes(clean)) {
-      forcePause(); // Arrêter immédiatement si le mot actuel est sélectionné
-      return;
-    }
-  }
-  
-  startLoop(skipFirst);
+  showToken(tokens[idx]);
+  startLoop();
 }
 function startLoop(){
   const speedEl = document.getElementById('speed');
