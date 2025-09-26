@@ -65,6 +65,107 @@ h1{
   letter-spacing:.2px;
 }
 
+/* Mode Selector */
+.mode-selector {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 20px 0 30px;
+  padding: 20px;
+  background: #f0f5ff;
+  border-radius: var(--radius);
+}
+
+.mode-option {
+  flex: 1;
+  max-width: 250px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.mode-option:hover {
+  transform: translateY(-2px);
+}
+
+.mode-option input[type="radio"] {
+  display: none;
+}
+
+.mode-label {
+  display: block;
+  padding: 20px;
+  border: 3px solid #e0e7ff;
+  border-radius: 12px;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.mode-option input[type="radio"]:checked + .mode-label {
+  border-color: var(--brand);
+  background: #f0f9ff;
+  box-shadow: 0 4px 12px rgba(10,132,255,0.2);
+}
+
+.mode-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.mode-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 4px;
+}
+
+.mode-desc {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* Game Mode Options */
+.game-mode-options {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 16px;
+  display: none;
+}
+
+.game-mode-title {
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.game-mode-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.game-mode-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.game-mode-item input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.game-mode-item label {
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
 /* CTA bas de page (Accueil) */
 .cta-bar{
   position:sticky;
@@ -119,7 +220,7 @@ textarea:focus{ border-color:var(--brand); box-shadow:0 0 0 4px var(--ring) }
 .editor-actions{
   margin-top: 6px;
   display: flex;
-  justify-content: space-between; /* croix à gauche / crayon à droite */
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -143,7 +244,6 @@ textarea:focus{ border-color:var(--brand); box-shadow:0 0 0 4px var(--ring) }
   background: #e5e7eb;
 }
 
-/* bouton "effacer" = croix simple sans fond */
 #clearText{
   background: none;
   box-shadow: none;
@@ -151,17 +251,17 @@ textarea:focus{ border-color:var(--brand); box-shadow:0 0 0 4px var(--ring) }
 }
 
 #clearText .icon {
-width: 28px;   /* ✅ un peu plus grande que le crayon */
+  width: 28px;
   height: 28px;
-  stroke: currentColor;   /* utilise la couleur du bouton */
-  fill: none;             /* pas de remplissage */
+  stroke: currentColor;
+  fill: none;
 }
-
 
 #clearText:hover {
   background: none;
-  color: #b91c1c;   /* rouge plus foncé au survol */
+  color: #b91c1c;
 }
+
 .icon {
   width: 18px;
   height: 18px;
@@ -174,25 +274,24 @@ width: 28px;   /* ✅ un peu plus grande que le crayon */
   box-shadow: none;
   color: var(--brand);
 }
+
 #toggleEdit:hover {
   color: #0066cc;
 }
 
-
 #toggleEdit.icon {
-  fill: currentColor;     /* utilise la couleur du bouton */
+  fill: currentColor;
   stroke: none;
 }
 
-/* Icônes SVG */
 .editor-btn .icon{
-  width: 22px;   /* taille augmentée */
+  width: 22px;
   height: 22px;
   display: block;
   flex-shrink: 0;
   pointer-events: none;
-  fill: currentColor;    /* ✅ couleur héritée du bouton */
-  stroke: currentColor;  /* ✅ pour les traits */
+  fill: currentColor;
+  stroke: currentColor;
 }
 
 .segmented-box{
@@ -202,12 +301,14 @@ width: 28px;   /* ✅ un peu plus grande que le crayon */
   min-height:160px;
   background:#fafcff;
 }
+
 #segmentedText{
   overflow-x:auto; overflow-y:hidden;
   white-space:nowrap;
   -webkit-overflow-scrolling:touch;
   padding:4px 2px;
 }
+
 .token{
   display:inline-block;
   margin:6px 8px;
@@ -222,9 +323,9 @@ width: 28px;   /* ✅ un peu plus grande que le crayon */
   user-select:none;
   transition:transform .12s ease, background .2s ease, color .2s ease;
 }
+
 .token:hover{ transform:translateY(-1px) }
 #segmentedText .selected{ background:#ef4444; color:#fff; transform:scale(1.04) }
-
 
 /* Fieldsets */
 fieldset{
@@ -293,43 +394,43 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
   box-shadow: 0 6px 20px rgba(0,0,0,.2);
   width: 100%;
   max-width: 760px;
-  padding: 0; /* on déplace le padding sur les sous-sections */
+  padding: 0;
   display: flex;
   flex-direction: column;
-  max-height: 90vh; /* limite la taille */
+  max-height: 90vh;
 }
-#selectionOverlay .overlay-content{
-  border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,.2);
-  width:100%; max-width:760px; padding:16px; display:flex; flex-direction:column;
-}
+
 #overlayHeader{
-    flex-shrink: 0;
+  flex-shrink: 0;
   padding: 12px;
   background:#f5f5f5;
   border-bottom:1px solid #ddd;
 }
+
 #closeOverlay{ background:transparent; border:none; font-size:28px; cursor:pointer; color:#444 }
+
 #segmentedOverlayText {
-  flex: 1;                 /* occupe tout l’espace dispo */
-  overflow-y: auto;         /* ✅ scroll uniquement ici */
+  flex: 1;
+  overflow-y: auto;
   padding: 16px;
   white-space: normal;
   line-height: 1.8;
 }
+
 #segmentedOverlayText span{
   display:inline-block; margin:6px 8px; padding:8px 12px;
   border-radius:6px; background:#f1f5f9; font-size:22px; font-weight:600; cursor:pointer;
 }
+
 #segmentedOverlayText span.selected{ background:#ef4444; color:#fff }
 
 .bar-hidden {
   opacity: 0;
-  pointer-events: none;  /* évite les clics fantômes */
+  pointer-events: none;
   transform: translateY(20px);
   transition: opacity 0.15s ease, transform 0.15s ease;
 }
 
-/* État visible du menu */
 .bar-visible {
   opacity: 1;
   pointer-events: auto;
@@ -355,11 +456,13 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
   display:flex; align-items:center; justify-content:center;
   padding:12px;
 }
+
 #charDisplay{
   display:flex; justify-content:center; align-items:baseline;
   gap:.12em; white-space:nowrap; line-height:1;
   font-family:"Noto Sans SC",sans-serif; font-weight:800;
 }
+
 #charDisplay span{ display:inline-flex; width:1em; justify-content:center; align-items:center; text-align:center }
 #charDisplay .han, #charDisplay .punc{ font-weight:800 }
 #charDisplay.shifted{ transform:translateX(.4em) }
@@ -370,10 +473,9 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
 }
 #pinyin{ top:calc(50% + 12vh); font-size:clamp(22px,6.2vw,34px); font-weight:700 }
 #defs{   top:calc(50% + 18vh); font-size:clamp(16px,4.4vw,24px); font-weight:600; color:#0f172ac7 }
-#pinyin, #defs{ pointer-events:none } /* clic passe au caractère */
+#pinyin, #defs{ pointer-events:none }
 
-
-/* === New reading controls (two bars + arrows) === */
+/* Reading controls */
 :root{
   --maxWidth: 760px;
   --safe: env(safe-area-inset-bottom, 0px);
@@ -381,13 +483,14 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
   --blur: 10px; --elev: 0 6px 20px rgba(0,0,0,.12);
   --alpha1:.18; --alpha2:.26; --stroke:.55;
 }
+
 .bar{ position:absolute; left:50%; transform:translateX(-50%); width:100%; max-width:var(--maxWidth); padding:0 var(--padX); display:flex; gap:var(--gap); }
 .bar-default{ bottom: calc(var(--safe) + 0px); }
 .bar-extra{ bottom: calc(var(--safe) + var(--slotH1) + 10px); display:none; }
 
 .slot{ 
   flex:1; display:flex; align-items:center; justify-content:center; border-radius: var(--radius);
-  background: rgba(255,255,255,0.1); /* léger fond au lieu de transparent */
+  background: rgba(255,255,255,0.1);
   box-shadow: var(--elev);
   border:1px solid; cursor:pointer; user-select:none; height:var(--slotH1); 
 }
@@ -399,7 +502,7 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
   position:absolute;
   left:50%;
   transform:translateX(-50%);
-  bottom: calc(var(--safe) + var(--slotH1) + 10px); /* ← au lieu de + 4px */
+  bottom: calc(var(--safe) + var(--slotH1) + 10px);
   display:flex;
   gap:14px;
   align-items:center;
@@ -415,7 +518,6 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
   backdrop-filter: blur(var(--blur)); 
   -webkit-backdrop-filter: blur(var(--blur)); 
   box-shadow: var(--elev);
-  /* Centrage parfait */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -425,7 +527,6 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
   position: relative;
 }
 
-/* Position spécifique pour le bouton collapse - POSITION ORIGINALE */
 .arrow-collapse-top{ 
   position:absolute; 
   left:50%; 
@@ -435,7 +536,6 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
   z-index: 4;
 }
 
-/* Centrage des SVG - règle générale pour les autres boutons */
 .arrow-btn svg,
 .arrow-collapse-top svg{
   display: block;
@@ -448,15 +548,10 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
   transform: translate(-50%, -50%);
 }
 
-/* Rotation pour le triangle vers le bas du bouton collapse-top */
 .arrow-collapse-top svg {
   transform: translate(-50%, -50%) rotate(180deg);
 }
 
-
-
-
-/* RÈGLES SPÉCIFIQUES avec priorité élevée */
 .arrow-cluster #arrowToggle svg {
   position: absolute !important;
   top: 50% !important;
@@ -489,7 +584,7 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
   cursor:pointer; 
   z-index:2; 
 }
-/* theme helpers */
+
 .onLightBorder{ border-color: rgba(0,0,0,var(--stroke)); }
 .onDarkBorder { border-color: rgba(255,255,255,var(--stroke)); }
 .defOnLight { background: rgba(0,0,0,var(--alpha1)); color:#000; }
@@ -530,26 +625,27 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
   position: fixed;
   inset: 0;
   z-index: 1000;
-  display: none;              /* caché par défaut */
-  align-items: center;        /* centre vertical */
-  justify-content: center;    /* centre horizontal */
-  background: rgba(0,0,0,.45);/* masque semi-transparent */
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,.45);
 }
 
-/* ===== Info Overlay ===== */
+/* Info Overlay */
 #infoOverlay{
   position:fixed; inset:0; z-index:1100;
   display:none; align-items:center; justify-content:center;
   padding:16px;
   background:rgba(0,0,0,.45);
 }
+
 #infoOverlay .info-card{
   width:100%; max-width:860px; max-height:86dvh;
   border-radius:14px; box-shadow:0 10px 28px rgba(0,0,0,.26);
   display:flex; flex-direction:column; overflow:hidden;
-  /* Couleurs injectées en JS (fond + texte) */
   background:var(--info-bg,#ffffff); color:var(--info-fg,#111);
 }
+
 #infoOverlay .info-header{
   display:flex; align-items:center; justify-content:space-between;
   padding:12px 16px; font-weight:800;
@@ -557,13 +653,14 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
   border-bottom:1px solid color-mix(in oklab, var(--info-fg,#111) 10%, transparent);
 }
 
-
 #infoOverlay .info-close{
   background:transparent; border:none; font-size:20px; cursor:pointer; color:inherit;
 }
+
 #infoOverlay .info-body{
   padding:14px 14px 6px; overflow:auto; line-height:1.9;
 }
+
 .info-word {
   display:inline-block;
   margin:6px 6px;
@@ -573,16 +670,21 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
   font-weight:700;
   font-size:22px;
   background:color-mix(in oklab, var(--info-bg,#fff) 85%, #000 0%);
-  color: var(--info-fg,#111);  /* ✅ texte normal hérité de la page */
+  color: var(--info-fg,#111);
   border:1px solid color-mix(in oklab, var(--info-fg,#111) 10%, transparent);
   user-select:none;
 }
-.info-word.selectable{ cursor: pointer !important;
-  pointer-events: auto !important; }
+
+.info-word.selectable{ 
+  cursor: pointer !important;
+  pointer-events: auto !important; 
+}
+
 .info-word.current{
   outline: 2px solid color-mix(in oklab, var(--info-fg, #111) 40%, transparent);
   outline-offset: 2px; 
 }
+
 .info-word.chosen {
   background: #ef4444;
   color: #ffffff;
@@ -600,22 +702,20 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
   border-top:1px solid color-mix(in oklab, var(--info-fg,#111) 10%, transparent);
   background:color-mix(in oklab, var(--info-bg,#fff) 92%, #000 0%);
 }
+
 .info-btn{
   appearance:none; border:none; border-radius:12px; padding:12px 18px;
   font-weight:800; cursor:pointer;
 }
+
 .info-btn.info-cancel{
   background: color-mix(in oklab, var(--info-fg,#111) 10%, transparent);
   color: var(--info-fg,#111);
 }
+
 .info-btn.info-validate {
   background: #ef4444;
   color: #ffffff;
-}
-.info-word.initialSelected {
-  color: #dc2626 !important;   /* rouge */
-  background: inherit;
-  border: 1px solid color-mix(in oklab, var(--info-fg,#111) 10%, transparent);
 }
 
 .info-word.initialSelected.chosen,
@@ -624,14 +724,12 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
   color: #ffffff !important;
   border-color: rgba(255,255,255,0.25);
 }
+
 #hamburger {
   position: absolute;
   bottom: calc(env(safe-area-inset-bottom, 0px) + var(--slotH1) + 6px);
-
-  /* On se cale sur la position du bouton i */
   right: var(--padX);
-  transform: translateX(-50%); /* centre horizontalement */
-
+  transform: translateX(-50%);
   background: none;
   border: none;
   box-shadow: none;
@@ -646,12 +744,503 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
   fill: currentColor;
 }
 
+/* Game bars */
+#gameBars {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 0px);
+  width: 100%;
+  max-width: 760px;
+  padding: 0 12px;
+  z-index: 2;
+}
+
+.game-bar {
+  display: grid;
+  grid-template-columns: 1fr 2fr 2fr 2fr 1fr;
+  gap: 10px;
+  height: 62px;
+}
+
+.game-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  border: none !important;
+  backdrop-filter: saturate(120%) blur(10px);
+  -webkit-backdrop-filter: saturate(120%) blur(10px);
+  box-shadow: 0 6px 20px rgba(0,0,0,.12);
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.game-btn:active {
+  transform: scale(0.98);
+}
+
+.game-btn .icon {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.game-btn#quitGameBtn {
+  background: rgba(220, 38, 38, 0.2);
+  color: #991b1b;
+  border-color: rgba(220, 38, 38, 0.4);
+}
+
+.game-btn#prevSentenceBtn {
+  background: rgba(59, 130, 246, 0.2);
+  color: #1e40af;
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+.game-btn#playGameBtn {
+  background: rgba(34, 197, 94, 0.2);
+  color: #166534;
+  border-color: rgba(34, 197, 94, 0.4);
+}
+
+.game-btn#nextSentenceBtn {
+  background: rgba(249, 115, 22, 0.2);
+  color: #9a3412;
+  border-color: rgba(249, 115, 22, 0.4);
+}
+
+.game-btn#showGameBtn {
+  background: rgba(168, 85, 247, 0.2);
+  color: #6b21a8;
+  border-color: rgba(168, 85, 247, 0.4);
+}
+
+.game-btn#randomSentenceBtn {
+  background: rgba(236, 72, 153, 0.2);
+  color: #9f1239;
+  border-color: rgba(236, 72, 153, 0.4);
+}
+
+
+.mode-switch.active {
+  background: #ef4444 !important;
+  color: white !important;
+  border-color: #ef4444 !important;
+}
+
+.nav-btn-replay {
+  background: rgba(34, 197, 94, 0.85);
+  color: #ffffff;
+  font-weight: 700;
+  border: none !important;
+}
+
+.nav-btn-replay::before {
+  content: '▶';
+  margin-right: 6px;
+  font-size: 12px;
+}
+
+.nav-btn-replay:hover {
+  background: rgba(34, 197, 94, 0.95);
+  transform: translateY(-1px);
+}
+
+/* Game overlays */
+#gameModeOverlay,
+#gamePlayOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.5);
+  padding: 16px;
+}
+
+.game-overlay-content {
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  background: rgba(0,0,0,0.05);
+}
+
+.game-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: inherit;
+  padding: 4px;
+}
+
+.mode-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  padding: 24px;
+}
+
+.mode-btn {
+  background: rgba(239, 68, 68, 0.15);
+  border: 2px solid rgba(239, 68, 68, 0.3);
+  border-radius: 12px;
+  padding: 16px 24px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #1f2937;
+}
+
+.mode-btn:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: rgba(239, 68, 68, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.2);
+}
+
+.mode-switcher {
+  display: flex;
+  gap: 8px;
+}
+
+.mode-switcher .mode-switch {
+  background: rgba(0,0,0,0.08);
+  border: 2px solid rgba(0,0,0,0.2);
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #1f2937;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.mode-switcher .mode-switch.active {
+  background: #ef4444;
+  color: white;
+  border-color: #ef4444;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+  transform: translateY(-1px);
+}
+
+.mode-switcher .mode-switch:hover:not(.active) {
+  background: rgba(0,0,0,0.12);
+  border-color: rgba(0,0,0,0.3);
+  transform: translateY(-1px);
+}
+
+.game-content {
+  padding: 20px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.word-pool,
+.sentence-builder {
+  margin-bottom: 20px;
+}
+
+.pool-title {
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: inherit;
+}
+
+.words-container {
+  min-height: 60px;
+  padding: 12px;
+  border: 2px dashed rgba(0,0,0,0.3);
+  border-radius: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  background: rgba(0,0,0,0.05);
+}
+
+.drop-zone {
+  background: rgba(0,0,0,0.1);
+}
+
+.word-token {
+  background: rgba(239, 68, 68, 0.15);
+  border: 2px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+  color: #000000;
+  font-family: "Noto Sans SC", "Inter", sans-serif;
+}
+
+.word-token:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.word-token.dragging {
+  opacity: 0.5;
+  transform: rotate(2deg);
+}
+
+
+/* Le reste du CSS continue après */
+.free-input-container {
+  margin-bottom: 20px;
+}
+.free-input-container {
+  margin-bottom: 20px;
+}
+
+.free-input-container label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: inherit;
+}
+
+.free-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 16px;
+  border: 2px solid rgba(0,0,0,0.2);
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: "Noto Sans SC", "Inter", sans-serif;
+  background: rgba(0,0,0,0.05);
+  color: inherit;
+  resize: vertical;
+}
+
+.free-textarea:focus {
+  outline: none;
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+.validate-btn,
+.retry-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  display: block;
+  margin: 0 auto 16px;
+  transition: all 0.2s ease;
+}
+
+.validate-btn:hover,
+.retry-btn:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+}
+
+.retry-btn {
+  background: #6b7280;
+}
+
+.retry-btn:hover {
+  background: #4b5563;
+}
+
+.result-message {
+  text-align: center;
+  padding: 16px;
+  margin: 16px 0;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.result-message.success {
+  background: rgba(34, 197, 94, 0.2);
+  color: #000000;
+  border: 1px solid rgba(34, 197, 94, 0.4);
+}
+
+.result-message.error {
+  background: rgba(239, 68, 68, 0.2);
+  color: #991b1b;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.game-nav-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  background: rgba(0,0,0,0.05);
+}
+
+.nav-btn {
+  background: rgba(0,0,0,0.1);
+  border: 1px solid rgba(0,0,0,0.2);
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  color: inherit;
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+  background: rgba(0,0,0,0.2);
+}
+
+.nav-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.game-mode-active .bar.bar-default {
+  display: none !important;
+}
+
+.game-mode-active #ghostBar {
+  display: none !important;
+}
+
+.bar.bar-default{
+  position:absolute; left:50%; transform:translateX(-50%);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 0px);
+  width:100%; max-width:760px; padding:0 12px;
+  display:grid; grid-template-columns: 1fr 2fr 2fr 2fr 1fr auto; gap: 10px;
+}
+
+.bar.bar-default .slot{
+  height: 62px;
+  display:flex; align-items:center; justify-content:center;
+  border-radius:14px; border:1px solid;
+  backdrop-filter: saturate(120%) blur(10px); -webkit-backdrop-filter: saturate(120%) blur(10px);
+  box-shadow: 0 6px 20px rgba(0,0,0,.12);
+}
+
+.bar.bar-default .slot,
+#hamburger {
+  border: none !important;
+  outline: none !important;
+}
+
+.bar.bar-default .icon{ width:24px; height:24px; display:block }
+
+#ghostBar{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 0px);
+  width:100%;
+  max-width:760px;
+  padding:0 12px;
+  display:none;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap:10px;
+  background:transparent;
+  z-index:3;
+}
+
+#ghostBar button{
+  height:62px;
+  background:transparent;
+  border:none;
+  pointer-events:auto;
+}
+
+/* Cacher la barre de boutons quand l'overlay de jeu est ouvert */
+body:has(#gamePlayOverlay[style*="display: flex"]) #gameBarsNoRead,
+body:has(#gamePlayOverlay[style*="display: flex"]) #gameBars {
+  display: none !important;
+}
+
+#hamburger{
+  width:36px; height:36px;
+  border-radius:999px; border:1px solid;
+  display:flex; align-items:center; justify-content:center;
+  background: transparent;
+  box-shadow: 0 6px 20px rgba(0,0,0,.12);
+}
+
+.onLightBorder{ border-color: rgba(0,0,0,.55); }
+.onDarkBorder { border-color: rgba(255,255,255,.55); }
+.defOnLight { background: rgba(0,0,0,.18); color:#000; }
+.defOnDark  { background: rgba(255,255,255,.18); color:#fff; }
+
+/* === Mobile DnD only === */
+@media (pointer: coarse) and (hover: none) {
+  .words-container { position: relative; }
+  .word-token { touch-action: none; } /* permet le suivi du doigt */
+  .word-token.drag-source { visibility: hidden; }
+
+  .drag-ghost {
+    position: fixed;
+    z-index: 10000;
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0.96); /* petit scale pour voir derrière */
+    opacity: .95;
+    filter: drop-shadow(0 6px 18px rgba(0,0,0,.25));
+    will-change: transform, left, top;
+  }
+
+  .placeholder-token {
+    display: inline-block;
+    min-width: 28px;
+    border-radius: 10px;
+    background: rgba(16,185,129,.14);   /* vert clair */
+    border: 2px dashed rgba(16,185,129,.6);
+    vertical-align: middle;
+  }
+
+  .drop-caret {
+    position: fixed;
+    z-index: 10001;
+    width: 2px;
+    background: #10B981; /* vert */
+    border-radius: 1px;
+  }
+
+  /* feedback de zone cible */
+  .words-container.drop-zone--active {
+    border-color: rgba(59,130,246,.6);
+    box-shadow: 0 0 0 3px rgba(59,130,246,.15) inset;
+  }
+}
+
+
 @media (max-width:560px){
   :root{ --slotH1:58px; --slotH2:50px; --gap:8px; --padX:10px; }
 }
-/* =====================================================
-   Mobile tweaks
-   ===================================================== */
+
 @media (max-width:600px){
   .container{
     padding:max(10px, env(safe-area-inset-left)) max(10px, env(safe-area-inset-right));
@@ -667,73 +1256,40 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
   #charDisplay{ font-size:80px }
   #charDisplay.long-seq{ font-size:clamp(28px, 6vw, 40px) }
 
-  /* spacing character → pinyin → translation (mobile) */
   #pinyin{ top:calc(50% + 8vh) }
   #defs{   top:calc(50% + 12vh) }
+  
+  .mode-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .mode-btn {
+    width: 100%;
+    max-width: 280px;
+  }
+  
+  .game-nav-footer {
+    flex-direction: column;
+  }
+  
+  .game-bar {
+    height: 54px;
+  }
+  
+  .game-btn {
+    font-size: 13px;
+  }
+  
+  .mode-option {
+    flex: 1 1 100%;
+    max-width: none;
+  }
+  
+  .mode-selector {
+    flex-direction: column;
+  }
 }
-
-/* === Single bottom bar (5 zones) === */
-.bar.bar-default{
-  position:absolute; left:50%; transform:translateX(-50%);
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 0px);
-  width:100%; max-width:760px; padding:0 12px;
-  display:grid; grid-template-columns: 1fr 2fr 2fr 2fr 1fr auto; gap: 10px;
-}
-.bar.bar-default .slot{
-  height: 62px;
-  display:flex; align-items:center; justify-content:center;
-  border-radius:14px; border:1px solid;
-  backdrop-filter: saturate(120%) blur(10px); -webkit-backdrop-filter: saturate(120%) blur(10px);
-  box-shadow: 0 6px 20px rgba(0,0,0,.12);
-}
-.bar.bar-default .slot,
-#hamburger {
-  border: none !important;   /* supprime totalement la bordure */
-  outline: none !important;  /* sécurité si un outline était appliqué */
-}
-
-.bar.bar-default .icon{ width:24px; height:24px; display:block }
-
-#ghostBar{
-  position:absolute;
-  left:50%;
-  transform:translateX(-50%);
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 0px);
-  width:100%;
-  max-width:760px;
-  padding:0 12px;
-
-  /* 3 zones égales : Prev | Play | Next */
-  display:none;                          /* caché quand menu par défaut visible */
-  grid-template-columns: 1fr 1fr 1fr;
-  gap:10px;
-
-  /* invisible visuellement */
-  background:transparent;
-  z-index:3;                             /* au-dessus de la barre par défaut */
-}
-#ghostBar button{
-  height:62px;                           /* même hauteur que .slot */
-  background:transparent;
-  border:none;
-  pointer-events:auto;                   /* capte les clics quand #ghostBar est affiché */
-}
-
-/* Hamburger */
-#hamburger{
-  width:36px; height:36px;
-  border-radius:999px; border:1px solid;
-  display:flex; align-items:center; justify-content:center;
-  background: transparent; /* fond transparent */
-  box-shadow: 0 6px 20px rgba(0,0,0,.12);
-}
-
-/* helpers (if missing) */
-.onLightBorder{ border-color: rgba(0,0,0,.55); }
-.onDarkBorder { border-color: rgba(255,255,255,.55); }
-.defOnLight { background: rgba(0,0,0,.18); color:#000; }
-.defOnDark  { background: rgba(255,255,255,.18); color:#fff; }
-
 </style>
 </head>
 
@@ -742,32 +1298,64 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
     <div class="card" id="homePage">
       <h1>Lecteur chinois mot-à-mot</h1>
 
-      <div class="input-wrap">
-  <div id="editorArea">
-    <textarea id="inputText">你好，我们是学生。老师喜欢中国。</textarea>
-  </div>
-  <div id="segmentedArea" style="display:none;">
-    <div id="segmentedText" class="segmented-box"></div>
-  </div>
-  <!-- barre d’actions -->
-<div class="editor-actions">
-  <!-- Croix (effacer) -->
-  <button id="clearText" class="editor-btn" title="Effacer le texte">
-    <svg viewBox="0 0 24 24" class="icon" xmlns="http://www.w3.org/2000/svg">
-      <line x1="18" y1="6" x2="6" y2="18" stroke-width="2" stroke-linecap="round"/>
-      <line x1="6" y1="6" x2="18" y2="18" stroke-width="2" stroke-linecap="round"/>
-    </svg>
-  </button>
+      <!-- Mode Selector -->
+      <div class="mode-selector">
+        <div class="mode-option">
+          <input type="radio" id="readMode" name="appMode" value="read" checked>
+          <label class="mode-label" for="readMode">
+            <div class="mode-icon">📖</div>
+            <div class="mode-title">Mode Lecture</div>
+            <div class="mode-desc">Lecture avec sélection de mots</div>
+          </label>
+        </div>
+        <div class="mode-option">
+          <input type="radio" id="gameMode" name="appMode" value="game">
+          <label class="mode-label" for="gameMode">
+            <div class="mode-icon">🎮</div>
+            <div class="mode-title">Mode Jeu</div>
+            <div class="mode-desc">Exercices interactifs</div>
+          </label>
+        </div>
+      </div>
 
-  <!-- Crayon (modifier) -->
-  <button id="toggleEdit" class="editor-btn" title="Basculer édition/segmentation">
-    <svg viewBox="0 0 24 24" class="icon" xmlns="http://www.w3.org/2000/svg">
-      <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/>
-      <path d="M20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 
-               1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"/>
-    </svg>
-  </button>
+      <div class="input-wrap">
+        <div id="editorArea">
+          <textarea id="inputText">你好，我们是学生。老师喜欢中国。</textarea>
+        </div>
+        <div id="segmentedArea" style="display:none;">
+          <div id="segmentedText" class="segmented-box"></div>
+        </div>
+        <div class="editor-actions">
+          <button id="clearText" class="editor-btn" title="Effacer le texte">
+            <svg viewBox="0 0 24 24" class="icon" xmlns="http://www.w3.org/2000/svg">
+              <line x1="18" y1="6" x2="6" y2="18" stroke-width="2" stroke-linecap="round"/>
+              <line x1="6" y1="6" x2="18" y2="18" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <button id="toggleEdit" class="editor-btn" title="Basculer édition/segmentation" style="display:none;">
+            <svg viewBox="0 0 24 24" class="icon" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/>
+              <path d="M20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 
+                       1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Game Mode Options -->
+      <div class="game-mode-options" id="gameModeOptions">
+        <div class="game-mode-title">Options du mode jeu :</div>
+        <div class="game-mode-grid">
+  <div class="game-mode-item">
+    <input type="radio" id="gameBoth" name="gameType" value="both" checked>
+    <label for="gameBoth">Normal</label>
+  </div>
+  <div class="game-mode-item">
+    <input type="radio" id="gameReorderNoRead" name="gameType" value="reorderNoRead">
+    <label for="gameReorderNoRead">Phrases aléatoires</label>
+  </div>
 </div>
+      </div>
 
       <fieldset>
         <legend>Paramètres de lecture</legend>
@@ -775,16 +1363,16 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
           <label>Vitesse (mots/min) : <strong id="speedLabel">120</strong></label>
           <input class="range" type="range" id="speed" min="30" max="360" step="10" value="120">
         </div>
-        <div class="opt">
+        <div class="opt" id="pinyinOption">
           <input type="checkbox" id="showPinyin"><span>Afficher le pinyin</span>
         </div>
-        <div class="opt">
+        <div class="opt" id="translationOption">
           <input type="checkbox" id="showDefs"><span>Afficher la traduction</span>
         </div>
-      <div class="opt">
+        <div class="opt" id="selectionOption">
           <input type="checkbox" id="alwaysShowSelected">
-      <span>Tout afficher sur la sélection</span>
-      </div>
+          <span>Tout afficher sur la sélection</span>
+        </div>
       </fieldset>
 
       <fieldset>
@@ -798,11 +1386,11 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
             <div id="textColorPicker"></div>
             <label for="textColorPicker">Mots</label>
           </div>
-          <div class="swatch">
+          <div class="swatch" id="highlightBgSwatch">
             <div id="highlightBgColorPicker"></div>
             <label for="highlightBgColorPicker">Fond 2</label>
           </div>
-          <div class="swatch">
+          <div class="swatch" id="highlightColorSwatch">
             <div id="highlightColorPicker"></div>
             <label for="highlightColorPicker">Mots 2</label>
           </div>
@@ -822,22 +1410,21 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
     </div>
   </div>
 
-  <!-- Overlay plein écran pour la sélection -->
+  <!-- Selection Overlay -->
   <div id="selectionOverlay">
-  <div class="overlay-content">
-    <div id="overlayHeader">
-      <button id="closeOverlay" aria-label="Fermer la sélection">✖</button>
-    </div>
-    <div id="segmentedOverlayText"></div>
-    <!-- ✅ footer boutons -->
-    <div class="overlay-footer">
-      <button id="overlayCancelBtn" class="info-btn info-cancel">Annuler</button>
-      <button id="overlayValidateBtn" class="info-btn info-validate">Valider</button>
+    <div class="overlay-content">
+      <div id="overlayHeader">
+        <button id="closeOverlay" aria-label="Fermer la sélection">✖</button>
+      </div>
+      <div id="segmentedOverlayText"></div>
+      <div class="overlay-footer">
+        <button id="overlayCancelBtn" class="info-btn info-cancel">Annuler</button>
+        <button id="overlayValidateBtn" class="info-btn info-validate">Valider</button>
+      </div>
     </div>
   </div>
-</div>
   
-  <!-- Overlay "Info" (nouveau) -->
+  <!-- Info Overlay -->
   <div id="infoOverlay" style="display:none">
     <div class="info-card">
       <div class="info-header">
@@ -851,9 +1438,8 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
       </div>
     </div>
   </div>
-  
 
-  <!-- Page de lecture -->
+  <!-- Display Page -->
   <div id="displayPage">
     <div id="charContainer">
       <div id="charDisplay"></div>
@@ -861,53 +1447,177 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
       <div id="defs"></div>
     </div>
 
-    <!-- bouton toggle + barre -->
-    
-    <!-- New controls -->
-    <!-- bar-extra removed -->
+    <!-- Normal Bar -->
+    <div class="bar bar-default" id="barDefault" aria-label="Menu de base">
+      <button class="slot slot-quit" id="quitBtn" title="Quitter" aria-label="Quitter">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6"  y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <button class="slot slot-prev" id="prevWordBtn" title="Mot précédent" aria-label="Mot précédent">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+      <button class="slot slot-play" id="pauseBtn" title="Lecture/Pause" aria-label="Lecture/Pause">
+        <svg id="pauseIcon" class="icon" viewBox="0 0 24 24" fill="currentColor">
+          <polygon points="8,6 18,12 8,18"></polygon>
+        </svg>
+      </button>
+      <button class="slot slot-next" id="nextWordBtn" title="Mot suivant" aria-label="Mot suivant">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+      <button class="slot slot-info" id="infoBtn" title="Infos" aria-label="Infos">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="12" y1="17" x2="12" y2="11"></line>
+          <line x1="12" y1="7"  x2="12" y2="7"></line>
+        </svg>
+      </button>
+      <button class="slot slot-hamburger" id="hamburger" title="Afficher/Masquer le menu">
+        <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M4 7h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
+        </svg>
+      </button>
+    </div>
 
-<!-- Single bottom bar (6 zones): Quit | Prev | Play | Next | Info | Hamburger -->
-<div class="bar bar-default" id="barDefault" aria-label="Menu de base">
-  <button class="slot slot-quit" id="quitBtn" title="Quitter" aria-label="Quitter">
-    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-      <line x1="18" y1="6" x2="6" y2="18"></line>
-      <line x1="6"  y1="6" x2="18" y2="18"></line>
-    </svg>
-  </button>
-  <button class="slot slot-prev" id="prevWordBtn" title="Mot précédent" aria-label="Mot précédent">
-    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-      <polyline points="15 18 9 12 15 6"></polyline>
-    </svg>
-  </button>
-  <button class="slot slot-play" id="pauseBtn" title="Lecture/Pause" aria-label="Lecture/Pause">
-    <svg id="pauseIcon" class="icon" viewBox="0 0 24 24" fill="currentColor">
-      <polygon points="8,6 18,12 8,18"></polygon>
-    </svg>
-  </button>
-  <button class="slot slot-next" id="nextWordBtn" title="Mot suivant" aria-label="Mot suivant">
-    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-      <polyline points="9 18 15 12 9 6"></polyline>
-    </svg>
-  </button>
-  <button class="slot slot-info" id="infoBtn" title="Infos" aria-label="Infos">
-    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-      <line x1="12" y1="17" x2="12" y2="11"></line>
-      <line x1="12" y1="7"  x2="12" y2="7"></line>
-    </svg>
-  </button>
-  <button class="slot slot-hamburger" id="hamburger" title="Afficher/Masquer le menu">
-    <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M4 7h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
-    </svg>
-  </button>
-</div>
+    <!-- Ghost Bar -->
+    <div id="ghostBar" aria-hidden="true" inert>
+      <button id="ghostPrev"  aria-label="Mot précédent"></button>
+      <button id="ghostPause" aria-label="Lecture/Pause"></button>
+      <button id="ghostNext"  aria-label="Mot suivant"></button>
+    </div>
 
-<!-- Menu fantôme (invisible) : Prev | Play | Next -->
-<div id="ghostBar" aria-hidden="true" inert>
-  <button id="ghostPrev"  aria-label="Mot précédent"></button>
-  <button id="ghostPause" aria-label="Lecture/Pause"></button>
-  <button id="ghostNext"  aria-label="Mot suivant"></button>
-</div>
+    <!-- Game Bars -->
+    <div id="gameBars" style="display:none;">
+      <div class="game-bar">
+        <button class="game-btn" id="quitGameBtn" title="Quitter le mode jeu" aria-label="Quitter">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6"  y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+        <button class="game-btn" id="prevSentenceBtn" title="Phrase précédente" aria-label="Phrase précédente">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <button class="game-btn" id="playGameBtn" title="Lire la phrase" aria-label="Lecture">
+          <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="8,6 18,12 8,18"></polygon>
+          </svg>
+        </button>
+        <button class="game-btn" id="nextSentenceBtn" title="Phrase suivante" aria-label="Phrase suivante">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+        <button class="game-btn" id="showGameBtn" title="Afficher le jeu" aria-label="Jeu">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="12" y1="17" x2="12" y2="11"></line>
+            <line x1="12" y1="7"  x2="12" y2="7"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Game Bars No Read -->
+    <div id="gameBarsNoRead" style="display:none;">
+      <div class="game-bar">
+        <button class="game-btn" id="quitGameNoReadBtn" title="Quitter le mode jeu" aria-label="Quitter">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6"  y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+        <button class="game-btn" id="prevSentenceNoReadBtn" title="Phrase précédente" aria-label="Phrase précédente">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <button class="game-btn" id="randomSentenceBtn" title="Phrase aléatoire" aria-label="Aléatoire">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/>
+          </svg>
+        </button>
+        <button class="game-btn" id="nextSentenceNoReadBtn" title="Phrase suivante" aria-label="Phrase suivante">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+        <button class="game-btn" id="showGameNoReadBtn" title="Afficher le jeu" aria-label="Jeu">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="12" y1="17" x2="12" y2="11"></line>
+            <line x1="12" y1="7"  x2="12" y2="7"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game Mode Overlay -->
+  <div id="gameModeOverlay" style="display:none;">
+    <div class="game-overlay-content">
+      <div class="game-header">
+        <h3>Choisissez votre mode</h3>
+        <button id="closeGameMode" class="close-btn">✖</button>
+      </div>
+      <div class="mode-buttons">
+        <button id="reorderModeBtn" class="mode-btn">Réorganiser</button>
+        <button id="freeModeBtn" class="mode-btn">Libre</button>
+      </div>
+      <div class="game-nav-footer">
+        <button id="prevSentenceGame" class="nav-btn">← Précédente</button>
+        <button id="replayGame" class="nav-btn nav-btn-replay">Relire</button>
+        <button id="nextSentenceGame" class="nav-btn">Suivante →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game Play Overlay -->
+  <div id="gamePlayOverlay" style="display:none;">
+    <div class="game-overlay-content">
+      <div class="game-header">
+        <div class="mode-switcher">
+          <button id="switchReorder" class="mode-switch mode-switch-reorder active">Réorganiser</button>
+          <button id="switchFree" class="mode-switch mode-switch-free">Libre</button>
+        </div>
+        <button id="closeGamePlay" class="close-btn">✖</button>
+      </div>
+      
+      <div id="reorderGame" class="game-content">
+        <div id="wordPool" class="word-pool">
+          <div class="pool-title">Mots disponibles :</div>
+          <div id="availableWords" class="words-container"></div>
+        </div>
+        <div id="sentenceBuilder" class="sentence-builder">
+          <div class="pool-title">Votre phrase :</div>
+          <div id="userSentence" class="words-container drop-zone"></div>
+        </div>
+        <button id="validateReorder" class="validate-btn">Valider</button>
+        <div id="reorderResult" class="result-message" style="display:none;"></div>
+        <button id="retryReorder" class="retry-btn" style="display:none;">Recommencer</button>
+      </div>
+      
+      <div id="freeGame" class="game-content" style="display:none;">
+        <div class="free-input-container">
+          <label for="freeTextInput">Retapez la phrase :</label>
+          <textarea id="freeTextInput" class="free-textarea" placeholder="Tapez la phrase ici..."></textarea>
+        </div>
+        <button id="validateFree" class="validate-btn">Valider</button>
+        <div id="freeResult" class="result-message" style="display:none;"></div>
+        <button id="retryFree" class="retry-btn" style="display:none;">Recommencer</button>
+      </div>
+      
+      <div class="game-nav-footer">
+        <button id="prevSentenceInGame" class="nav-btn">← Précédente</button>
+        <button id="replayInGame" class="nav-btn nav-btn-replay">Relire</button>
+        <button id="nextSentenceInGame" class="nav-btn">Suivante →</button>
+      </div>
+    </div>
+  </div>
 
 <script>
 // ========= État global =========
@@ -915,13 +1625,24 @@ let dict = { entries: new Map(), wordSet: new Set(), maxLen: 1 };
 let tokens = [];
 let idx = 0;
 let timer = null;
-let playing = true;
+let playing = false;
 let highlightWords = [];
+let readModeHighlightWords = [];  // Pour le mode lecture
+let gameModeHighlightWords = [];  // Pour le mode jeu (si besoin)
 let currentToken = null;
 let editMode = true;
 let infoChosenIndex = null;
 let infoWasPlaying  = false;
-let __menuHiddenByUser = false;   // true seulement si le hamburger a caché le menu
+let __menuHiddenByUser = false;
+let gameMode = false;
+let gameType = 'both';
+let sentenceStarts = [];
+let currentSentenceIndex = 0;
+let originalSentence = '';
+let currentGameMode = 'reorder';
+let appMode = 'read';
+let playedSentences = [];  // Pour tracker les phrases déjà jouées
+
 
 // ========= Utilitaires =========
 function numericToDiacriticPinyin(pinyin){
@@ -934,26 +1655,19 @@ function numericToDiacriticPinyin(pinyin){
   const normalized=pinyin.replace(/u:/g,'ü').replace(/U:/g,'Ü').replace(/\bv/g,'ü').replace(/\bV/g,'Ü');
   return normalized.replace(/([A-Za-zü:]+)([0-5])/g,(m,sy,t)=>{const tone=+t; if(tone===0||tone===5) return sy.replace(/:/g,''); return applyMark(sy,tone-1);});
 }
+
 function normalizeChineseText(text){
   if(!text) return '';
-
-  // supprimer caractères invisibles
   text = text.replace(/[\u200B-\u200D\uFEFF]/g,'');
-
-  // unifier les retours à la ligne → espace unique
   text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
   text = text.replace(/\n+/g, ' ');
-
-  // enlever espaces entre deux Han
   text = text.replace(/([\p{Script=Han}])\p{White_Space}+(?=[\p{Script=Han}])/gu,'$1');
-
-  // enlever espaces mal placés autour de la ponctuation (inclut guillemets chinois)
   text = text
-    .replace(/\p{White_Space}+([，。！？、；：,.!?;:“”《》])/gu,'$1')
-    .replace(/([，。！？、；：,.!?;:“”《》])\p{White_Space}+/gu,'$1');
-
+    .replace(/\p{White_Space}+([，。！？、；：,.!?;"《》])/gu,'$1')
+    .replace(/([，。！？、；：,.!?;"《》])\p{White_Space}+/gu,'$1');
   return text.trim();
 }
+
 function parseCedict(raw){
   const entries=new Map(), wordSet=new Set(); let maxLen=1;
   for(const line of raw.split(/\r?\n/)){
@@ -965,31 +1679,26 @@ function parseCedict(raw){
   }
   return { entries, wordSet, maxLen };
 }
+
 const isHan = ch => /[\u3400-\u9FFF\uF900-\uFAFF]/.test(ch);
 
 function segmentText(text, wordSet, maxLen){
-  // Guillemets & ponctuation (plein largeur + ASCII)
-  const OPEN  = /[“‘«《「『（(〈]/u;
-  const CLOSE = /[”’»》」』）)〉]/u;
-  const PUNC  = /[，、：；。！？,.!?;…—\-‧·･•‥？]/u; // inclut le "？" plein largeur
+  const OPEN  = /["'«《「『（(〈]/u;
+  const CLOSE = /["'»》」』）)〉]/u;
+  const PUNC  = /[，、：；。！？,.!?;…—\-·•‥，？]/u;
 
   const isOpen   = ch => OPEN.test(ch);
   const isAfter  = ch => CLOSE.test(ch) || PUNC.test(ch);
 
   const result = [];
   let i = 0;
-  let prefix = ""; // on accumule les guillemets ouvrants ici
+  let prefix = "";
 
   while (i < text.length){
     let ch = text[i];
-
-    // espaces → on saute
     if (/\s/.test(ch)) { i++; continue; }
-
-    // guillemets ouvrants : on les stocke en préfixe, puis on continue
     if (isOpen(ch)) { prefix += ch; i++; continue; }
 
-    // essai de match glouton dans le dictionnaire
     let match = null;
     let len = Math.min(maxLen, text.length - i);
     while (len > 0){
@@ -999,12 +1708,9 @@ function segmentText(text, wordSet, maxLen){
     }
 
     if (match){
-      // on colle le préfixe ouvrant au mot trouvé
       result.push({ text: prefix + match, type:'han' });
       prefix = "";
       i += match.length;
-
-      // on absorbe toute ponctuation/guillemets fermants qui suivent
       while (i < text.length && isAfter(text[i])) {
         result[result.length - 1].text += text[i];
         i++;
@@ -1012,37 +1718,23 @@ function segmentText(text, wordSet, maxLen){
       continue;
     }
 
-    // pas de match dict → fallback caractère par caractère
     ch = text[i];
-
-    // ponctuation/fermeture → on l'attache au token précédent si possible
     if (isAfter(ch)) {
-      if (result.length) {
-        result[result.length - 1].text += (prefix + ch);
-      } else {
-        result.push({ text: prefix + ch, type: 'punc' });
-      }
-      prefix = "";
-      i++;
-      continue;
+      if (result.length) result[result.length - 1].text += (prefix + ch);
+      else result.push({ text: prefix + ch, type: 'punc' });
+      prefix = ""; i++; continue;
     }
 
-    // caractère "han" isolé ou autre
     result.push({ text: prefix + ch, type: /[\u3400-\u9FFF\uF900-\uFAFF]/.test(ch) ? 'han' : 'punc' });
-    prefix = "";
-    i++;
+    prefix = ""; i++;
   }
 
-  // si un préfixe restait (rare), on le rattache proprement
   if (prefix){
     if (result.length) result[result.length - 1].text = prefix + result[result.length - 1].text;
     else result.push({ text: prefix, type: 'punc' });
   }
-
   return result;
 }
-
-
 
 function attachDictInfo(tokens, dictMap){
   return tokens.map(tok=>{
@@ -1070,23 +1762,18 @@ function renderSegmented(){
     const clean = tok.text.replace(/[。！？,.，!?]$/, '');
     if (highlightWords.includes(clean)) el.classList.add('selected');
 
-    // ✅ clic sur le token
     el.addEventListener('click', (e) => {
       e.stopPropagation();
-
-      // toggle surlignage
       if (highlightWords.includes(clean)) {
         highlightWords = highlightWords.filter(w => w !== clean);
       } else {
         highlightWords.push(clean);
       }
+      readModeHighlightWords = [...highlightWords];  // ← AJOUTER ICI
       renderSegmented();
-
-      // ✅ afficher directement infos du mot
       showToken(tok);
     });
 
-    // ✅ bouton ▶ lecture depuis ce mot
     const play = document.createElement('button');
     play.className = 'chip-play';
     play.textContent = '▶';
@@ -1106,8 +1793,6 @@ function renderSegmented(){
   });
 }
 
-
-
 // ========= Rendu (page de jeu) =========
 function showToken(token) {
   currentToken = token;
@@ -1117,21 +1802,18 @@ function showToken(token) {
   const dEl  = document.getElementById('defs');
   const cont = document.getElementById('charContainer');
 
-  // reset zone
   cd.innerHTML = '';
   pEl.textContent = '';
   dEl.textContent = '';
   pEl.style.display = '';
   dEl.style.display = '';
 
-  // --- découpe ponctuation finale (。,！…)
   let han = token.text, punc = '';
   if (/[。！？,.，!?]$/.test(token.text)) {
     han  = token.text.slice(0, -1);
     punc = token.text.slice(-1);
   }
 
-  // --- écriture des caractères
   if (han) {
     for (const ch of han) {
       const s = document.createElement('span');
@@ -1150,7 +1832,6 @@ function showToken(token) {
     cd.classList.remove('shifted');
   }
 
-  // --- couleurs dynamiques (pickr)
   const normalBg      = (bgColorPicker?.getColor()?.toHEXA().toString())          || '#ffffff';
   const normalText    = (textColorPicker?.getColor()?.toHEXA().toString())        || '#000000';
   const highlightBg   = (highlightBgColorPicker?.getColor()?.toHEXA().toString()) || '#000000';
@@ -1159,7 +1840,6 @@ function showToken(token) {
   const clean = token.text.replace(/[。！？,.，!?]$/, '');
   const isH   = highlightWords.includes(clean);
 
-  // couleurs page + caractères selon surlignage
   const pageBg   = isH ? highlightBg   : normalBg;
   const textCol  = isH ? highlightText : normalText;
   cd.style.color = textCol;
@@ -1167,17 +1847,13 @@ function showToken(token) {
   dp.style.backgroundColor = pageBg;
   applyControlsTheme(getContrastingColor(pageBg));
 
-
-  // contraste pour pinyin / defs
   const contrast = getContrastingColor(pageBg);
   pEl.style.color = contrast;
   dEl.style.color = contrast;
 
-  // --- contenu pinyin/defs
   if (token.pinyin) pEl.textContent = token.pinyin;
   if (token.defs)   dEl.textContent = token.defs.join(', ');
 
-  // --- affichage selon cases cochées
   const optShowPinyin = !!document.getElementById('showPinyin')?.checked;
   const optShowDefs   = !!document.getElementById('showDefs')?.checked;
   const alwaysShowSel = !!document.getElementById('alwaysShowSelected')?.checked;
@@ -1190,16 +1866,13 @@ function showToken(token) {
     dEl.style.display = optShowDefs   ? '' : 'none';
   }
 
-  // --- taille dynamique
   const totalLen = han.length + (punc ? 1 : 0);
   if (totalLen >= 5) cd.classList.add('long-seq'); else cd.classList.remove('long-seq');
   if (typeof fitCharLine === 'function') fitCharLine();
 
-  // --- clic sur le conteneur : toggle local
   cont.dataset.toggled = '0';
   cont.onclick = (e) => {
     e.stopPropagation();
-
     const showPinyin = !!document.getElementById('showPinyin')?.checked;
     const showDefs   = !!document.getElementById('showDefs')?.checked;
     const toggled    = cont.dataset.toggled === '1';
@@ -1217,7 +1890,7 @@ function showToken(token) {
         dEl.style.display = '';
       } else if (!showPinyin && showDefs) {
         pEl.style.display = '';
-      } else { // les deux cochés
+      } else {
         pEl.style.display = 'none';
         dEl.style.display = 'none';
       }
@@ -1229,18 +1902,37 @@ function showToken(token) {
     }
   };
 
-  // --- (important) : garder l’état du menu en bas
+  // Gestion barres jeu
+  if (gameMode) {
+    if (gameType === 'reorderNoRead') {
+      toggleGameBarsNoRead(true);
+    } else {
+      toggleGameBars(true);
+    }
+    const gameBars = document.getElementById(gameType === 'reorderNoRead' ? 'gameBarsNoRead' : 'gameBars');
+    if (gameBars) {
+      gameBars.querySelectorAll('.game-btn').forEach(btn => {
+        btn.style.color = contrast;
+        btn.style.borderColor = 'none';
+        btn.style.background = contrast === '#ffffff' 
+          ? 'rgba(255,255,255,0.18)' 
+          : 'rgba(0,0,0,0.18)';
+      });
+    }
+  } else {
+    toggleGameBars(false);
+    toggleGameBarsNoRead(false);
+  }
+  
   try { enforceMenuState(); } catch (_) {}
 }
 
 function applyControlsTheme(contrastColor){
-  const isDarkBg = (contrastColor === '#ffffff'); // si contraste = blanc, alors bg sombre
-  const elemColor = isDarkBg ? '#ffffff' : '#000000'; // blanc sur fond sombre, noir sur fond clair
+  const isDarkBg = (contrastColor === '#ffffff');
+  const elemColor = isDarkBg ? '#ffffff' : '#000000';
   const borderColor = isDarkBg ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)';
 
   const barDefault = document.getElementById('barDefault');
-  const hamburger = document.getElementById('hamburger');
-  
   if (barDefault) {
     barDefault.querySelectorAll('.slot, #hamburger').forEach(slot => {
       slot.style.color = elemColor;
@@ -1249,49 +1941,74 @@ function applyControlsTheme(contrastColor){
   }
 }
 
-
-
-
 // ========= Page de lecture =========
 function startDisplay() {
-  // cacher la page d’accueil
-  document.getElementById('homePage').style.display = 'none';
-
-  // afficher la page de jeu
-  const dp = document.getElementById('displayPage');
-  dp.style.display = 'block';
-  dp.style.visibility = 'visible';
-
-  // appliquer un thème initial aux boutons/menus AVANT le premier showToken
-  const initialBg  = (bgColorPicker?.getColor()?.toHEXA().toString()) || '#ffffff';
-  const contrast0  = getContrastingColor(initialBg);
-  applyControlsTheme(contrast0);
-
-  // 👇 câblage des boutons Info/Valider/Annuler/✖
-  wireInfoOverlayControls();
-
-  // segmenter le texte
   const text = normalizeChineseText(document.getElementById('inputText').value);
   tokens = attachDictInfo(segmentText(text, dict.wordSet, dict.maxLen), dict.entries);
   idx = 0;
 
   if (!tokens.length) {
-    alert("Aucun mot à afficher. Vérifie ton texte ou ta segmentation.");
+    alert("Aucun mot à afficher.");
     return;
   }
 
-  // reset du timer
-  clearInterval(timer);
+  if (gameMode && gameType === 'reorderNoRead') {
+    // Mode spécial : ne pas afficher la page de lecture du tout
+    document.getElementById('homePage').style.display = 'none';
+    
+    sentenceStarts = computeSentenceStarts(tokens);
+    playedSentences = [];
+    currentSentenceIndex = Math.floor(Math.random() * sentenceStarts.length);
+    playedSentences.push(currentSentenceIndex);
+    idx = sentenceStarts[currentSentenceIndex];
+    originalSentence = getSentenceText(tokens, currentSentenceIndex);
+    
+    // Appliquer le fond choisi à l'overlay
+    const bgColor = (bgColorPicker?.getColor()?.toHEXA().toString()) || '#ffffff';
+    document.body.style.backgroundColor = bgColor;
+    
+    openGamePlayOverlayDirect();
+    return;
+  }
+  
+  // Mode normal avec page de lecture
+  document.getElementById('homePage').style.display = 'none';
+  const dp = document.getElementById('displayPage');
+  dp.style.display = 'block';
+  dp.style.visibility = 'visible';
+  
+  if (gameMode) {
+    highlightWords = [];
+  } else {
+    highlightWords = [...readModeHighlightWords];
+  }
 
-  // premier affichage
+  const initialBg = (bgColorPicker?.getColor()?.toHEXA().toString()) || '#ffffff';
+  const contrast0 = getContrastingColor(initialBg);
+  applyControlsTheme(contrast0);
+
+  wireInfoOverlayControls();
+
+  if (gameMode) {
+    sentenceStarts = computeSentenceStarts(tokens);
+    playedSentences = [];
+    currentSentenceIndex = 0;
+    toggleGameBars(true);
+    updateGameBarNavigation();
+  } else {
+    toggleGameBars(false);
+    toggleGameBarsNoRead(false);
+  }
+
+  clearInterval(timer);
+  playing = false;
   showToken(tokens[idx]);
   if (typeof fitCharLine === 'function') fitCharLine();
 }
 
-function stopDisplay(){ clearInterval(timer); }
-
 // ========= Navigation par phrase =========
 const SENT_END_RE = /[。！？.!?]$/;
+
 function computeSentenceStarts(tokArr){
   const starts = [0];
   for (let i=0;i<tokArr.length;i++){
@@ -1300,19 +2017,31 @@ function computeSentenceStarts(tokArr){
   if (starts[starts.length-1] === tokArr.length) starts.pop();
   return starts;
 }
-function findCurrentSentenceStart(tokArr, i){
+
+function findCurrentSentenceIndex(tokArr, currentIdx) {
   const starts = computeSentenceStarts(tokArr);
-  let s = 0;
-  for (const st of starts){ if(st <= i) s = st; else break; }
-  return s;
-}
-function findNextSentenceStart(tokArr, i){
-  const starts = computeSentenceStarts(tokArr);
-  for (const st of starts){ if(st > i) return st; }
-  return i;
+  for (let i = 0; i < starts.length; i++) {
+    if (i === starts.length - 1) return i;
+    if (currentIdx >= starts[i] && currentIdx < starts[i + 1]) return i;
+  }
+  return 0;
 }
 
-// ========= Couleurs / contraste =========
+function getSentenceText(tokArr, sentenceIdx) {
+  const starts = computeSentenceStarts(tokArr);
+  if (sentenceIdx >= starts.length) return '';
+  
+  const startIdx = starts[sentenceIdx];
+  let endIdx = tokArr.length;
+  
+  if (sentenceIdx < starts.length - 1) {
+    endIdx = starts[sentenceIdx + 1];
+  }
+  
+  return tokArr.slice(startIdx, endIdx).map(t => t.text).join('');
+}
+
+// ========= Couleurs =========
 function getContrastingColor(hex){
   hex = hex.replace('#','');
   if(hex.length === 3) hex = hex.split('').map(c=>c+c).join('');
@@ -1323,10 +2052,15 @@ function getContrastingColor(hex){
   return luminance > 0.6 ? "#000000" : "#ffffff";
 }
 
-// ========= Repositionnement lecture =========
+// ========= Repositionnement =========
 function restartFrom(index){
   const text = normalizeChineseText(document.getElementById('inputText').value);
   tokens = attachDictInfo(segmentText(text, dict.wordSet, dict.maxLen), dict.entries);
+  
+  if (gameMode) {
+    sentenceStarts = computeSentenceStarts(tokens);
+  }
+  
   if (!tokens.length) return;
 
   idx = Math.max(0, Math.min(index, tokens.length-1));
@@ -1335,42 +2069,122 @@ function restartFrom(index){
   fitCharLine && fitCharLine();
 }
 
-// ========= Boucle + Play/Pause =========
+// ========= Boucle =========
+function updatePlayGameBtnIcon() {
+  const btn = document.getElementById('playGameBtn');
+  if (!btn) return;
+
+  if (playing) {
+    // Icône Pause II
+    btn.innerHTML = `
+      <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+        <rect x="7" y="6" width="3" height="12"></rect>
+        <rect x="14" y="6" width="3" height="12"></rect>
+      </svg>`;
+  } else {
+    // Icône Lecture ▶
+    btn.innerHTML = `
+      <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+        <polygon points="8,6 18,12 8,18"></polygon>
+      </svg>`;
+  }
+}
 function forcePause(){
   playing = false;
   clearInterval(timer);
   const pb = document.getElementById('pauseIcon');
   if (pb) pb.innerHTML = '<polygon points="8,6 18,12 8,18"></polygon>';
+  updatePlayGameBtnIcon(); // ← ajoute ça
 }
-function forcePlay(){
+
+function forcePlay(skipFirst = false){
   if (!tokens || !tokens.length) return;
+  if (gameMode && gameType === 'reorderNoRead') return;
+
   playing = true;
   const pb = document.getElementById('pauseIcon');
-  if (pb) pb.innerHTML = '<rect x="7" y="6" width="3" height="12" fill="currentColor"></rect><rect x="14" y="6" width="3" height="12" fill="currentColor"></rect>';
-  showToken(tokens[idx]);
-  startLoop();
+  if (pb) pb.innerHTML = '<rect x="7" y="6" width="3" height="12" fill="currentColor"></rect>'
+                       + '<rect x="14" y="6" width="3" height="12" fill="currentColor"></rect>';
+  
+  if (!skipFirst) showToken(tokens[idx]);
+  startLoop(skipFirst);
+  updatePlayGameBtnIcon(); // ← ajoute ça
 }
-function startLoop(){
+
+function startLoop(skipFirst = false){
   const speedEl = document.getElementById('speed');
   const speed = +(speedEl?.value || 120);
   const ms = Math.max(50, Math.round(60000 / Math.max(1, speed)));
   clearInterval(timer);
-  timer = setInterval(()=>{
-    if(!playing) return;
+
+  let first = skipFirst;
+  timer = setInterval(() => {
+    if (!playing) return;
+
+    if (first) {         // on saute la 1re itération si demandé
+      first = false;
+      return;
+    }
+
     idx++;
-    if(idx < tokens.length){
+    if (idx < tokens.length) {
       showToken(tokens[idx]);
+
+      // Si on est en mode jeu (sauf reorderNoRead) et qu’on finit une phrase → ouvrir l’overlay
+      if (gameMode && gameType !== 'reorderNoRead' && SENT_END_RE.test(tokens[idx].text)) {
+        forcePause();
+        setTimeout(() => { openGameModeOverlay(); }, 500);
+        return;
+      }
+
+      // Pause sur mot surligné
       const clean = tokens[idx].text.replace(/[。！？,.，!?]$/,'');
-      if (highlightWords.includes(clean)){
+      if (highlightWords.includes(clean)) {
         forcePause();
       }
-    }else{
+    } else {
+      // fin du texte
       forcePause();
+      // (option) on se remet au début pour que ▶ relance depuis le début
+      idx = 0;
+      updatePlayGameBtnIcon();
     }
   }, ms);
 }
 
-// ========= Ajuste la taille =========
+// ========= UI Management =========
+function updateUI() {
+  const readMode = document.getElementById('readMode').checked;
+  const gameMode = document.getElementById('gameMode').checked;
+  
+  const toggleEdit = document.getElementById('toggleEdit');
+  const pinyinOption = document.getElementById('pinyinOption');
+  const translationOption = document.getElementById('translationOption');
+  const selectionOption = document.getElementById('selectionOption');
+  const highlightBgSwatch = document.getElementById('highlightBgSwatch');
+  const highlightColorSwatch = document.getElementById('highlightColorSwatch');
+  const gameModeOptions = document.getElementById('gameModeOptions');
+  
+  if (readMode) {
+    toggleEdit.style.display = 'flex';
+    pinyinOption.style.display = 'flex';
+    translationOption.style.display = 'flex';
+    selectionOption.style.display = 'flex';
+    highlightBgSwatch.style.display = 'block';
+    highlightColorSwatch.style.display = 'block';
+    gameModeOptions.style.display = 'none';
+  } else if (gameMode) {
+    toggleEdit.style.display = 'none';
+    pinyinOption.style.display = 'flex';
+    translationOption.style.display = 'flex';
+    selectionOption.style.display = 'none';
+    highlightBgSwatch.style.display = 'none';
+    highlightColorSwatch.style.display = 'none';
+    gameModeOptions.style.display = 'block';
+  }
+}
+
+// ========= Taille =========
 function fitCharLine() {
   const container = document.getElementById('charContainer');
   const display   = document.getElementById('charDisplay');
@@ -1383,129 +2197,1124 @@ function fitCharLine() {
     if (symbols <= 3) {
       display.style.fontSize = '80px';
       return;
-    } else {
-      let maxPx = 140;  const minPx = 28;
-      let size = maxPx; let guard = 30;
-      display.style.fontSize = size + 'px';
-      while (
-        guard-- > 0 &&
-        (display.scrollWidth > container.clientWidth * 0.95 ||
-         display.scrollHeight > container.clientHeight * 0.95)
-      ) {
-        size = Math.max(minPx, Math.floor(size * 0.92));
-        display.style.fontSize = size + 'px';
-      }
-      return;
     }
+    let size = 140, minPx = 28, guard = 30;
+    display.style.fontSize = size + 'px';
+    while (guard-- > 0 && (display.scrollWidth > container.clientWidth * 0.95 || display.scrollHeight > container.clientHeight * 0.95)) {
+      size = Math.max(minPx, Math.floor(size * 0.92));
+      display.style.fontSize = size + 'px';
+    }
+    return;
   }
 
-  const maxPx = Math.min(Math.floor(container.clientWidth * 0.85), 180);
-  const minPx = 28;
-  let size = maxPx; let guard = 30;
+  let maxPx = Math.min(Math.floor(container.clientWidth * 0.85), 180), minPx = 28, size=maxPx, guard=30;
   display.style.fontSize = size + 'px';
-  while (
-    guard-- > 0 &&
-    (display.scrollWidth > container.clientWidth * 0.98 ||
-     display.scrollHeight > container.clientHeight * 0.98)
-  ) {
+  while (guard-- > 0 && (display.scrollWidth > container.clientWidth * 0.98 || display.scrollHeight > container.clientHeight * 0.98)) {
     size = Math.max(minPx, Math.floor(size * 0.92));
     display.style.fontSize = size + 'px';
   }
 }
 
-// ========= Overlay =========
+// ========= Fonctions MODE JEU =========
+function normalizeForComparison(text) {
+  return text
+    .toLowerCase()
+    .replace(/[。！？,.，!?:：;；'"\"「」《》''""〔〕（）()…—\-\s]/g, '')
+    .trim();
+}
+
+function extractWordsFromSentence(sentence) {
+  const segmented = segmentText(sentence, dict.wordSet, dict.maxLen);
+  const words = [];
+  
+  segmented.forEach(token => {
+    if (token.text.trim()) {
+      words.push(token.text);
+    }
+  });
+  
+  return words;
+}
+
+function shuffleArray(array) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+function applyGameTheme() {
+  const normalBg = (bgColorPicker?.getColor()?.toHEXA().toString()) || '#ffffff';
+  const normalText = (textColorPicker?.getColor()?.toHEXA().toString()) || '#000000';
+  const highlightBg = (highlightBgColorPicker?.getColor()?.toHEXA().toString()) || '#000000';
+  const highlightText = (highlightColorPicker?.getColor()?.toHEXA().toString()) || '#ffffff';
+  
+  const clean = tokens[idx]?.text?.replace(/[。！？,.，!?]$/, '') || '';
+  const isHighlighted = highlightWords.includes(clean);
+  
+  const pageBg = isHighlighted ? highlightBg : normalBg;
+  const pageText = isHighlighted ? highlightText : normalText;
+  
+  const overlays = ['#gameModeOverlay', '#gamePlayOverlay'];
+  overlays.forEach(selector => {
+    const overlay = document.querySelector(selector);
+    if (overlay) {
+      const content = overlay.querySelector('.game-overlay-content');
+      if (content) {
+        content.style.background = pageBg;
+        content.style.color = pageText;
+      }
+    }
+  });
+}
+
+function toggleGameBars(showGameBars) {
+  const normalBar = document.getElementById('barDefault');
+  const ghostBar = document.getElementById('ghostBar');
+  const gameBars = document.getElementById('gameBars');
+  const gameBarsNoRead = document.getElementById('gameBarsNoRead');
+  const hamburger = document.getElementById('hamburger');
+  const displayPage = document.getElementById('displayPage');
+  
+  if (showGameBars) {
+    normalBar.style.display = 'none';
+    ghostBar.style.display = 'none';
+    gameBars.style.display = 'block';
+    gameBarsNoRead.style.display = 'none';
+    displayPage.classList.add('game-mode-active');
+    
+    if (hamburger) {
+      hamburger.style.display = 'flex';
+    }
+  } else {
+    normalBar.style.display = 'grid';
+    ghostBar.style.display = 'none';
+    gameBars.style.display = 'none';
+    gameBarsNoRead.style.display = 'none';
+    displayPage.classList.remove('game-mode-active');
+  }
+}
+
+function toggleGameBarsNoRead(show) {
+  const normalBar = document.getElementById('barDefault');
+  const ghostBar = document.getElementById('ghostBar');
+  const gameBars = document.getElementById('gameBars');
+  const gameBarsNoRead = document.getElementById('gameBarsNoRead');
+  const displayPage = document.getElementById('displayPage');
+  
+  if (show) {
+    normalBar.style.display = 'none';
+    ghostBar.style.display = 'none';
+    gameBars.style.display = 'none';
+    gameBarsNoRead.style.display = 'block';
+    displayPage.classList.add('game-mode-active');
+  } else {
+    normalBar.style.display = 'grid';
+    ghostBar.style.display = 'none';
+    gameBars.style.display = 'none';
+    gameBarsNoRead.style.display = 'none';
+    displayPage.classList.remove('game-mode-active');
+  }
+}
+
+function goToPreviousSentence() {
+  if (currentSentenceIndex > 0) {
+    currentSentenceIndex--;
+    const startIdx = sentenceStarts[currentSentenceIndex];
+    restartFrom(startIdx);
+    originalSentence = getSentenceText(tokens, currentSentenceIndex);
+    updateGameNavigation();
+    updateGameBarNavigation();
+
+    setTimeout(() => { forcePlay(); }, 300);
+  } else {
+    // déjà à la première phrase → revenir au début de celle-ci
+    const startIdx = sentenceStarts[0];
+    restartFrom(startIdx);
+    forcePause(); // en pause au début
+  }
+}
+
+function goToNextSentence() {
+  if (currentSentenceIndex < sentenceStarts.length - 1) {
+    currentSentenceIndex++;
+    const startIdx = sentenceStarts[currentSentenceIndex];
+    restartFrom(startIdx);
+    originalSentence = getSentenceText(tokens, currentSentenceIndex);
+    updateGameNavigation();
+    updateGameBarNavigation();
+    
+    if (gameType === 'reorderNoRead') {
+      openGamePlayOverlayDirect();
+    } else {
+      // Relancer la lecture automatiquement pour les autres modes
+      setTimeout(() => {
+        forcePlay();
+      }, 300);
+    }
+  }
+}
+
+function goToRandomSentence() {
+  if (sentenceStarts.length <= 1) return;
+  
+  // Si toutes les phrases ont été jouées, réinitialiser
+  if (playedSentences.length >= sentenceStarts.length) {
+    playedSentences = [];
+  }
+  
+  // Trouver les phrases non encore jouées
+  const availableSentences = [];
+  for (let i = 0; i < sentenceStarts.length; i++) {
+    if (!playedSentences.includes(i)) {
+      availableSentences.push(i);
+    }
+  }
+  
+  // S'il ne reste qu'une phrase non jouée, la prendre
+  if (availableSentences.length === 1) {
+    currentSentenceIndex = availableSentences[0];
+  } else {
+    // Sinon, choisir aléatoirement parmi les phrases non jouées
+    const randomIdx = Math.floor(Math.random() * availableSentences.length);
+    currentSentenceIndex = availableSentences[randomIdx];
+  }
+  
+  // Marquer cette phrase comme jouée
+  if (!playedSentences.includes(currentSentenceIndex)) {
+    playedSentences.push(currentSentenceIndex);
+  }
+  
+  const startIdx = sentenceStarts[currentSentenceIndex];
+  idx = startIdx;
+  originalSentence = getSentenceText(tokens, currentSentenceIndex);
+  updateGameNavigation();
+  
+  // En mode reorderNoRead, juste recharger le contenu de l'overlay
+  if (gameType === 'reorderNoRead') {
+    // S'assurer que l'overlay est visible
+    const overlay = document.getElementById('gamePlayOverlay');
+    if (overlay.style.display !== 'flex') {
+      overlay.style.display = 'flex';
+    }
+    // Recharger le jeu
+    initReorderGame();
+  } else {
+    initReorderGame();
+  }
+}
+
+function replaySentence() {
+  const startIdx = sentenceStarts[currentSentenceIndex];
+  restartFrom(startIdx);
+  forcePause();
+  closeGameModeOverlay();
+  closeGamePlayOverlay();
+  setTimeout(() => {
+    forcePlay();
+  }, 300);
+}
+
+function updateGameBarNavigation() {
+  const prevBtn = document.getElementById('prevSentenceBtn');
+  const nextBtn = document.getElementById('nextSentenceBtn');
+  const playBtn = document.getElementById('playGameBtn');
+  const prevBtnNoRead = document.getElementById('prevSentenceNoReadBtn');
+  const nextBtnNoRead = document.getElementById('nextSentenceNoReadBtn');
+  
+  if (prevBtn) prevBtn.disabled = currentSentenceIndex === 0;
+  if (nextBtn) nextBtn.disabled = currentSentenceIndex >= sentenceStarts.length - 1;
+  if (prevBtnNoRead) prevBtnNoRead.disabled = currentSentenceIndex === 0;
+  if (nextBtnNoRead) nextBtnNoRead.disabled = currentSentenceIndex >= sentenceStarts.length - 1;
+  
+  if (playBtn) playBtn.disabled = false;
+}
+
+function openGameManually() {
+  currentSentenceIndex = findCurrentSentenceIndex(tokens, idx);
+  originalSentence = getSentenceText(tokens, currentSentenceIndex);
+  
+  if (gameType === 'both') {
+    openGameModeOverlay();
+  } else if (gameType === 'reorder' || gameType === 'reorderNoRead') {
+    openGamePlayOverlay('reorder');
+  } else if (gameType === 'free') {
+    openGamePlayOverlay('free');
+  }
+}
+
+function openGameModeOverlay() {
+  currentSentenceIndex = findCurrentSentenceIndex(tokens, idx);
+  originalSentence = getSentenceText(tokens, currentSentenceIndex);
+  
+  const overlay = document.getElementById('gameModeOverlay');
+  overlay.style.display = 'flex';
+  applyGameTheme();
+  
+  const prevBtn = document.getElementById('prevSentenceGame');
+  const nextBtn = document.getElementById('nextSentenceGame');
+  
+  prevBtn.disabled = currentSentenceIndex === 0;
+  nextBtn.disabled = currentSentenceIndex >= sentenceStarts.length - 1;
+}
+
+function closeGameModeOverlay() {
+  document.getElementById('gameModeOverlay').style.display = 'none';
+}
+
+function openGamePlayOverlay(mode) {
+  currentGameMode = mode;
+  closeGameModeOverlay();
+  
+  const overlay = document.getElementById('gamePlayOverlay');
+  overlay.style.display = 'flex';
+  applyGameTheme();
+  
+  const reorderBtn = document.getElementById('switchReorder');
+  const freeBtn = document.getElementById('switchFree');
+  const switcher = document.querySelector('.mode-switcher');
+  
+  // Gérer la visibilité de la croix de fermeture
+const closeBtn = document.getElementById('closeGamePlay');
+if (closeBtn) {
+  if (gameType === 'reorderNoRead') {
+    closeBtn.style.display = 'none';
+  } else {
+    closeBtn.style.display = 'block';
+  }
+}
+  
+  // Hide switcher based on game type
+  if (gameType === 'reorder' || gameType === 'reorderNoRead') {
+    switcher.style.display = 'none';
+    mode = 'reorder';
+  } else if (gameType === 'free') {
+    switcher.style.display = 'none';
+    mode = 'free';
+  } else {
+    switcher.style.display = 'flex';
+  }
+  
+  if (mode === 'reorder') {
+    reorderBtn.classList.add('active');
+    freeBtn.classList.remove('active');
+    document.getElementById('reorderGame').style.display = 'block';
+    document.getElementById('freeGame').style.display = 'none';
+    initReorderGame();
+  } else {
+    freeBtn.classList.add('active');
+    reorderBtn.classList.remove('active');
+    document.getElementById('freeGame').style.display = 'block';
+    document.getElementById('reorderGame').style.display = 'none';
+    initFreeGame();
+  }
+  
+  // Gérer les boutons selon le mode
+const replayBtn = document.getElementById('replayInGame');
+const prevBtn = document.getElementById('prevSentenceInGame');
+const nextBtn = document.getElementById('nextSentenceInGame');
+
+if (gameType === 'reorderNoRead') {
+  // MODE RÉORGANISER SANS LECTURE - Comportement spécial
+  if (replayBtn) replayBtn.style.display = 'none';
+  
+  if (prevBtn) {
+    prevBtn.textContent = '✕ Quitter';
+    prevBtn.disabled = false;
+    prevBtn.onclick = () => {
+      closeGamePlayOverlay();
+      document.body.style.backgroundColor = '';
+      idx = 0;
+      document.getElementById('homePage').style.display = 'block';
+    };
+  }
+  
+  if (nextBtn) {
+    nextBtn.textContent = 'Suivante →';
+    nextBtn.disabled = false;
+    nextBtn.onclick = () => {
+      // Action aléatoire derrière le bouton "Suivante"
+      goToRandomSentence();
+    };
+  }
+} else {
+  // AUTRES MODES - Comportement normal
+  if (replayBtn) replayBtn.style.display = 'block';
+  
+  if (prevBtn) {
+    prevBtn.textContent = '← Précédente';
+    prevBtn.onclick = () => {
+      goToPreviousSentence();
+      closeGamePlayOverlay();
+    };
+  }
+  
+  if (nextBtn) {
+    nextBtn.textContent = 'Suivante →';
+    nextBtn.onclick = () => {
+      goToNextSentence();
+      closeGamePlayOverlay();
+    };
+  }
+}
+
+updateGameNavigation();
+}
+
+function openGamePlayOverlayDirect() {
+  currentSentenceIndex = findCurrentSentenceIndex(tokens, idx);
+  originalSentence = getSentenceText(tokens, currentSentenceIndex);
+  openGamePlayOverlay('reorder');
+}
+
+function closeGamePlayOverlay() {
+  document.getElementById('gamePlayOverlay').style.display = 'none';
+}
+
+function updateGameNavigation() {
+  const prevBtn = document.getElementById('prevSentenceInGame');
+  const nextBtn = document.getElementById('nextSentenceInGame');
+  
+  // En mode reorderNoRead, les boutons ont un comportement spécial et ne doivent jamais être désactivés
+  if (gameType === 'reorderNoRead') {
+    if (prevBtn) {
+      prevBtn.disabled = false;
+      prevBtn.style.opacity = '1';
+      prevBtn.style.cursor = 'pointer';
+    }
+    if (nextBtn) {
+      nextBtn.disabled = false;
+      nextBtn.style.opacity = '1';
+      nextBtn.style.cursor = 'pointer';
+    }
+  } else {
+    // Mode normal
+    if (prevBtn) prevBtn.disabled = currentSentenceIndex === 0;
+    if (nextBtn) nextBtn.disabled = currentSentenceIndex >= sentenceStarts.length - 1;
+  }
+}
+
+function initReorderGame() {
+  const words = extractWordsFromSentence(originalSentence);
+  const shuffledWords = shuffleArray(words);
+  
+  const availableWordsContainer = document.getElementById('availableWords');
+  const userSentenceContainer = document.getElementById('userSentence');
+  
+  availableWordsContainer.innerHTML = '';
+  userSentenceContainer.innerHTML = '';
+  
+  shuffledWords.forEach(word => {
+    const token = createWordToken(word);
+    availableWordsContainer.appendChild(token);
+  });
+  
+  document.getElementById('reorderResult').style.display = 'none';
+  document.getElementById('retryReorder').style.display = 'none';
+  document.getElementById('validateReorder').style.display = 'block';
+  
+  setupDragAndDrop();
+}
+
+function createWordToken(text) {
+  const token = document.createElement('div');
+  token.className = 'word-token';
+  token.textContent = text;
+  token.draggable = true;
+  
+  token.addEventListener('click', (e) => {
+    e.preventDefault();
+    const availableContainer = document.getElementById('availableWords');
+    const userContainer = document.getElementById('userSentence');
+    
+    if (token.parentNode === availableContainer) {
+      userContainer.appendChild(token);
+    } else {
+      availableContainer.appendChild(token);
+    }
+  });
+  
+  return token;
+}
+
+
+function setupDragAndDrop() {
+  const containers = ['availableWords', 'userSentence'];
+  
+  containers.forEach(containerId => {
+    const container = document.getElementById(containerId);
+    
+    container.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  const dragging = document.querySelector('.dragging');
+  if (!dragging) return;
+  
+  const afterElement = getDragAfterElement(container, e.clientX, e.clientY);
+  if (afterElement == null) {
+    container.appendChild(dragging);
+  } else {
+    container.insertBefore(dragging, afterElement);
+  }
+});
+    
+    container.addEventListener('drop', (e) => {
+      e.preventDefault();
+    });
+  });
+  
+  document.addEventListener('dragstart', (e) => {
+    if (e.target.classList.contains('word-token')) {
+      e.target.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    }
+  });
+  
+  document.addEventListener('dragend', (e) => {
+    if (e.target.classList.contains('word-token')) {
+      e.target.classList.remove('dragging');
+    }
+  });
+}
+
+function getDragAfterElement(container, x, y) {
+  const els = [...container.querySelectorAll('.word-token:not(.dragging)')];
+  if (!els.length) return null;
+
+  // Construire les lignes (tolérance Y)
+  const TOL = 8;
+  const lines = [];
+  for (const node of els) {
+    const rects = Array.from(node.getClientRects());
+    for (const r of rects) {
+      let line = lines.find(L => Math.abs(L.top - r.top) <= TOL);
+      if (!line) {
+        line = { top: r.top, bottom: r.bottom, items: [] };
+        lines.push(line);
+      } else {
+        line.top = Math.min(line.top, r.top);
+        line.bottom = Math.max(line.bottom, r.bottom);
+      }
+      line.items.push({ node, rect: r });
+    }
+  }
+  lines.sort((a, b) => a.top - b.top);
+  lines.forEach(L => L.items.sort((a, b) => a.rect.left - b.rect.left));
+
+  // Choisir la ligne la plus proche en Y
+  let bestLine = null, bestDy = Infinity;
+  for (const L of lines) {
+    const cy = (L.top + L.bottom) / 2;
+    const dy = Math.abs(y - cy);
+    if (dy < bestDy) { bestDy = dy; bestLine = L; }
+  }
+
+  if (!bestLine || !bestLine.items.length) return null;
+
+  // Début de ligne : renvoyer le 1er élément (insertion avant lui)
+  const first = bestLine.items[0];
+  if (x < first.rect.left) return first.node;
+
+  // Fin de ligne : renvoyer null pour indiquer "append at end of this line"
+  const last = bestLine.items[bestLine.items.length - 1];
+  if (x > last.rect.right) return last.node.nextSibling || null;
+
+  // Entre deux : trouver l’élément après lequel insérer
+  let chosen = null, bestDx = Infinity;
+  for (const it of bestLine.items) {
+    const midX = (it.rect.left + it.rect.right) / 2;
+    const dx = x - midX;
+    const adx = Math.abs(dx);
+    if (adx < bestDx) { bestDx = adx; chosen = { it, dx }; }
+  }
+  // si x est à gauche du centre → on insère avant l’élément; sinon après
+  if (chosen.dx < 0) return chosen.it.node;               // insertBefore(chosen.it.node)
+  return chosen.it.node.nextSibling || null;              // insertAfter
+}
+
+
+function initFreeGame() {
+  const textarea = document.getElementById('freeTextInput');
+  textarea.value = '';
+  textarea.focus();
+  
+  document.getElementById('freeResult').style.display = 'none';
+  document.getElementById('retryFree').style.display = 'none';
+  document.getElementById('validateFree').style.display = 'block';
+}
+
+function validateReorderGame() {
+  const userSentenceContainer = document.getElementById('userSentence');
+  const userWords = Array.from(userSentenceContainer.children).map(token => token.textContent);
+  const userSentence = userWords.join('');
+  
+  const isCorrect = normalizeForComparison(userSentence) === normalizeForComparison(originalSentence);
+  
+  const resultDiv = document.getElementById('reorderResult');
+  resultDiv.style.display = 'block';
+  resultDiv.className = 'result-message ' + (isCorrect ? 'success' : 'error');
+  
+  if (isCorrect) {
+    resultDiv.textContent = '✅ Bravo ! La phrase est correcte : ' + originalSentence;
+  } else {
+    resultDiv.textContent = '❌ Incorrect. Réessayez !';
+  }
+  
+  document.getElementById('validateReorder').style.display = 'none';
+  document.getElementById('retryReorder').style.display = 'block';
+}
+
+function validateFreeGame() {
+  const textarea = document.getElementById('freeTextInput');
+  const userText = textarea.value.trim();
+  
+  const isCorrect = normalizeForComparison(userText) === normalizeForComparison(originalSentence);
+  
+  const resultDiv = document.getElementById('freeResult');
+  resultDiv.style.display = 'block';
+  resultDiv.className = 'result-message ' + (isCorrect ? 'success' : 'error');
+  
+  if (isCorrect) {
+    resultDiv.textContent = '✅ Bravo ! La phrase est correcte : ' + originalSentence;
+  } else {
+    resultDiv.textContent = '❌ Incorrect. Réessayez !';
+  }
+  
+  document.getElementById('validateFree').style.display = 'none';
+  document.getElementById('retryFree').style.display = 'block';
+}
+
+function switchGameMode(newMode) {
+  currentGameMode = newMode;
+  
+  const reorderBtn = document.getElementById('switchReorder');
+  const freeBtn = document.getElementById('switchFree');
+  const reorderGame = document.getElementById('reorderGame');
+  const freeGame = document.getElementById('freeGame');
+  
+  if (newMode === 'reorder') {
+    reorderBtn.classList.add('active');
+    freeBtn.classList.remove('active');
+    reorderGame.style.display = 'block';
+    freeGame.style.display = 'none';
+    initReorderGame();
+  } else {
+    freeBtn.classList.add('active');
+    reorderBtn.classList.remove('active');
+    freeGame.style.display = 'block';
+    reorderGame.style.display = 'none';
+    initFreeGame();
+  }
+}
+
+// ========= Overlays =========
 function openSelectionOverlay() {
   const text = normalizeChineseText(document.getElementById('inputText').value);
   const segmented = attachDictInfo(segmentText(text, dict.wordSet, dict.maxLen), dict.entries);
-
   const container = document.getElementById('segmentedOverlayText');
   container.innerHTML = '';
 
-  segmented.forEach((tok, i) => {
+  segmented.forEach((tok) => {
     const el = document.createElement('span');
     el.textContent = tok.text;
-
     const clean = tok.text.replace(/[。！？,.，!?]$/, '');
-    if (highlightWords.includes(clean)) el.classList.add('selected');
-
-    el.addEventListener('click', () => {
-      if (highlightWords.includes(clean)) {
-        highlightWords = highlightWords.filter(w => w !== clean);
-      } else {
-        highlightWords.push(clean);
-      }
-      openSelectionOverlay();
-    });
-
+if (readModeHighlightWords.includes(clean)) el.classList.add('selected');
+    
+el.addEventListener('click', () => {
+  if (readModeHighlightWords.includes(clean)) readModeHighlightWords = readModeHighlightWords.filter(w => w !== clean);
+  else readModeHighlightWords.push(clean);
+  openSelectionOverlay();
+});
+    
     container.appendChild(el);
   });
 
   document.getElementById('selectionOverlay').style.display = 'flex';
 }
+
 function closeSelectionOverlay() {
   document.getElementById('selectionOverlay').style.display = 'none';
-  document.getElementById('editorArea').style.display = 'block';
-  document.getElementById('segmentedArea').style.display = 'none';
-  editMode = true;
-  document.getElementById('toggleEdit').textContent = '✏️';
+}
+
+function openInfoOverlay() {
+  const overlay = document.getElementById('infoOverlay');
+  const body = document.getElementById('infoWords');
+  if (!overlay || !body) return;
+  
+  infoWasPlaying = !!playing;
+  forcePause();
+  
+  body.innerHTML = '';
+  
+  const normalBg = (bgColorPicker?.getColor()?.toHEXA().toString()) || '#ffffff';
+  const normalText = (textColorPicker?.getColor()?.toHEXA().toString()) || '#000000';
+  const highlightBg = (highlightBgColorPicker?.getColor()?.toHEXA().toString()) || '#ef4444';
+  const highlightText = (highlightColorPicker?.getColor()?.toHEXA().toString()) || '#ffffff';
+  
+  const cleanCurrent = tokens[idx]?.text?.replace(/[。！？、，；：,.!?\u201D]$/u,'') || '';
+  const isH = highlightWords.includes(cleanCurrent);
+  
+  const pageBg = isH ? highlightBg : normalBg;
+  const pageFg = isH ? highlightText : normalText;
+  
+  overlay.style.setProperty('--info-bg', pageBg);
+  overlay.style.setProperty('--info-fg', pageFg);
+  
+  tokens.forEach((tok, i) => {
+    const span = document.createElement('span');
+    span.textContent = tok.text;
+    span.className = 'info-word';
+    
+    const clean = tok.text.replace(/[。！？、，；：,.!?\u201D]$/u,'');
+    if (highlightWords.includes(clean)) span.classList.add('initialSelected');
+    if (i === idx) span.classList.add('current');
+    
+    span.onclick = () => {
+      infoChosenIndex = i;
+      body.querySelectorAll('.info-word.chosen').forEach(el => el.classList.remove('chosen'));
+      span.classList.add('chosen');
+    };
+    
+    body.appendChild(span);
+  });
+  
+  overlay.style.display = 'flex';
+}
+
+function closeInfoOverlay() {
+  document.getElementById('infoOverlay').style.display = 'none';
+}
+
+function wireInfoOverlayControls() {
+  const infoBtn = document.getElementById('infoBtn');
+  const infoValidateBtn = document.getElementById('infoValidateBtn');
+  const infoCancelBtn = document.getElementById('infoCancelBtn');
+  const infoCloseBtn = document.getElementById('infoCloseBtn');
+  
+  if (!infoBtn || !infoValidateBtn || !infoCancelBtn || !infoCloseBtn) return;
+  
+  infoBtn.onclick = () => { openInfoOverlay(); };
+  
+  infoValidateBtn.onclick = () => {
+    if (infoChosenIndex != null) {
+      restartFrom(infoChosenIndex);
+      forcePause();
+    }
+    closeInfoOverlay();
+  };
+  
+  const cancel = () => {
+    closeInfoOverlay();
+    if (infoWasPlaying) forcePlay();
+    infoWasPlaying = false;
+    infoChosenIndex = null;
+  };
+  
+  infoCancelBtn.onclick = cancel;
+  infoCloseBtn.onclick = cancel;
+}
+
+function enableMobileDnD() {
+  const isMobile = matchMedia('(pointer:coarse)').matches && matchMedia('(hover: none)').matches;
+  if (!isMobile) return;
+
+  const pool = document.getElementById('availableWords');
+  const sentence = document.getElementById('userSentence');
+  if (!pool || !sentence) return; // sécurité
+  
+   const FINGER_OFFSET_X = 0; // décalage horizontal du fantôme par rapport au doigt
+  const FINGER_OFFSET_Y = -30; // décalage vertical du fantôme
+
+  let pressTimer = null, dragging = false;
+  let srcEl = null, ghost = null, placeholder = null, caret = null, activeContainer = null;
+
+  // Long press pour entrer en mode drag
+  const LONG_PRESS_MS = 180;
+
+  // Attach sur les conteneurs (délégation)
+  [pool, sentence].forEach(zone => {
+    zone.addEventListener('pointerdown', onPointerDown, { passive: true });
+  });
+
+  // Empêche le scroll pendant le drag
+  window.addEventListener('pointermove', onPointerMove, { passive: false });
+  window.addEventListener('pointerup', onPointerUp, { passive: true });
+  window.addEventListener('pointercancel', onPointerUp, { passive: true });
+
+  function onPointerDown(e) {
+    const token = e.target.closest('.word-token');
+    if (!token) return;
+    if (pressTimer) clearTimeout(pressTimer);
+
+    srcEl = token;
+    pressTimer = setTimeout(() => {
+      startDrag(e);
+    }, LONG_PRESS_MS);
+  }
+
+  function startDrag(e) {
+    dragging = true;
+    // fantôme
+    ghost = srcEl.cloneNode(true);
+    ghost.classList.add('drag-ghost');
+    document.body.appendChild(ghost);
+
+    // placeholder (même largeur approx. pour garder la mise en ligne)
+    placeholder = document.createElement('span');
+    placeholder.className = 'placeholder-token';
+    placeholder.style.width = Math.ceil(srcEl.getBoundingClientRect().width) + 'px';
+
+    // caret (barre d’insertion)
+    caret = document.createElement('div');
+    caret.className = 'drop-caret';
+    caret.style.display = 'none';
+    document.body.appendChild(caret);
+
+// dimensions de la source
+const r = srcEl.getBoundingClientRect();
+
+// fantôme déjà cloné -> rien à faire ici, il prend la taille du token
+
+// placeholder : même largeur ET hauteur que le token
+placeholder = document.createElement('span');
+placeholder.className = 'placeholder-token';
+placeholder.style.width  = Math.ceil(r.width)  + 'px';
+placeholder.style.height = Math.ceil(r.height) + 'px';
+placeholder.style.lineHeight = Math.ceil(r.height) + 'px'; // cohérence verticale
+
+// caret : même hauteur que le token
+caret = document.createElement('div');
+caret.className = 'drop-caret';
+caret.style.height = Math.ceil(r.height) + 'px';
+caret.style.display = 'none';
+document.body.appendChild(caret);
+
+    // source invisible pendant le drag
+    srcEl.classList.add('drag-source');
+
+    // définir container actif (au départ, celui d’origine)
+    activeContainer = srcEl.parentElement;
+
+    // insérer placeholder à la position d’origine (avant la source)
+    activeContainer.insertBefore(placeholder, srcEl);
+
+    // activer style “on”
+    [pool, sentence].forEach(z => z.classList.add('drop-zone--active'));
+
+    moveGhost(e);
+    e.preventDefault();
+  }
+
+  function onPointerMove(e) {
+    if (!dragging) return;
+    moveGhost(e);
+
+    // déterminer conteneur sous le doigt
+    const targetContainer = getContainerUnder(e.clientX, e.clientY) || activeContainer;
+    if (targetContainer !== activeContainer) {
+      activeContainer = targetContainer;
+    }
+
+    // calculer index d’insertion dans le conteneur actif
+    positionPlaceholder(activeContainer, e.clientX, e.clientY);
+  }
+
+  function onPointerUp(e) {
+    if (pressTimer) {
+      clearTimeout(pressTimer);
+      pressTimer = null;
+    }
+    if (!dragging) { srcEl = null; return; }
+
+    // Drop : remplacer placeholder par la source
+    try {
+      activeContainer.insertBefore(srcEl, placeholder);
+    } catch(_) {}
+
+    cleanupDrag();
+
+    // (optionnel) déclenche ton recalcul de “bonne phrase” si tu en as un
+    // ex: updateUserSentenceOrder();  // à toi de brancher si nécessaire
+  }
+
+function moveGhost(e) {
+  if (!ghost) return;
+
+  // décalage pour que le mot ne soit pas sous le doigt
+  const FINGER_OFFSET_X = 0;    // centré horizontalement
+  const FINGER_OFFSET_Y = -30;  // remonte le mot au-dessus du doigt
+
+  ghost.style.left = (e.clientX + FINGER_OFFSET_X) + 'px';
+  ghost.style.top  = (e.clientY + FINGER_OFFSET_Y) + 'px';
+}
+
+
+  function getContainerUnder(x, y) {
+    // neutraliser temporairement ghost pour connaître l’élément sous le doigt
+    ghost.style.display = 'none';
+    const el = document.elementFromPoint(x, y);
+    ghost.style.display = '';
+    const zone = el?.closest?.('.words-container');
+    return (zone === pool || zone === sentence) ? zone : null;
+  }
+
+  function positionPlaceholder(container, x, y) {
+  // Cas conteneur vide
+  if (!container.children.length) {
+    container.appendChild(placeholder);
+    caret.style.left = x + 'px';
+    caret.style.top  = y + 'px';
+    caret.style.display = 'block';
+    return;
+  }
+
+  const children = Array.from(container.children).filter(ch => ch !== placeholder);
+
+  // ---- 1) Construire les lignes (groupement par top avec tolérance) ----
+  const TOL = 8; // px de tolérance vertical pour regrouper dans une ligne
+  const lines = []; // [{ top, bottom, items: [{node, rect}] }]
+  for (const node of children) {
+    // Un token peut avoir plusieurs rects, on les prend tous
+    const rects = Array.from(node.getClientRects());
+    for (const r of rects) {
+      // essayer d'attacher ce rect à une ligne existante (proche en Y)
+      let line = lines.find(L => Math.abs(L.top - r.top) <= TOL);
+      if (!line) {
+        line = { top: r.top, bottom: r.bottom, items: [] };
+        lines.push(line);
+      } else {
+        line.top = Math.min(line.top, r.top);
+        line.bottom = Math.max(line.bottom, r.bottom);
+      }
+      line.items.push({ node, rect: r });
+    }
+  }
+  // trier les lignes par Y
+  lines.sort((a, b) => a.top - b.top);
+  // dans chaque ligne, trier les items par X
+  lines.forEach(L => L.items.sort((a, b) => a.rect.left - b.rect.left));
+
+  // ---- 2) Trouver la ligne la plus proche du pointeur (en Y) ----
+  let bestLine = null, bestDy = Infinity;
+  for (const L of lines) {
+    // distance verticale du centre de la ligne
+    const cy = (L.top + L.bottom) / 2;
+    const dy = Math.abs(y - cy);
+    if (dy < bestDy) { bestDy = dy; bestLine = L; }
+  }
+  if (!bestLine || !bestLine.items.length) {
+    // fallback
+    container.appendChild(placeholder);
+    caret.style.left = x + 'px';
+    caret.style.top  = y + 'px';
+    caret.style.display = 'block';
+    return;
+  }
+
+  // ---- 3) Décider la position dans CETTE ligne uniquement ----
+  const first = bestLine.items[0];
+  const last  = bestLine.items[bestLine.items.length - 1];
+
+  // a) avant le tout premier de la ligne
+  if (y >= bestLine.top - TOL && y <= bestLine.bottom + TOL && x < first.rect.left) {
+    container.insertBefore(placeholder, first.node);
+    caret.style.left = first.rect.left + 'px';
+    caret.style.top  = (bestLine.top + (bestLine.bottom - bestLine.top - 28)/2) + 'px';
+    caret.style.display = 'block';
+    return;
+  }
+
+  // b) après le tout dernier de la ligne
+  if (y >= bestLine.top - TOL && y <= bestLine.bottom + TOL && x > last.rect.right) {
+    container.insertBefore(placeholder, last.node.nextSibling);
+    caret.style.left = last.rect.right + 'px';
+    caret.style.top  = (bestLine.top + (bestLine.bottom - bestLine.top - 28)/2) + 'px';
+    caret.style.display = 'block';
+    return;
+  }
+
+  // c) entre deux éléments de la ligne
+  // trouver l’item dont le centre X est le plus proche
+  let target = null, bestDx = Infinity;
+  for (const it of bestLine.items) {
+    const midX = (it.rect.left + it.rect.right) / 2;
+    const dx = Math.abs(x - midX);
+    if (dx < bestDx) { bestDx = dx; target = it; }
+  }
+
+  if (target) {
+    const midX = (target.rect.left + target.rect.right) / 2;
+    const before = x < midX;
+    container.insertBefore(placeholder, before ? target.node : target.node.nextSibling);
+
+    // Caret (feedback visuel) exactement sous le pointeur
+    caret.style.left = x + 'px';
+    // aligner la hauteur du caret sur la ligne courante
+const lineHeight = bestLine.bottom - bestLine.top;
+caret.style.top = (bestLine.top + (lineHeight - parseInt(caret.style.height || '28')) / 2) + 'px';
+    caret.style.display = 'block';
+  }
+}
+
+
+  function placeCaretNearRect(rect, at='end') {
+    if (!caret) return;
+    const x = (at === 'start') ? rect.left : rect.right;
+    const y = rect.top + (rect.height - 28) / 2;
+    caret.style.left = x + 'px';
+    caret.style.top  = y + 'px';
+    caret.style.display = 'block';
+  }
+
+  function cleanupDrag() {
+    dragging = false;
+    if (ghost?.parentNode) ghost.parentNode.removeChild(ghost);
+    if (caret?.parentNode) caret.parentNode.removeChild(caret);
+    if (placeholder?.parentNode) placeholder.parentNode.removeChild(placeholder);
+    [pool, sentence].forEach(z => z.classList.remove('drop-zone--active'));
+    if (srcEl) srcEl.classList.remove('drag-source');
+
+    ghost = caret = placeholder = srcEl = null;
+    activeContainer = null;
+  }
+
+  // Annule le drag si l’utilisateur “tapote” (pas d’appui long)
+  window.addEventListener('pointerdown', () => {}, { passive: true });
+  window.addEventListener('pointerup', () => {
+    if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
+  }, { passive: true });
+
+  // HACK : sur mobile, on masque tes flèches de déplacement si elles existent
+  try {
+    document.querySelectorAll('.word-controls').forEach(el => el.style.display = 'none');
+  } catch(_) {}
+}
+
+// Active à la fin du chargement
+document.addEventListener('DOMContentLoaded', () => {
+  enableMobileDnD();
+});
+
+
+// ========= Menu =========
+function showMenu() {
+  __menuHiddenByUser = false;
+  
+  if (gameMode) {
+    if (gameType === 'reorderNoRead') {
+      document.getElementById('gameBarsNoRead').style.display = 'block';
+    } else {
+      document.getElementById('gameBars').style.display = 'block';
+    }
+  } else {
+    document.querySelectorAll('#barDefault .slot:not(#hamburger)').forEach(s => {
+      s.style.display = 'flex';
+    });
+    const ghost = document.getElementById('ghostBar');
+    if (ghost) {
+      ghost.style.display = 'none';
+      ghost.setAttribute('aria-hidden', 'true');
+      ghost.setAttribute('inert', '');
+    }
+  }
+}
+
+function hideMenu() {
+  __menuHiddenByUser = true;
+  
+  if (gameMode) {
+    document.getElementById('gameBars').style.display = 'none';
+    document.getElementById('gameBarsNoRead').style.display = 'none';
+  } else {
+    document.querySelectorAll('#barDefault .slot:not(#hamburger)').forEach(s => {
+      s.style.display = 'none';
+    });
+    const ghost = document.getElementById('ghostBar');
+    if (ghost) {
+      ghost.style.display = 'grid';
+      ghost.removeAttribute('inert');
+      ghost.setAttribute('aria-hidden', 'false');
+    }
+  }
+}
+
+function enforceMenuState() {
+  if (__menuHiddenByUser) hideMenu();
+  else showMenu();
 }
 
 // ========= Events =========
 window.addEventListener('resize', fitCharLine);
-window.addEventListener('orientationchange', ()=> setTimeout(fitCharLine, 50));
+window.addEventListener('orientationchange', () => setTimeout(fitCharLine, 50));
 
-// Fonction utilitaire
 function wireGhostBar() {
   const map = {
-    ghostPrev:  'prevWordBtn',
+    ghostPrev: 'prevWordBtn',
     ghostPause: 'pauseBtn',
-    ghostNext:  'nextWordBtn'
+    ghostNext: 'nextWordBtn'
   };
   for (const [ghostId, realId] of Object.entries(map)) {
     const g = document.getElementById(ghostId);
     const r = document.getElementById(realId);
-    if (g && r) g.onclick = (e)=>{ e.preventDefault(); r.click(); };
+    if (g && r) g.onclick = (e) => { e.preventDefault(); r.click(); };
   }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+highlightWords = [...readModeHighlightWords]; 
   const $ = s => document.querySelector(s);
 
-  // === Vitesse ===
-  $('#speed')?.addEventListener('input', e=>{
+  // Initialize UI
+  updateUI();
+
+  // Mode selection
+  $('#readMode')?.addEventListener('change', () => {
+    appMode = 'read';
+    gameMode = false;
+    updateUI();
+  });
+  
+  $('#gameMode')?.addEventListener('change', () => {
+    appMode = 'game';
+    gameMode = true;
+    updateUI();
+  });
+  
+  // Game type selection
+  document.querySelectorAll('input[name="gameType"]').forEach(radio => {
+    radio.addEventListener('change', (e) => {
+      gameType = e.target.value;
+    });
+  });
+
+  // Vitesse
+  $('#speed')?.addEventListener('input', e => {
     $('#speedLabel').textContent = e.target.value;
     if (playing) startLoop();
   });
 
-  // === Démarrer ===
-  $('#startBtn')?.addEventListener('click', ()=>{
+  // Démarrer
+  $('#startBtn')?.addEventListener('click', () => {
     startDisplay();
-    forcePlay();
+    if (!gameMode || gameType !== 'reorderNoRead') {
+      forcePlay(true);
+    }
   });
 
-  // === Play / Pause ===
-  $('#pauseBtn')?.addEventListener('click', ()=>{
+  // Play / Pause
+  $('#pauseBtn')?.addEventListener('click', () => {
     if (!tokens || !tokens.length) return;
     if (idx >= tokens.length - 1) { restartFrom(0); forcePlay(); return; }
     if (playing) forcePause(); else forcePlay();
   });
 
-  // === Navigation mots / phrases ===
-  $('#startTextBtn')?.addEventListener('click', ()=>{ restartFrom(0); forcePause(); });
-  $('#prevSentenceBtn')?.addEventListener('click', ()=>{ 
-    if (!tokens.length) return;
-    const s = findCurrentSentenceStart(tokens, idx);
-    const starts = computeSentenceStarts(tokens);
-    let prevIdx = 0; for (const st of starts){ if(st < s) prevIdx = st; else break; }
-    restartFrom(prevIdx); forcePause();
-  });
-  $('#sentenceStartBtn')?.addEventListener('click', ()=>{ if (!tokens.length) return; restartFrom(findCurrentSentenceStart(tokens, idx)); forcePause(); });
-  $('#prevWordBtn')?.addEventListener('click', ()=>{ if (!tokens.length) return; restartFrom(Math.max(0, idx-1)); forcePause(); });
-  $('#nextWordBtn')?.addEventListener('click', ()=>{ if (!tokens.length) return; restartFrom(Math.min(tokens.length-1, idx+1)); forcePause(); });
-  $('#nextSentenceBtn')?.addEventListener('click', ()=>{ if (!tokens.length) return; restartFrom(findNextSentenceStart(tokens, idx)); forcePause(); });
+  // Navigation mots
+  $('#prevWordBtn')?.addEventListener('click', () => { if (!tokens.length) return; restartFrom(Math.max(0, idx - 1)); forcePause(); });
+  $('#nextWordBtn')?.addEventListener('click', () => { if (!tokens.length) return; restartFrom(Math.min(tokens.length - 1, idx + 1)); forcePause(); });
 
-  // === Quitter ===
-  $('#quitBtn')?.addEventListener('click', ()=>{
+  // Quitter
+  $('#quitBtn')?.addEventListener('click', () => {
     forcePause();
     document.getElementById('charDisplay').innerHTML = '';
     document.getElementById('pinyin').textContent = '';
@@ -1515,16 +3324,182 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('homePage').style.display = 'block';
   });
 
-  // === Overlay sélection (accueil) ===
+  // Quitter le mode jeu
+	  $('#quitGameBtn')?.addEventListener('click', () => {
+  forcePause();
+  
+  document.getElementById('charDisplay').innerHTML = '';
+  document.getElementById('pinyin').textContent = '';
+  document.getElementById('defs').textContent = '';
+  idx = 0;
+  
+  closeGameModeOverlay();
+  closeGamePlayOverlay();
+  
+  document.getElementById('displayPage').style.display = 'none';
+  toggleGameBars(false);
+  toggleGameBarsNoRead(false);
+  
+  document.getElementById('homePage').style.display = 'block';
+  // gameMode reste à true, le mode sélectionné reste inchangé
+});
+  
+$('#quitGameNoReadBtn')?.addEventListener('click', () => {
+  forcePause();
+  closeGamePlayOverlay();
+  
+  document.body.style.backgroundColor = '';
+  idx = 0;
+  
+  document.getElementById('homePage').style.display = 'block';
+});
+
+  // MODE JEU : Barres de jeu
+  $('#prevSentenceBtn')?.addEventListener('click', () => {
+    goToPreviousSentence();
+    forcePause();
+  });
+  
+  $('#prevSentenceNoReadBtn')?.addEventListener('click', () => {
+    goToPreviousSentence();
+  });
+
+  $('#showGameBtn')?.addEventListener('click', () => {
+    openGameManually();
+  });
+  
+  $('#showGameNoReadBtn')?.addEventListener('click', () => {
+    openGameManually();
+  });
+
+  $('#nextSentenceBtn')?.addEventListener('click', () => {
+    goToNextSentence();
+    forcePause();
+  });
+  
+  $('#nextSentenceNoReadBtn')?.addEventListener('click', () => {
+    goToNextSentence();
+  });
+  
+  $('#randomSentenceBtn')?.addEventListener('click', () => {
+    goToRandomSentence();
+  });
+
+$('#playGameBtn')?.addEventListener('click', () => {
+  if (playing) {
+    forcePause(); // mettre en pause
+  } else {
+    if (idx >= tokens.length - 1) {
+      // si on était à la fin → revenir au début
+      restartFrom(0);
+    }
+    forcePlay(); // reprendre ou relancer
+  }
+  updatePlayGameBtnIcon();
+});
+
+
+  // OVERLAY DE SÉLECTION DE MODE
+  $('#reorderModeBtn')?.addEventListener('click', () => {
+    openGamePlayOverlay('reorder');
+  });
+
+  $('#freeModeBtn')?.addEventListener('click', () => {
+    openGamePlayOverlay('free');
+  });
+
+  $('#closeGameMode')?.addEventListener('click', () => {
+    closeGameModeOverlay();
+  });
+
+  $('#prevSentenceGame')?.addEventListener('click', () => {
+  goToPreviousSentence();
+  closeGameModeOverlay();
+  // La lecture se relancera automatiquement via goToPreviousSentence()
+});
+
+  $('#nextSentenceGame')?.addEventListener('click', () => {
+  goToNextSentence();
+  closeGameModeOverlay();
+  // La lecture se relancera automatiquement via goToNextSentence()
+});
+
+  $('#replayGame')?.addEventListener('click', () => {
+    replaySentence();
+  });
+
+  // OVERLAY DE JEU PRINCIPAL
+$('#closeGamePlay')?.addEventListener('click', () => {
+  closeGamePlayOverlay();
+  
+  if (gameType === 'reorderNoRead') {
+    // En mode réorganiser sans lecture, retour direct à l'accueil
+    document.body.style.backgroundColor = '';
+    document.getElementById('homePage').style.display = 'block';
+  } else {
+    // Autres modes : juste fermer l'overlay, garder la page de jeu visible
+    // Ne rien faire de plus, l'overlay est déjà fermé
+  }
+});
+
+  $('#switchReorder')?.addEventListener('click', () => {
+    switchGameMode('reorder');
+  });
+
+  $('#switchFree')?.addEventListener('click', () => {
+    switchGameMode('free');
+  });
+
+  $('#validateReorder')?.addEventListener('click', () => {
+    validateReorderGame();
+  });
+
+  $('#retryReorder')?.addEventListener('click', () => {
+    initReorderGame();
+  });
+
+  $('#validateFree')?.addEventListener('click', () => {
+    validateFreeGame();
+  });
+
+  $('#retryFree')?.addEventListener('click', () => {
+    initFreeGame();
+  });
+
+  $('#prevSentenceInGame')?.addEventListener('click', () => {
+  goToPreviousSentence();
+  closeGamePlayOverlay();
+  // La lecture se relancera automatiquement via goToPreviousSentence()
+});
+
+  $('#nextSentenceInGame')?.addEventListener('click', () => {
+  goToNextSentence();
+  closeGamePlayOverlay();
+  // La lecture se relancera automatiquement via goToNextSentence()
+});
+
+  $('#replayInGame')?.addEventListener('click', () => {
+    replaySentence();
+  });
+
+  $('#freeTextInput')?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && e.ctrlKey) {
+      e.preventDefault();
+      validateFreeGame();
+    }
+  });
+
+  // Overlay sélection
   $('#toggleEdit')?.addEventListener('click', openSelectionOverlay);
   $('#closeOverlay')?.addEventListener('click', closeSelectionOverlay);
   $('#overlayCancelBtn')?.addEventListener('click', closeSelectionOverlay);
-  $('#overlayValidateBtn')?.addEventListener('click', () => {
-    renderSegmented();
-    closeSelectionOverlay();
-  });
+$('#overlayValidateBtn')?.addEventListener('click', () => {
+  highlightWords = [...readModeHighlightWords];  // ← AJOUTER CETTE LIGNE
+  renderSegmented();
+  closeSelectionOverlay();
+});
 
-  // === Bouton effacer texte ===
+  // Effacer
   $('#clearText')?.addEventListener('click', () => {
     const input = document.getElementById('inputText');
     if (!input) return;
@@ -1532,17 +3507,15 @@ document.addEventListener('DOMContentLoaded', () => {
     renderSegmented();
   });
 
-  // === Gestion Hamburger (menu lecture) ===
+  // Hamburger
   let hamburgerTimeout = null;
   const hamburger = document.getElementById('hamburger');
   if (hamburger) {
     hamburger.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      
-      if (hamburgerTimeout) return; // ignore clics rapides
+      if (hamburgerTimeout) return;
       hamburgerTimeout = setTimeout(() => hamburgerTimeout = null, 200);
-      
       if (__menuHiddenByUser) {
         showMenu();
         __menuHiddenByUser = false;
@@ -1553,69 +3526,68 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // === Saisie / collage ===
-  $('#inputText')?.addEventListener('paste', ()=>{ setTimeout(()=>{
-    const input = document.getElementById('inputText');
-    input.value = normalizeChineseText(input.value);
-    renderSegmented();
-  }, 50);});
-  $('#inputText')?.addEventListener('input', e=>{
-    const caret=e.target.selectionStart; const before=e.target.value;
-    const after=normalizeChineseText(before);
-    if(after!==before){ e.target.value=after; e.target.setSelectionRange(caret, caret); }
+  // Saisie / collage
+  $('#inputText')?.addEventListener('paste', () => {
+    setTimeout(() => {
+      const input = document.getElementById('inputText');
+      input.value = normalizeChineseText(input.value);
+      renderSegmented();
+    }, 50);
+  });
+  
+  $('#inputText')?.addEventListener('input', e => {
+    const caret = e.target.selectionStart;
+    const before = e.target.value;
+    const after = normalizeChineseText(before);
+    if (after !== before) {
+      e.target.value = after;
+      e.target.setSelectionRange(caret, caret);
+    }
     renderSegmented();
   });
 
-  // === Dictionnaire ===
-  $('#loadDict')?.addEventListener('click', ()=> $('#dictFile').click());
-  $('#dictFile')?.addEventListener('change', e=>{
-    const file=e.target.files[0]; if(!file) return;
-    const reader=new FileReader();
-    reader.onload=()=>{
-      dict=parseCedict(reader.result);
-      document.getElementById('dictStatus').textContent='Dictionnaire chargé ('+dict.wordSet.size+' mots)';
+  // Dictionnaire
+  $('#loadDict')?.addEventListener('click', () => $('#dictFile').click());
+  $('#dictFile')?.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      dict = parseCedict(reader.result);
+      document.getElementById('dictStatus').textContent = 'Dictionnaire chargé (' + dict.wordSet.size + ' mots)';
       renderSegmented();
     };
-    reader.readAsText(file,'utf-8');
+    reader.readAsText(file, 'utf-8');
   });
 
-  // === Premier rendu ===
+  // Premier rendu
   renderSegmented();
   wireGhostBar();
   showMenu();
-
-  // === Icônes flèches si besoin ===
-  (function ensureArrowIcons(){
-    const up   = document.getElementById('arrowToggle');
-    const hide = document.getElementById('arrowHide');
-    const top  = document.getElementById('arrowCollapseTop');
-    if (up   && !up.querySelector('svg'))   up.innerHTML   = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 7l7 10H5z"/></svg>';
-    if (hide && !hide.querySelector('svg')) hide.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="transform:rotate(180deg)"><path d="M12 7l7 10H5z"/></svg>';
-    if (top  && !top.querySelector('svg'))  top.innerHTML  = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="transform:rotate(180deg)"><path d="M12 7l7 10H5z"/></svg>';
-    wireGhostBar();
-  })();
 });
 
-
-// ========= Pickr defaults =========
+// ========= Pickr =========
 const bgColorPicker = Pickr.create({
   el: '#bgColorPicker',
   theme: 'classic',
   default: '#FFE103',
   components: { preview: true, opacity: true, hue: true, interaction: { hex: true, rgba: true, input: true, save: true } }
 });
+
 const textColorPicker = Pickr.create({
   el: '#textColorPicker',
   theme: 'classic',
   default: '#000000',
   components: { preview: true, opacity: true, hue: true, interaction: { hex: true, rgba: true, input: true, save: true } }
 });
+
 const highlightBgColorPicker = Pickr.create({
   el: '#highlightBgColorPicker',
   theme: 'classic',
   default: '#000000',
   components: { preview: true, opacity: true, hue: true, interaction: { hex: true, rgba: true, input: true, save: true } }
 });
+
 const highlightColorPicker = Pickr.create({
   el: '#highlightColorPicker',
   theme: 'classic',
@@ -1623,281 +3595,7 @@ const highlightColorPicker = Pickr.create({
   components: { preview: true, opacity: true, hue: true, interaction: { hex: true, rgba: true, input: true, save: true } }
 });
 
-function hexFromAny(c){
-  if(!c) return '#000000';
-  const s=String(c).trim();
-  if(s.startsWith('#')){
-    return s.length===4 ? '#'+[1,2,3].map(i=>s[i]+s[i]).join('') : s.toLowerCase();
-  }
-  if(s.startsWith('rgb')){
-    const m = s.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
-    if(m){
-      const r=(+m[1]).toString(16).padStart(2,'0');
-      const g=(+m[2]).toString(16).padStart(2,'0');
-      const b=(+m[3]).toString(16).padStart(2,'0');
-      return `#${r}${g}${b}`;
-    }
-  }
-  return '#000000';
-}
 
-function computeReadableRed(bgHex){
-  // détermine si fond clair/sombre
-  const hex = bgHex.replace('#','');
-  const r = parseInt(hex.slice(0,2),16), g=parseInt(hex.slice(2,4),16), b=parseInt(hex.slice(4,6),16);
-  const Y = (0.299*r + 0.587*g + 0.114*b) / 255;
-  const lightBg = Y > 0.6;
-  // rouge adapté (plus profond sur fond clair, un peu plus vif sur fond sombre)
-  const redBg = lightBg ? '#dc2626' : '#ef4444';
-  const redFg = '#ffffff';
-  return { redBg, redFg, lightBg };
-}
-
-function openInfoOverlay() {
-  const overlay = document.getElementById('infoOverlay');
-  const body    = document.getElementById('infoWords');
-  if (!overlay || !body) return;
-  
-  // État de lecture -> pause
-  infoWasPlaying = (typeof playing !== 'undefined') ? !!playing : false;
-  try { if (typeof forcePause === 'function') forcePause(); } catch(_) {}
-  
-  // Nettoie le contenu
-  body.innerHTML = '';
-  
-  // Palette actuelle (mêmes pickers que showToken)
-  const normalBg      = (bgColorPicker?.getColor()?.toHEXA().toString())          || '#ffffff';
-  const normalText    = (textColorPicker?.getColor()?.toHEXA().toString())        || '#000000';
-  const highlightBg   = (highlightBgColorPicker?.getColor()?.toHEXA().toString()) || '#ef4444';
-  const highlightText = (highlightColorPicker?.getColor()?.toHEXA().toString())   || '#ffffff';
-  
-  // Page actuellement surlignée ?
-  const cleanCurrent = tokens[idx]?.text?.replace(/[。！？、，；：,.!?\u201D]$/u,'') || '';
-  const isH = Array.isArray(highlightWords) && highlightWords.includes(cleanCurrent);
-  
-  // Thème de la page de jeu en cours
-  const pageBg = isH ? highlightBg  : normalBg;
-  const pageFg = isH ? highlightText: normalText;
-  
-  const readableRed = getReadableRed(pageBg);
-  overlay.style.setProperty('--readable-red', readableRed);
-  
-  // Pousse les couleurs dans l'overlay (héritage CSS)
-  overlay.style.setProperty('--info-bg', pageBg);
-  overlay.style.setProperty('--info-fg', pageFg);
-  overlay.style.setProperty('--info-red-bg', highlightBg);
-  overlay.style.setProperty('--info-red-fg', getContrastingColor(highlightBg));
-  
-  // ✅ masque adaptatif autour de l’overlay
-  const contrast = getContrastingColor(pageBg);
-  if (contrast === '#000000') {
-    overlay.style.background = 'rgba(0,0,0,0.45)';   // fond clair → masque noir
-  } else {
-    overlay.style.background = 'rgba(255,255,255,0.25)'; // fond sombre → masque blanc
-  }
-  
-  // Construit les mots
-  tokens.forEach((tok, i) => {
-    const span = document.createElement('span');
-    span.textContent = tok.text;
-    
-    // D'abord la classe de base et selectable
-    span.className = 'info-word selectable';
-    
-    const clean = tok.text.replace(/[。！？、，；：,.!?\u201D]$/u,'');
-    
-    // Événement de clic (avant les classes visuelles)
-    span.onclick = () => {
-      infoChosenIndex = i;
-      body.querySelectorAll('.info-word.chosen')
-          .forEach(el => el.classList.remove('chosen'));
-      span.classList.add('chosen');
-    };
-    
-    // Puis ajouter les classes visuelles
-    if (Array.isArray(highlightWords) && highlightWords.includes(clean)) {
-      span.classList.add('initialSelected');
-    }
-    
-    if (i === idx) {
-      span.classList.add('current');
-    }
-    
-    if (i === infoChosenIndex) {
-      span.classList.add('chosen');
-    }
-    
-    body.appendChild(span);
-  });
-  
-  // Affiche l'overlay
-  overlay.style.display = 'flex';
-}
-
-
-
-
-function closeInfoOverlay(){
-  const ov = document.getElementById('infoOverlay');
-  ov.style.display = 'none';
-}
-
-// Brancher les boutons Info / Valider / Annuler / ✖
-document.addEventListener('DOMContentLoaded', ()=>{
-  const infoBtn = document.getElementById('infoBtn');
-  const infoValidateBtn = document.getElementById('infoValidateBtn');
-  const infoCancelBtn = document.getElementById('infoCancelBtn');
-  const infoCloseBtn = document.getElementById('infoCloseBtn');
-
-  infoBtn?.addEventListener('click', openInfoOverlay);
-
-  infoValidateBtn?.addEventListener('click', ()=>{
-    if(infoChosenIndex != null){
-      restartFrom(infoChosenIndex);  // saute au mot choisi
-      forcePause();                  // reste en pause comme demandé
-    }
-    closeInfoOverlay();
-  });
-
-  const cancelOverlay = ()=>{
-    closeInfoOverlay();
-    // revenir comme avant si on lisait (sinon on reste en pause)
-    if(infoWasPlaying) forcePlay();
-  };
-  infoCancelBtn?.addEventListener('click', cancelOverlay);
-  infoCloseBtn?.addEventListener('click', cancelOverlay);
-});
-
-function showMenu(){
-  __menuHiddenByUser = false;
-
-  // afficher les slots normaux (sauf le burger qui reste)
-  document.querySelectorAll('#barDefault .slot:not(#hamburger)').forEach(s=>{
-    s.style.display = 'flex';
-  });
-
-  // désactiver le fantôme
-  const ghost = document.getElementById('ghostBar');
-  if (ghost){
-    ghost.style.display = 'none';
-    ghost.setAttribute('aria-hidden','true');
-    ghost.setAttribute('inert','');           // évite tout clic (fallback : display none)
-  }
-}
-
-function hideMenu(){
-  __menuHiddenByUser = true;
-
-  // masquer les slots normaux (laisser le burger visible)
-  document.querySelectorAll('#barDefault .slot:not(#hamburger)').forEach(s=>{
-    s.style.display = 'none';
-  });
-
-  // activer le fantôme (cliquable mais invisible)
-  const ghost = document.getElementById('ghostBar');
-  if (ghost){
-    ghost.style.display = 'grid';
-    ghost.removeAttribute('inert');           // redevient fonctionnel
-    ghost.setAttribute('aria-hidden','false');
-  }
-}
-
-// --- à appeler après le rendu d’un token pour garantir l’état
-function enforceMenuState() {
-  if (__menuHiddenByUser) {
-    // l’utilisateur a demandé de cacher : on respecte
-    hideMenu();
-  } else {
-    // personne n’a demandé : on s’assure que le menu est visible
-    showMenu();
-  }
-}
-
-// À placer avec tes globals
-window.infoChosenIndex = null;   // index choisi dans l’overlay
-window.infoWasPlaying  = false;  // on mémorise si la lecture était en cours
-
-// Câblage des boutons de l'overlay "Info" + bouton i
-function wireInfoOverlayControls() {
-  const infoBtn         = document.getElementById('infoBtn');
-  const infoValidateBtn = document.getElementById('infoValidateBtn');
-  const infoCancelBtn   = document.getElementById('infoCancelBtn');
-  const infoCloseBtn    = document.getElementById('infoCloseBtn');
-
-  // sécurité : si un des éléments manque, on sort silencieusement
-  if (!infoBtn || !infoValidateBtn || !infoCancelBtn || !infoCloseBtn) return;
-
-  // on évite les doubles-écoutes si la fonction est rappelée
-  infoBtn.onclick = null;
-  infoValidateBtn.onclick = null;
-  infoCancelBtn.onclick = null;
-  infoCloseBtn.onclick = null;
-
-  // Ouvrir l’overlay via le bouton "i"
-  infoBtn.onclick = () => {
-    // mémoriser l'état de lecture et mettre en pause
-    try {
-      // si tu as une variable globale "playing" ou une fonction isPlaying()
-      const was = (typeof isPlaying === 'function') ? isPlaying()
-                : (typeof playing  !== 'undefined' ? !!playing : false);
-      window.infoWasPlaying = was;
-      if (typeof forcePause === 'function') forcePause();
-    } catch (_) {}
-
-    if (typeof openInfoOverlay === 'function') openInfoOverlay();
-  };
-
-  // Valider : sauter au mot choisi, rester en pause
-  infoValidateBtn.onclick = () => {
-    try {
-      if (window.infoChosenIndex != null && typeof restartFrom === 'function') {
-        restartFrom(window.infoChosenIndex);
-      }
-      if (typeof forcePause === 'function') forcePause();
-    } catch (_) {}
-    if (typeof closeInfoOverlay === 'function') closeInfoOverlay();
-  };
-
-  // Annuler/fermer : fermer l’overlay et, si on lisait, reprendre
-  const cancelOverlay = () => {
-    if (typeof closeInfoOverlay === 'function') closeInfoOverlay();
-    try {
-      if (window.infoWasPlaying && typeof forcePlay === 'function') {
-        forcePlay();
-      }
-    } catch (_) {}
-    // reset
-    window.infoWasPlaying  = false;
-    window.infoChosenIndex = null;
-  };
-
-  infoCancelBtn.onclick = cancelOverlay;
-  infoCloseBtn.onclick  = cancelOverlay;
-}
-
-function getReadableRed(bgColor) {
-  const hex = bgColor.replace('#', '');
-  const r = parseInt(hex.slice(0,2), 16);
-  const g = parseInt(hex.slice(2,4), 16); 
-  const b = parseInt(hex.slice(4,6), 16);
-  const luminance = (0.299*r + 0.587*g + 0.114*b) / 255;
-  
-  return luminance > 0.6 ? '#dc2626' : '#f87171';
-}
-
-
-function link(idGhost, idReal) {
-  const g = document.getElementById(idGhost);
-  const r = document.getElementById(idReal);
-  if (g && r) g.addEventListener('click', () => r.click());
-}
-
-// ✅ Relie chaque zone invisible au vrai bouton
-link('g_quit','quitBtn');
-link('g_prev','prevWordBtn');
-link('g_play','pauseBtn');
-link('g_next','nextWordBtn');
-link('g_info','infoBtn');
 </script>
 
 </body>
