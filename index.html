@@ -438,6 +438,34 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
   transition: opacity 0.15s ease, transform 0.15s ease;
 }
 
+/* Overlay universel pour toutes les fenêtres modales */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  z-index: 999;
+  display: none;
+}
+
+.modal-backdrop.dark {
+  background: rgba(255, 255, 255, 0.15); /* Plus clair sur fond sombre */
+}
+
+.modal-backdrop.light {
+  background: rgba(0, 0, 0, 0.45); /* Plus foncé sur fond clair */
+}
+
+.modal-backdrop.active {
+  display: block;
+}
+/* Ajuster le z-index des overlays existants pour être au-dessus du backdrop */
+#selectionOverlay,
+#infoOverlay,
+#gameModeOverlay,
+#gamePlayOverlay {
+  z-index: 1000;
+}
+
 /* =====================================================
    Reading page (fullscreen)
    ===================================================== */
@@ -486,7 +514,6 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
 
 .bar{ position:absolute; left:50%; transform:translateX(-50%); width:100%; max-width:var(--maxWidth); padding:0 var(--padX); display:flex; gap:var(--gap); }
 .bar-default{ bottom: calc(var(--safe) + 0px); }
-.bar-extra{ bottom: calc(var(--safe) + var(--slotH1) + 10px); display:none; }
 
 .slot{ 
   flex:1; display:flex; align-items:center; justify-content:center; border-radius: var(--radius);
@@ -495,84 +522,6 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
   border:1px solid; cursor:pointer; user-select:none; height:var(--slotH1); 
 }
 
-.bar-extra .slot{ height:var(--slotH2); }
-.icon{ width:24px; height:24px; display:block } .icon-sm{ width:20px; height:20px; display:block }
-
-.arrow-cluster{
-  position:absolute;
-  left:50%;
-  transform:translateX(-50%);
-  bottom: calc(var(--safe) + var(--slotH1) + 10px);
-  display:flex;
-  gap:14px;
-  align-items:center;
-  z-index:3;
-}
-
-.arrow-btn, .arrow-collapse-top{ 
-  width:36px; 
-  height:26px; 
-  border-radius:999px; 
-  cursor:pointer; 
-  border:1px solid;
-  backdrop-filter: blur(var(--blur)); 
-  -webkit-backdrop-filter: blur(var(--blur)); 
-  box-shadow: var(--elev);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 0;
-  padding: 0;
-  margin: 0;
-  position: relative;
-}
-
-.arrow-collapse-top{ 
-  position:absolute; 
-  left:50%; 
-  transform:translateX(-50%); 
-  bottom: calc(var(--safe) + var(--slotH1) + 10px + var(--slotH2) + 8px); 
-  display:none; 
-  z-index: 4;
-}
-
-.arrow-btn svg,
-.arrow-collapse-top svg{
-  display: block;
-  width: 18px;
-  height: 18px;
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.arrow-collapse-top svg {
-  transform: translate(-50%, -50%) rotate(180deg);
-}
-
-.arrow-cluster #arrowToggle svg {
-  position: absolute !important;
-  top: 50% !important;
-  left: 48% !important;
-  transform: translate(-50%, -50%) !important;
-  width: 18px !important;
-  height: 18px !important;
-  display: block !important;
-  margin: 0 !important;
-}
-
-.arrow-cluster #arrowHide svg {
-  position: absolute !important;
-  top: 50% !important;
-  left: 48% !important;
-  transform: translate(-50%, -50%) rotate(180deg) !important;
-  width: 18px !important;
-  height: 18px !important;
-  display: block !important;
-  margin: 0 !important;
-}
 
 .bottom-hit{ 
   position:absolute; 
@@ -847,6 +796,18 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
   transform: translateY(-1px);
 }
 
+#pinyinBars {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 0px);
+  width: 100%;
+  max-width: 760px;
+  padding: 0 12px;
+  z-index: 1001;
+  top: auto;
+}
+
 /* Game overlays */
 #gameModeOverlay,
 #gamePlayOverlay {
@@ -924,6 +885,8 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
 .mode-switcher {
   display: flex;
   gap: 8px;
+  justify-content: flex-start;
+  padding: 12px 20px 16px; 
 }
 
 .mode-switcher .mode-switch {
@@ -957,6 +920,9 @@ legend{ font-weight:800; color:#0f172a; padding:0 8px }
   padding: 20px;
   flex: 1;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;   
 }
 
 .word-pool,
@@ -1236,6 +1202,304 @@ body:has(#gamePlayOverlay[style*="display: flex"]) #gameBars {
   }
 }
 
+/* Pinyin Game Mode */
+#pinyinKeyboard {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 72px);
+  width: 100%;
+  max-width: 760px;
+  padding: 16px;
+  background: transparent !important;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+  display: none;
+  z-index: 10;
+}
+
+.keyboard-row {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.key-btn {
+  min-width: 36px;
+  height: 44px;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: saturate(120%) blur(10px);
+  border: none;;
+  box-shadow: 0 6px 20px rgba(0,0,0,.12);
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+.key-btn:hover {
+  background: #f3f4f6;
+  transform: translateY(-1px);
+}
+
+.key-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+
+.key-btn.wide {
+  min-width: 80px;
+}
+
+.key-btn.backspace {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.key-btn.validate {
+  background: #10b981;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* Tone picker popup */
+.tone-picker {
+  position: absolute;
+  background: #ffffff;
+  border: 2px solid #3b82f6;
+  border-radius: 12px;
+  padding: 8px;
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  z-index: 100;
+}
+
+.tone-picker.active {
+  display: flex;
+}
+
+.tone-option {
+  padding: 8px 16px;
+  font-size: 20px;
+  font-weight: 600;
+  background: #f9fafb;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.tone-option:hover {
+  background: #e5e7eb;
+}
+
+.tone-option.selected {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Pinyin input boxes above characters */
+.pinyin-input-boxes {
+  position: absolute;
+  top: calc(50% - 22vh); 
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+}
+
+.pinyin-box {
+  min-width: 80px;  
+  height: 70px; 
+  padding: 12px 16px;  
+  background: rgba(255,255,255,0.9);
+  border: 2px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 36px; 
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.pinyin-box.active {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+}
+
+.pinyin-box.correct {
+  color: #10b981;
+  border-color: #10b981;
+  background: rgba(16,185,129,0.1);
+}
+
+.pinyin-box.incorrect {
+  color: #ef4444;
+  border-color: #ef4444;
+  background: rgba(239,68,68,0.1);
+}
+
+#pinyinSubOptions .opt {
+  margin: 10px 0;
+  gap: 10px; /* Réduire l'espace entre le toggle et le texte */
+}
+
+#pinyinSubOptions .opt input[type="checkbox"] {
+  width: 44px;  /* Réduire la largeur du toggle */
+  height: 26px; /* Réduire la hauteur du toggle */
+}
+
+#pinyinSubOptions .opt input[type="checkbox"]::after {
+  width: 20px;  /* Réduire la taille de la boule */
+  height: 20px;
+  top: 3px;
+  left: 3px;
+}
+
+#pinyinSubOptions .opt input[type="checkbox"]:checked::after {
+  left: 21px;  /* Ajuster la position quand activé */
+}
+
+#pinyinSubOptions .opt span {
+  font-size: 14px;      /* Même taille que .game-mode-item label */
+  font-weight: 600;     /* Même poids */
+  color: #374151;       /* Même couleur */
+  font-family: "Inter", system-ui, Arial, sans-serif; /* Même police */
+  line-height: 1.3;
+}
+
+
+/* Tone selection buttons */
+#toneSelection {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 72px);
+  width: 100%;
+  max-width: 760px;
+  padding: 16px;
+  background: transparent;
+  display: none;
+  z-index: 10;
+}
+
+.tone-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.tone-btn {
+  padding: 16px 24px;
+  background: #ffffff;
+  border: 2px solid #d1d5db;
+  border-radius: 12px;
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  font-family: "Noto Sans SC", "Inter", sans-serif;
+}
+
+.tone-btn:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+  transform: translateY(-1px);
+}
+
+.tone-btn:active {
+  transform: scale(0.98);
+}
+
+/* Mode sombre */
+body.dark-mode #pinyinKeyboard,
+body.dark-mode #toneSelection {
+  background: rgba(0,0,0,0.18);
+}
+
+.overlay-footer {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-top: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+#selectAllOverlay {
+  display: flex;
+}
+
+.tone-btn {
+  border: none;
+  border-radius: 14px;
+  font-size: 44px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  backdrop-filter: saturate(120%) blur(10px);
+  -webkit-backdrop-filter: saturate(120%) blur(10px);
+  box-shadow: 0 6px 20px rgba(0,0,0,.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tone-btn:hover {
+  transform: scale(1.05);
+}
+
+.tone-btn:active {
+  transform: scale(0.98);
+}
+
+/* Agrandir les accents sauf ˇ */
+.pinyin-box {
+  font-size: 28px;
+}
+
+.tone-btn:not(.tone-btn-bottom) {
+  font-size: 44px;
+}
+
+/* Flash effect for keyboard */
+.key-btn.flash {
+  animation: keyFlash 0.2s ease;
+}
+
+@keyframes keyFlash {
+  0%, 100% { background: rgba(255,255,255,0.18); }
+  50% { background: rgba(59, 130, 246, 0.4); }
+}
+
+/* Highlight selected tone option */
+.tone-option.selected {
+  background: #3b82f6;
+  color: white;
+}
+
+/* Cacher les barres de navigation sur la page d'accueil */
+body:has(#homePage:not([style*="display: none"])) #pinyinBars,
+body:has(#homePage:not([style*="display: none"])) #gameBars,
+body:has(#homePage:not([style*="display: none"])) #gameBarsNoRead,
+body:has(#homePage:not([style*="display: none"])) #barDefault {
+  display: none !important;
+}
 
 @media (max-width:560px){
   :root{ --slotH1:58px; --slotH2:50px; --gap:8px; --padX:10px; }
@@ -1289,7 +1553,80 @@ body:has(#gamePlayOverlay[style*="display: flex"]) #gameBars {
   .mode-selector {
     flex-direction: column;
   }
+
+  .tone-cross-container {
+    transform: translateY(28px) !important;
+  }
+  
+/* --- Clavier Pinyin : rangées fixes + centrage parfait --- */
+
+/* Conteneur clavier */
+#pinyinKeyboard{
+  width: 94%;
+  padding: 10px 6px;
+  left: 50%;
+  transform: translateX(-50%);
 }
+
+/* 1ère & 2e rangées : 10 colonnes identiques */
+#pinyinKeyboard .keyboard-row:nth-of-type(1),
+#pinyinKeyboard .keyboard-row:nth-of-type(2){
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0,1fr));
+  gap: 4px;
+}
+
+/* 3e rangée : 10 colonnes aussi, mais on centre 6 touches
+   grâce à deux “espacers” virtuels de 2 colonnes à gauche/droite */
+#pinyinKeyboard .keyboard-row:nth-of-type(3){
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0,1fr));
+  gap: 4px;
+  position: relative;
+}
+
+/* spacers gauche/droite (2 colonnes chacun) pour centrer w x c v b n */
+#pinyinKeyboard .keyboard-row:nth-of-type(3)::before,
+#pinyinKeyboard .keyboard-row:nth-of-type(3)::after{
+  content: "";
+  display: block;
+}
+
+#pinyinKeyboard .keyboard-row:nth-of-type(3)::before{ grid-column: 1 / span 2; }
+#pinyinKeyboard .keyboard-row:nth-of-type(3)::after { grid-column: 9 / span 2; }
+
+/* chaque touche occupe 1 colonne (les 6 lettres tomberont au centre) */
+#pinyinKeyboard .keyboard-row:nth-of-type(3) .key-btn{
+  grid-column: auto / span 1;
+}
+
+/* Touches : même taille partout + centrage strict du contenu */
+#pinyinKeyboard .key-btn{
+  min-width: 0;
+  width: 100%;
+  height: 40px;            /* ajuste à 38px si tu veux plus compact */
+  font-size: 16px;
+  box-sizing: border-box;
+
+  display: flex;           /* centrage parfait */
+  align-items: center;
+  justify-content: center;
+  line-height: 1;          /* évite le décalage vertical du texte */
+  padding: 0;              /* supprime marges internes parasites */
+}
+
+/* Icônes SVG (retour, valider…) parfaitement centrées */
+#pinyinKeyboard .key-btn svg{
+  display: block;
+  height: 1em;
+  width: 1em;
+}
+
+/* (si tu as des touches “larges”) */
+#pinyinKeyboard .key-btn.wide{
+  grid-column: span 2;
+}
+
 </style>
 </head>
 
@@ -1325,44 +1662,83 @@ body:has(#gamePlayOverlay[style*="display: flex"]) #gameBars {
         <div id="segmentedArea" style="display:none;">
           <div id="segmentedText" class="segmented-box"></div>
         </div>
-        <div class="editor-actions">
-          <button id="clearText" class="editor-btn" title="Effacer le texte">
-            <svg viewBox="0 0 24 24" class="icon" xmlns="http://www.w3.org/2000/svg">
-              <line x1="18" y1="6" x2="6" y2="18" stroke-width="2" stroke-linecap="round"/>
-              <line x1="6" y1="6" x2="18" y2="18" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </button>
-          <button id="toggleEdit" class="editor-btn" title="Basculer édition/segmentation" style="display:none;">
-            <svg viewBox="0 0 24 24" class="icon" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/>
-              <path d="M20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 
-                       1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"/>
-            </svg>
-          </button>
-        </div>
-      </div>
+<div class="editor-actions">
+  <button id="clearText" class="editor-btn" title="Effacer le texte">
+    <svg viewBox="0 0 24 24" class="icon" xmlns="http://www.w3.org/2000/svg">
+      <line x1="18" y1="6" x2="6" y2="18" stroke-width="2" stroke-linecap="round"/>
+      <line x1="6" y1="6" x2="18" y2="18" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </button>
+  
+  <button id="selectAllWords" class="editor-btn" title="Tout sélectionner / désélectionner" style="display:none;">
+    <svg viewBox="0 0 24 24" class="icon" xmlns="http://www.w3.org/2000/svg">
+      <path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+  
+  <button id="toggleEdit" class="editor-btn" title="Basculer édition/segmentation" style="display:none;">
+    <svg viewBox="0 0 24 24" class="icon" xmlns="http://www.w3.org/2000/svg">
+      <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/>
+      <path d="M20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 
+                   1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"/>
+    </svg>
+  </button>
+</div>
 
       <!-- Game Mode Options -->
-      <div class="game-mode-options" id="gameModeOptions">
-        <div class="game-mode-title">Options du mode jeu :</div>
-        <div class="game-mode-grid">
-  <div class="game-mode-item">
-    <input type="radio" id="gameBoth" name="gameType" value="both" checked>
-    <label for="gameBoth">Normal</label>
-  </div>
-  <div class="game-mode-item">
-    <input type="radio" id="gameReorderNoRead" name="gameType" value="reorderNoRead">
-    <label for="gameReorderNoRead">Phrases aléatoires</label>
+<div class="game-mode-options" id="gameModeOptions">
+  <div class="game-mode-title">Options du mode jeu :</div>
+  <div class="game-mode-grid">
+    <div class="game-mode-item">
+      <input type="radio" id="gameBoth" name="gameType" value="both" checked>
+      <label for="gameBoth">Normal</label>
+    </div>
+    <div class="game-mode-item">
+      <input type="radio" id="gameReorderNoRead" name="gameType" value="reorderNoRead">
+      <label for="gameReorderNoRead">Phrases aléatoires</label>
+    </div>
+    <div class="game-mode-item">
+      <input type="radio" id="gamePinyinKeyboard" name="gameType" value="pinyinKeyboard">
+      <label for="gamePinyinKeyboard">Pinyin - Clavier</label>
+    </div>
+    <div class="game-mode-item">
+      <input type="radio" id="gamePinyinToneLetters" name="gameType" value="pinyinToneLetters">
+      <label for="gamePinyinToneLetters">Pinyin - Tons + Lettres</label>
+    </div>
+    <div class="game-mode-item">
+      <input type="radio" id="gamePinyinTone" name="gameType" value="pinyinTone">
+      <label for="gamePinyinTone">Pinyin - Tons seuls</label>
+    </div>
   </div>
 </div>
-      </div>
+
+<div id="pinyinSubOptions" class="game-mode-options" style="display:none;margin-top:12px;">
+  <div class="game-mode-title">Options Pinyin</div>
+  <div class="game-mode-grid">
+    <div class="game-mode-item">
+      <input type="radio" id="pinyinFlowSelectedOnly" name="pinyinFlow" value="selectedOnly" checked>
+      <label for="pinyinFlowSelectedOnly">
+        Uniquement les mots sélectionnés
+        <small style="display:block;opacity:.8">Séquence de quiz Pinyin mot par mot (barre Pinyin).</small>
+      </label>
+    </div>
+    <div class="game-mode-item">
+      <input type="radio" id="pinyinFlowStop" name="pinyinFlow" value="stopOnSelected">
+      <label for="pinyinFlowStop">
+        Lecture + arrêt sur mots sélectionnés
+        <small style="display:block;opacity:.8">Barre du lecteur, pause auto sur chaque mot sélectionné, puis reprise.</small>
+      </label>
+    </div>
+  </div>
+</div>
 
       <fieldset>
         <legend>Paramètres de lecture</legend>
-        <div>
-          <label>Vitesse (mots/min) : <strong id="speedLabel">120</strong></label>
-          <input class="range" type="range" id="speed" min="30" max="360" step="10" value="120">
-        </div>
+        <div id="speedControl">
+  <label>Vitesse (mots/min) : <strong id="speedLabel">120</strong></label>
+  <input class="range" type="range" id="speed" min="30" max="360" step="10" value="120">
+</div>
         <div class="opt" id="pinyinOption">
           <input type="checkbox" id="showPinyin"><span>Afficher le pinyin</span>
         </div>
@@ -1370,9 +1746,9 @@ body:has(#gamePlayOverlay[style*="display: flex"]) #gameBars {
           <input type="checkbox" id="showDefs"><span>Afficher la traduction</span>
         </div>
         <div class="opt" id="selectionOption">
-          <input type="checkbox" id="alwaysShowSelected">
-          <span>Tout afficher sur la sélection</span>
-        </div>
+  <input type="checkbox" id="alwaysShowSelected" checked>
+  <span>Tout afficher sur la sélection</span>
+</div>
       </fieldset>
 
       <fieldset>
@@ -1417,10 +1793,18 @@ body:has(#gamePlayOverlay[style*="display: flex"]) #gameBars {
         <button id="closeOverlay" aria-label="Fermer la sélection">✖</button>
       </div>
       <div id="segmentedOverlayText"></div>
-      <div class="overlay-footer">
-        <button id="overlayCancelBtn" class="info-btn info-cancel">Annuler</button>
-        <button id="overlayValidateBtn" class="info-btn info-validate">Valider</button>
-      </div>
+<div class="overlay-footer">
+  <button id="selectAllOverlay" class="info-btn info-cancel">
+    <svg viewBox="0 0 24 24" class="icon" style="width:16px;height:16px;margin-right:6px" xmlns="http://www.w3.org/2000/svg">
+      <path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Tout sélectionner
+  </button>
+  <div style="flex:1"></div>
+  <button id="overlayCancelBtn" class="info-btn info-cancel">Annuler</button>
+  <button id="overlayValidateBtn" class="info-btn info-validate">Valider</button>
+</div>
     </div>
   </div>
   
@@ -1556,6 +1940,40 @@ body:has(#gamePlayOverlay[style*="display: flex"]) #gameBars {
       </div>
     </div>
   </div>
+  
+  <!-- Pinyin Bars -->
+<div id="pinyinBars" style="display:none;">
+  <div class="game-bar">
+    <button class="game-btn" id="quitPinyinBtn" title="Quitter le mode pinyin" aria-label="Quitter">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6"  y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+    <button class="game-btn" id="prevPinyinWordBtn" title="Mot précédent" aria-label="Mot précédent">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+    <button class="game-btn" id="playPinyinBtn" title="Lire le mot" aria-label="Lecture" style="visibility: hidden;">
+      <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+        <polygon points="8,6 18,12 8,18"></polygon>
+      </svg>
+    </button>
+    <button class="game-btn" id="nextPinyinWordBtn" title="Mot suivant" aria-label="Mot suivant">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+    <button class="game-btn" id="showPinyinInfoBtn" title="Afficher les infos" aria-label="Infos">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="12" y1="17" x2="12" y2="11"></line>
+        <line x1="12" y1="7"  x2="12" y2="7"></line>
+      </svg>
+    </button>
+  </div>
+</div>
+ 
 
   <!-- Game Mode Overlay -->
   <div id="gameModeOverlay" style="display:none;">
@@ -1577,47 +1995,54 @@ body:has(#gamePlayOverlay[style*="display: flex"]) #gameBars {
   </div>
 
   <!-- Game Play Overlay -->
-  <div id="gamePlayOverlay" style="display:none;">
-    <div class="game-overlay-content">
-      <div class="game-header">
-        <div class="mode-switcher">
-          <button id="switchReorder" class="mode-switch mode-switch-reorder active">Réorganiser</button>
-          <button id="switchFree" class="mode-switch mode-switch-free">Libre</button>
-        </div>
-        <button id="closeGamePlay" class="close-btn">✖</button>
+<div id="gamePlayOverlay" style="display:none;">
+  <div class="game-overlay-content">
+    <div class="game-header">
+      <h3>Exercice</h3>
+      <button id="closeGamePlay" class="close-btn">✖</button>
+    </div>
+
+    <div class="mode-switcher">
+      <button id="switchReorder" class="mode-switch active">Réorganiser</button>
+      <button id="switchFree" class="mode-switch">Libre</button>
+    </div>
+
+    <div id="reorderGame" class="game-content">
+      <div id="wordPool" class="word-pool">
+        <div class="pool-title">Mots disponibles :</div>
+        <div id="availableWords" class="words-container"></div>
       </div>
-      
-      <div id="reorderGame" class="game-content">
-        <div id="wordPool" class="word-pool">
-          <div class="pool-title">Mots disponibles :</div>
-          <div id="availableWords" class="words-container"></div>
-        </div>
-        <div id="sentenceBuilder" class="sentence-builder">
-          <div class="pool-title">Votre phrase :</div>
-          <div id="userSentence" class="words-container drop-zone"></div>
-        </div>
-        <button id="validateReorder" class="validate-btn">Valider</button>
-        <div id="reorderResult" class="result-message" style="display:none;"></div>
-        <button id="retryReorder" class="retry-btn" style="display:none;">Recommencer</button>
+      <div id="sentenceBuilder" class="sentence-builder">
+        <div class="pool-title">Votre phrase :</div>
+        <div id="userSentence" class="words-container drop-zone"></div>
       </div>
-      
-      <div id="freeGame" class="game-content" style="display:none;">
-        <div class="free-input-container">
-          <label for="freeTextInput">Retapez la phrase :</label>
-          <textarea id="freeTextInput" class="free-textarea" placeholder="Tapez la phrase ici..."></textarea>
-        </div>
-        <button id="validateFree" class="validate-btn">Valider</button>
-        <div id="freeResult" class="result-message" style="display:none;"></div>
-        <button id="retryFree" class="retry-btn" style="display:none;">Recommencer</button>
+      <button id="validateReorder" class="validate-btn">Valider</button>
+      <div id="reorderResult" class="result-message" style="display:none;"></div>
+      <button id="retryReorder" class="retry-btn" style="display:none;">Recommencer</button>
+    </div>
+    
+    <div id="freeGame" class="game-content" style="display:none;">
+      <div class="free-input-container">
+        <label for="freeTextInput">Retapez la phrase :</label>
+        <textarea id="freeTextInput" class="free-textarea" placeholder="Tapez la phrase ici..."></textarea>
       </div>
-      
-      <div class="game-nav-footer">
-        <button id="prevSentenceInGame" class="nav-btn">← Précédente</button>
-        <button id="replayInGame" class="nav-btn nav-btn-replay">Relire</button>
-        <button id="nextSentenceInGame" class="nav-btn">Suivante →</button>
-      </div>
+      <button id="validateFree" class="validate-btn">Valider</button>
+      <div id="freeResult" class="result-message" style="display:none;"></div>
+      <button id="retryFree" class="retry-btn" style="display:none;">Recommencer</button>
+    </div>
+    
+    <div class="game-nav-footer">
+      <button id="prevSentenceInGame" class="nav-btn">← Précédente</button>
+      <button id="replayInGame" class="nav-btn nav-btn-replay">Relire</button>
+      <button id="nextSentenceInGame" class="nav-btn">Suivante →</button>
     </div>
   </div>
+</div>
+
+<!-- Modal Backdrop Universal -->
+<div id="modalBackdrop" class="modal-backdrop"></div>
+
+</body>
 
 <script>
 // ========= État global =========
@@ -1627,8 +2052,6 @@ let idx = 0;
 let timer = null;
 let playing = false;
 let highlightWords = [];
-let readModeHighlightWords = [];  // Pour le mode lecture
-let gameModeHighlightWords = [];  // Pour le mode jeu (si besoin)
 let currentToken = null;
 let editMode = true;
 let infoChosenIndex = null;
@@ -1642,6 +2065,42 @@ let originalSentence = '';
 let currentGameMode = 'reorder';
 let appMode = 'read';
 let playedSentences = [];  // Pour tracker les phrases déjà jouées
+let pinyinMode = 'keyboard';
+let pinyinFlow = 'selectedOnly'; // 'stopOnSelected' | 'selectedOnly'
+let pinyinGateActive = false;
+ // 'keyboard', 'toneWithLetters', 'toneOnly'
+let pinyinSelectedWords = []; // Mots sélectionnés pour le test pinyin
+let currentPinyinWordIndex = 0; // Index dans les mots sélectionnés
+let currentCharacterIndex = 0; // Index du caractère dans le mot actuel
+let pinyinInput = []; // Saisie en cours pour chaque caractère
+let pinyinValidated = false; // Si le mot actuel est validé
+let selectedToneIndex = 0; // Index de l'option sélectionnée dans le tone picker
+let isSelectingUorU = false; // Si on est en train de choisir entre u et ü
+let autoNextTimer = null;
+let showDefsTimer = null;
+let tonePickerOpen = false;
+let pendingVowel = null;     // 'a','e','i','o','u','ü'
+let uChoiceOpen = false;     // sélection u / ü en cours ?
+
+function showBackdrop() {
+  const backdrop = document.getElementById('modalBackdrop');
+  if (!backdrop) return;
+  
+  // Détecter la couleur de fond actuelle
+  const bgColor = (bgColorPicker?.getColor()?.toHEXA().toString()) || '#ffffff';
+  const isLightBg = getContrastingColor(bgColor) === '#000000';
+  
+  // Appliquer la classe appropriée
+  backdrop.classList.remove('light', 'dark');
+  backdrop.classList.add(isLightBg ? 'light' : 'dark');
+  backdrop.classList.add('active');
+}
+function hideBackdrop() {
+  const backdrop = document.getElementById('modalBackdrop');
+  if (backdrop) {
+    backdrop.classList.remove('active', 'light', 'dark');
+  }
+}
 
 
 // ========= Utilitaires =========
@@ -1656,15 +2115,20 @@ function numericToDiacriticPinyin(pinyin){
   return normalized.replace(/([A-Za-zü:]+)([0-5])/g,(m,sy,t)=>{const tone=+t; if(tone===0||tone===5) return sy.replace(/:/g,''); return applyMark(sy,tone-1);});
 }
 
-function normalizeChineseText(text){
-  if(!text) return '';
-  text = text.replace(/[\u200B-\u200D\uFEFF]/g,'');
-  text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+function normalizeChineseText(text) {
+  if (!text) return '';
+  // Caractères invisibles
+  text = text.replace(/[\u200B-\u200D\uFEFF]/g, '');
+  // Normaliser retours à la ligne
+  text = text.replace(/\r\n?/g, '\n');
   text = text.replace(/\n+/g, ' ');
-  text = text.replace(/([\p{Script=Han}])\p{White_Space}+(?=[\p{Script=Han}])/gu,'$1');
-  text = text
-    .replace(/\p{White_Space}+([，。！？、；：,.!?;"《》])/gu,'$1')
-    .replace(/([，。！？、；：,.!?;"《》])\p{White_Space}+/gu,'$1');
+  // Supprimer espaces entre caractères chinois
+  text = text.replace(/([\p{Script=Han}])\p{White_Space}+(?=[\p{Script=Han}])/gu, '$1');
+  // Supprimer espaces autour de la ponctuation
+  const punct = '，。！？、；：,.!?;"《》『』「」〔〕【】（）﹁﹂﹃﹄';
+  text = text.replace(new RegExp(`\\p{White_Space}+([${punct}])`, 'gu'), '$1');
+  text = text.replace(new RegExp(`([${punct}])\\p{White_Space}+`, 'gu'), '$1');
+  // Trim final
   return text.trim();
 }
 
@@ -1739,7 +2203,7 @@ function segmentText(text, wordSet, maxLen){
 function attachDictInfo(tokens, dictMap){
   return tokens.map(tok=>{
     if(tok.type==='han'){
-      const clean=tok.text.replace(/[。！？,.，!?]$/,'');
+      const clean = stripPunct(tok.text);
       const e=dictMap.get(clean);
       if(e) return {...tok, pinyin:e.pinyin, defs:e.defs};
     }
@@ -1747,6 +2211,7 @@ function attachDictInfo(tokens, dictMap){
   });
 }
 
+// ========= Rendu (accueil) =========
 // ========= Rendu (accueil) =========
 function renderSegmented(){
   const text = normalizeChineseText(document.getElementById('inputText').value);
@@ -1759,7 +2224,7 @@ function renderSegmented(){
     el.className = 'token';
     el.textContent = tok.text;
 
-    const clean = tok.text.replace(/[。！？,.，!?]$/, '');
+    const clean = stripPunct(tok.text);
     if (highlightWords.includes(clean)) el.classList.add('selected');
 
     el.addEventListener('click', (e) => {
@@ -1769,7 +2234,6 @@ function renderSegmented(){
       } else {
         highlightWords.push(clean);
       }
-      readModeHighlightWords = [...highlightWords];  // ← AJOUTER ICI
       renderSegmented();
       showToken(tok);
     });
@@ -1785,13 +2249,17 @@ function renderSegmented(){
       dp.style.display = 'block';
       dp.style.visibility = 'visible';
       restartFrom(i);
-      forcePlay();
+      if (isPinyinGameMode() && pinyinFlow === 'selectedOnly') {
+        forcePause();
+      } else {
+        forcePlay();
+      }
     });
+    
+    c.appendChild(el);  // ← AJOUT : ajouter l'élément au conteneur
+  });  
+}  
 
-    el.appendChild(play);
-    c.appendChild(el);
-  });
-}
 
 // ========= Rendu (page de jeu) =========
 function showToken(token) {
@@ -1802,11 +2270,12 @@ function showToken(token) {
   const dEl  = document.getElementById('defs');
   const cont = document.getElementById('charContainer');
 
-  cd.innerHTML = '';
-  pEl.textContent = '';
-  dEl.textContent = '';
-  pEl.style.display = '';
-  dEl.style.display = '';
+cd.innerHTML = '';
+// Nettoyer et masquer immédiatement pinyin/traduction
+pEl.textContent = '';
+dEl.textContent = '';
+pEl.style.display = 'none';
+dEl.style.display = 'none';
 
   let han = token.text, punc = '';
   if (/[。！？,.，!?]$/.test(token.text)) {
@@ -1832,16 +2301,26 @@ function showToken(token) {
     cd.classList.remove('shifted');
   }
 
-  const normalBg      = (bgColorPicker?.getColor()?.toHEXA().toString())          || '#ffffff';
-  const normalText    = (textColorPicker?.getColor()?.toHEXA().toString())        || '#000000';
-  const highlightBg   = (highlightBgColorPicker?.getColor()?.toHEXA().toString()) || '#000000';
-  const highlightText = (highlightColorPicker?.getColor()?.toHEXA().toString())   || '#ffffff';
+const normalBg      = (bgColorPicker?.getColor()?.toHEXA().toString())          || '#ffffff';
+const normalText    = (textColorPicker?.getColor()?.toHEXA().toString())        || '#000000';
+const highlightBg   = (highlightBgColorPicker?.getColor()?.toHEXA().toString()) || '#000000';
+const highlightText = (highlightColorPicker?.getColor()?.toHEXA().toString())   || '#ffffff';
 
-  const clean = token.text.replace(/[。！？,.，!?]$/, '');
-  const isH   = highlightWords.includes(clean);
+const clean = stripPunct(token.text);
+const isH   = highlightWords.includes(clean);
 
-  const pageBg   = isH ? highlightBg   : normalBg;
-  const textCol  = isH ? highlightText : normalText;
+let pageBg, textCol;
+
+if (gameMode) {
+  // En mode jeu, toujours utiliser les couleurs normales
+  pageBg = normalBg;
+  textCol = normalText;
+} else {
+  // En mode lecture, différencier les mots surlignés
+  pageBg = isH ? highlightBg : normalBg;
+  textCol = isH ? highlightText : normalText;
+}
+
   cd.style.color = textCol;
   const dp = document.getElementById('displayPage');
   dp.style.backgroundColor = pageBg;
@@ -1858,12 +2337,16 @@ function showToken(token) {
   const optShowDefs   = !!document.getElementById('showDefs')?.checked;
   const alwaysShowSel = !!document.getElementById('alwaysShowSelected')?.checked;
 
+  // Forcer à masquer pour les modes spécifiques
+  const gameTypeValue = document.querySelector('input[name="gameType"]:checked')?.value || 'both';
+  const shouldForceHide = gameMode && (gameTypeValue === 'reorderNoRead' || gameTypeValue.includes('pinyin'));
+
   if (alwaysShowSel && isH) {
-    pEl.style.display = '';
-    dEl.style.display = '';
+    pEl.style.display = shouldForceHide ? 'none' : '';
+    dEl.style.display = shouldForceHide ? 'none' : '';
   } else {
-    pEl.style.display = optShowPinyin ? '' : 'none';
-    dEl.style.display = optShowDefs   ? '' : 'none';
+    pEl.style.display = (optShowPinyin && !shouldForceHide) ? '' : 'none';
+    dEl.style.display = (optShowDefs && !shouldForceHide) ? '' : 'none';
   }
 
   const totalLen = han.length + (punc ? 1 : 0);
@@ -1873,6 +2356,10 @@ function showToken(token) {
   cont.dataset.toggled = '0';
   cont.onclick = (e) => {
     e.stopPropagation();
+    
+    // Désactiver en mode pinyin
+    if (isPinyinGameMode()) return;
+    
     const showPinyin = !!document.getElementById('showPinyin')?.checked;
     const showDefs   = !!document.getElementById('showDefs')?.checked;
     const toggled    = cont.dataset.toggled === '1';
@@ -1904,6 +2391,13 @@ function showToken(token) {
 
   // Gestion barres jeu
   if (gameMode) {
+    if (isPinyinGameMode() && typeof pinyinFlow !== 'undefined' && pinyinFlow === 'stopOnSelected') {
+      document.getElementById('barDefault').style.display = 'grid';
+      document.getElementById('ghostBar').style.display = 'none';
+      document.getElementById('gameBars').style.display = 'none';
+      document.getElementById('gameBarsNoRead').style.display = 'none';
+      return;
+    }
     if (gameType === 'reorderNoRead') {
       toggleGameBarsNoRead(true);
     } else {
@@ -1941,70 +2435,6 @@ function applyControlsTheme(contrastColor){
   }
 }
 
-// ========= Page de lecture =========
-function startDisplay() {
-  const text = normalizeChineseText(document.getElementById('inputText').value);
-  tokens = attachDictInfo(segmentText(text, dict.wordSet, dict.maxLen), dict.entries);
-  idx = 0;
-
-  if (!tokens.length) {
-    alert("Aucun mot à afficher.");
-    return;
-  }
-
-  if (gameMode && gameType === 'reorderNoRead') {
-    // Mode spécial : ne pas afficher la page de lecture du tout
-    document.getElementById('homePage').style.display = 'none';
-    
-    sentenceStarts = computeSentenceStarts(tokens);
-    playedSentences = [];
-    currentSentenceIndex = Math.floor(Math.random() * sentenceStarts.length);
-    playedSentences.push(currentSentenceIndex);
-    idx = sentenceStarts[currentSentenceIndex];
-    originalSentence = getSentenceText(tokens, currentSentenceIndex);
-    
-    // Appliquer le fond choisi à l'overlay
-    const bgColor = (bgColorPicker?.getColor()?.toHEXA().toString()) || '#ffffff';
-    document.body.style.backgroundColor = bgColor;
-    
-    openGamePlayOverlayDirect();
-    return;
-  }
-  
-  // Mode normal avec page de lecture
-  document.getElementById('homePage').style.display = 'none';
-  const dp = document.getElementById('displayPage');
-  dp.style.display = 'block';
-  dp.style.visibility = 'visible';
-  
-  if (gameMode) {
-    highlightWords = [];
-  } else {
-    highlightWords = [...readModeHighlightWords];
-  }
-
-  const initialBg = (bgColorPicker?.getColor()?.toHEXA().toString()) || '#ffffff';
-  const contrast0 = getContrastingColor(initialBg);
-  applyControlsTheme(contrast0);
-
-  wireInfoOverlayControls();
-
-  if (gameMode) {
-    sentenceStarts = computeSentenceStarts(tokens);
-    playedSentences = [];
-    currentSentenceIndex = 0;
-    toggleGameBars(true);
-    updateGameBarNavigation();
-  } else {
-    toggleGameBars(false);
-    toggleGameBarsNoRead(false);
-  }
-
-  clearInterval(timer);
-  playing = false;
-  showToken(tokens[idx]);
-  if (typeof fitCharLine === 'function') fitCharLine();
-}
 
 // ========= Navigation par phrase =========
 const SENT_END_RE = /[。！？.!?]$/;
@@ -2030,14 +2460,14 @@ function findCurrentSentenceIndex(tokArr, currentIdx) {
 function getSentenceText(tokArr, sentenceIdx) {
   const starts = computeSentenceStarts(tokArr);
   if (sentenceIdx >= starts.length) return '';
-  
+
   const startIdx = starts[sentenceIdx];
   let endIdx = tokArr.length;
-  
+
   if (sentenceIdx < starts.length - 1) {
     endIdx = starts[sentenceIdx + 1];
   }
-  
+
   return tokArr.slice(startIdx, endIdx).map(t => t.text).join('');
 }
 
@@ -2053,21 +2483,30 @@ function getContrastingColor(hex){
 }
 
 // ========= Repositionnement =========
-function restartFrom(index){
+function restartFrom(index) {
+  // 🚫 Bloquer toute relance en mode Pinyin + selectedOnly
+  if (isPinyinGameMode() && pinyinFlow === 'selectedOnly') {
+    playing = false;
+    clearInterval(timer);
+    if (typeof updatePinyinPlayIcon === 'function') updatePinyinPlayIcon();
+    return;
+  }
+  
   const text = normalizeChineseText(document.getElementById('inputText').value);
   tokens = attachDictInfo(segmentText(text, dict.wordSet, dict.maxLen), dict.entries);
-  
+
   if (gameMode) {
     sentenceStarts = computeSentenceStarts(tokens);
   }
-  
+
   if (!tokens.length) return;
 
-  idx = Math.max(0, Math.min(index, tokens.length-1));
+  idx = Math.max(0, Math.min(index, tokens.length - 1));
   clearInterval(timer);
   showToken(tokens[idx]);
-  fitCharLine && fitCharLine();
+  if (typeof fitCharLine === 'function') fitCharLine();
 }
+
 
 // ========= Boucle =========
 function updatePlayGameBtnIcon() {
@@ -2095,23 +2534,51 @@ function forcePause(){
   const pb = document.getElementById('pauseIcon');
   if (pb) pb.innerHTML = '<polygon points="8,6 18,12 8,18"></polygon>';
   updatePlayGameBtnIcon(); // ← ajoute ça
+  if (typeof updatePinyinPlayIcon === 'function') updatePinyinPlayIcon();
 }
 
-function forcePlay(skipFirst = false){
+function forcePlay(skipFirst = false) {
+  // 🚫 Bloquer TOUTE lecture en mode Pinyin + selectedOnly
+  if (isPinyinGameMode() && pinyinFlow === 'selectedOnly') {
+    playing = false;
+    clearInterval(timer);
+    if (typeof updatePinyinPlayIcon === 'function') updatePinyinPlayIcon();
+    return;
+  }
+
   if (!tokens || !tokens.length) return;
   if (gameMode && gameType === 'reorderNoRead') return;
 
+  // En mode lecture normale : si on est sur un mot surligné, passer au suivant
+  if (!gameMode && !skipFirst && idx < tokens.length) {
+    const currentClean = stripPunct(tokens[idx].text);
+    if (highlightWords.includes(currentClean)) {
+      skipFirst = true;
+    }
+  }
+
   playing = true;
   const pb = document.getElementById('pauseIcon');
-  if (pb) pb.innerHTML = '<rect x="7" y="6" width="3" height="12" fill="currentColor"></rect>'
-                       + '<rect x="14" y="6" width="3" height="12" fill="currentColor"></rect>';
-  
+  if (pb)
+    pb.innerHTML =
+      '<rect x="7" y="6" width="3" height="12" fill="currentColor"></rect>' +
+      '<rect x="14" y="6" width="3" height="12" fill="currentColor"></rect>';
+
   if (!skipFirst) showToken(tokens[idx]);
   startLoop(skipFirst);
-  updatePlayGameBtnIcon(); // ← ajoute ça
+  updatePlayGameBtnIcon();
+  if (typeof updatePinyinPlayIcon === 'function') updatePinyinPlayIcon();
 }
 
 function startLoop(skipFirst = false){
+  // 🔇 Bloquer toute boucle d'auto-avance en selectedOnly
+  if (isPinyinGameMode() && pinyinFlow === 'selectedOnly') {
+    playing = false;
+    clearInterval(timer);
+    if (typeof updatePinyinPlayIcon === 'function') updatePinyinPlayIcon();
+    return;
+  }
+  
   const speedEl = document.getElementById('speed');
   const speed = +(speedEl?.value || 120);
   const ms = Math.max(50, Math.round(60000 / Math.max(1, speed)));
@@ -2121,7 +2588,7 @@ function startLoop(skipFirst = false){
   timer = setInterval(() => {
     if (!playing) return;
 
-    if (first) {         // on saute la 1re itération si demandé
+    if (first) {
       first = false;
       return;
     }
@@ -2130,27 +2597,62 @@ function startLoop(skipFirst = false){
     if (idx < tokens.length) {
       showToken(tokens[idx]);
 
-      // Si on est en mode jeu (sauf reorderNoRead) et qu’on finit une phrase → ouvrir l’overlay
-      if (gameMode && gameType !== 'reorderNoRead' && SENT_END_RE.test(tokens[idx].text)) {
+      // Fin de phrase en mode jeu (sauf pinyin et reorderNoRead)
+      if (gameMode && gameType !== 'reorderNoRead' && !isPinyinGameMode() && SENT_END_RE.test(tokens[idx].text)) {
         forcePause();
-        setTimeout(() => { openGameModeOverlay(); }, 500);
+        const gameModeOverlay = document.getElementById('gameModeOverlay');
+        const gamePlayOverlay = document.getElementById('gamePlayOverlay');
+        if (gameModeOverlay.style.display !== 'flex' && gamePlayOverlay.style.display !== 'flex') {
+          setTimeout(() => { openGameModeOverlay(); }, 500);
+        }
         return;
       }
 
       // Pause sur mot surligné
-      const clean = tokens[idx].text.replace(/[。！？,.，!?]$/,'');
+      const clean = stripPunct(tokens[idx].text);
       if (highlightWords.includes(clean)) {
-        forcePause();
+        if (isPinyinGameMode() && pinyinFlow === 'stopOnSelected') {
+          forcePause();
+          startPinyinGateForCurrentToken();
+          return;
+        }
+        // En mode lecture normale, mettre en pause
+        if (!gameMode) {
+          forcePause();
+        }
       }
     } else {
       // fin du texte
       forcePause();
-      // (option) on se remet au début pour que ▶ relance depuis le début
       idx = 0;
       updatePlayGameBtnIcon();
     }
   }, ms);
 }
+
+function ensurePinyinFastOption() {
+  // Insertion dynamique de l’option dans le bloc des sous-options Pinyin (accueil)
+  const host = document.getElementById('pinyinSubOptions');
+  if (!host) return;
+
+  if (!document.getElementById('pinyinFastReveal')) {
+    const wrap = document.createElement('label');
+    wrap.className = 'opt';
+    wrap.style.display = 'flex';
+    wrap.style.alignItems = 'center';
+    wrap.style.gap = '10px';
+    wrap.innerHTML = `
+      <input type="checkbox" id="pinyinFastReveal" />
+      <span>Révélation rapide</span>
+    `;
+    host.appendChild(wrap);
+  }
+}
+
+function isFastRevealEnabled() {
+  return !!document.getElementById('pinyinFastReveal')?.checked;
+}
+
 
 // ========= UI Management =========
 function updateUI() {
@@ -2158,6 +2660,7 @@ function updateUI() {
   const gameMode = document.getElementById('gameMode').checked;
   
   const toggleEdit = document.getElementById('toggleEdit');
+  const selectAllWords = document.getElementById('selectAllWords');
   const pinyinOption = document.getElementById('pinyinOption');
   const translationOption = document.getElementById('translationOption');
   const selectionOption = document.getElementById('selectionOption');
@@ -2165,23 +2668,44 @@ function updateUI() {
   const highlightColorSwatch = document.getElementById('highlightColorSwatch');
   const gameModeOptions = document.getElementById('gameModeOptions');
   
-  if (readMode) {
-    toggleEdit.style.display = 'flex';
-    pinyinOption.style.display = 'flex';
-    translationOption.style.display = 'flex';
-    selectionOption.style.display = 'flex';
-    highlightBgSwatch.style.display = 'block';
-    highlightColorSwatch.style.display = 'block';
-    gameModeOptions.style.display = 'none';
-  } else if (gameMode) {
-    toggleEdit.style.display = 'none';
-    pinyinOption.style.display = 'flex';
-    translationOption.style.display = 'flex';
-    selectionOption.style.display = 'none';
-    highlightBgSwatch.style.display = 'none';
-    highlightColorSwatch.style.display = 'none';
-    gameModeOptions.style.display = 'block';
-  }
+  const gameTypeValue = document.querySelector('input[name="gameType"]:checked')?.value || 'both';
+  const isPinyinMode = gameTypeValue.includes('pinyin');
+  const isReorderNoRead = gameTypeValue === 'reorderNoRead';
+  
+  const shouldHidePinyinTranslation = (isPinyinMode && gameTypeValue !== 'pinyinKeyboard') || isReorderNoRead;
+  
+  const needsHighlightColors = isPinyinMode && 
+    document.querySelector('input[name="pinyinFlow"]:checked')?.value === 'stopOnSelected';
+  
+if (readMode) {
+  toggleEdit.style.display = 'flex';
+  selectAllWords.style.display = 'none';
+  pinyinOption.style.display = 'flex';
+  translationOption.style.display = 'flex';
+  selectionOption.style.display = 'flex';
+  highlightBgSwatch.style.display = 'block';
+  highlightColorSwatch.style.display = 'block';
+  gameModeOptions.style.display = 'none';
+} else if (gameMode) {
+  toggleEdit.style.display = isPinyinMode ? 'flex' : 'none';
+  selectAllWords.style.display = 'none';
+  pinyinOption.style.display = shouldHidePinyinTranslation ? 'none' : 'flex';
+  translationOption.style.display = shouldHidePinyinTranslation ? 'none' : 'flex';
+  selectionOption.style.display = 'none';
+  
+  // Toujours masquer les couleurs highlight en mode jeu
+  highlightBgSwatch.style.display = 'none';
+  highlightColorSwatch.style.display = 'none';
+  gameModeOptions.style.display = 'block';
+  
+  const pinyinSub = document.getElementById('pinyinSubOptions');
+if (gameMode && isPinyinMode) {
+  pinyinSub.style.display = 'block';
+  ensurePinyinFastOption(); 
+} else {
+  pinyinSub.style.display = 'none';
+}
+}
 }
 
 // ========= Taille =========
@@ -2217,9 +2741,8 @@ function fitCharLine() {
 
 // ========= Fonctions MODE JEU =========
 function normalizeForComparison(text) {
-  return text
+  return stripPunct(text)
     .toLowerCase()
-    .replace(/[。！？,.，!?:：;；'"\"「」《》''""〔〕（）()…—\-\s]/g, '')
     .trim();
 }
 
@@ -2251,7 +2774,7 @@ function applyGameTheme() {
   const highlightBg = (highlightBgColorPicker?.getColor()?.toHEXA().toString()) || '#000000';
   const highlightText = (highlightColorPicker?.getColor()?.toHEXA().toString()) || '#ffffff';
   
-  const clean = tokens[idx]?.text?.replace(/[。！？,.，!?]$/, '') || '';
+  const clean = stripPunct(tokens[idx]?.text || '');
   const isHighlighted = highlightWords.includes(clean);
   
   const pageBg = isHighlighted ? highlightBg : normalBg;
@@ -2433,6 +2956,17 @@ function updateGameBarNavigation() {
 }
 
 function openGameManually() {
+  // Arrêter la lecture
+  forcePause();
+  
+  // Vérifier si une fenêtre de jeu est déjà ouverte
+  const gameModeOverlay = document.getElementById('gameModeOverlay');
+  const gamePlayOverlay = document.getElementById('gamePlayOverlay');
+  
+  if (gameModeOverlay.style.display === 'flex' || gamePlayOverlay.style.display === 'flex') {
+    return; // Ne rien faire si une fenêtre est déjà ouverte
+  }
+  
   currentSentenceIndex = findCurrentSentenceIndex(tokens, idx);
   originalSentence = getSentenceText(tokens, currentSentenceIndex);
   
@@ -2450,6 +2984,7 @@ function openGameModeOverlay() {
   originalSentence = getSentenceText(tokens, currentSentenceIndex);
   
   const overlay = document.getElementById('gameModeOverlay');
+  showBackdrop(); // ← AJOUT
   overlay.style.display = 'flex';
   applyGameTheme();
   
@@ -2462,6 +2997,7 @@ function openGameModeOverlay() {
 
 function closeGameModeOverlay() {
   document.getElementById('gameModeOverlay').style.display = 'none';
+  hideBackdrop(); // ← AJOUT
 }
 
 function openGamePlayOverlay(mode) {
@@ -2469,6 +3005,7 @@ function openGamePlayOverlay(mode) {
   closeGameModeOverlay();
   
   const overlay = document.getElementById('gamePlayOverlay');
+  showBackdrop(); // ← AJOUT
   overlay.style.display = 'flex';
   applyGameTheme();
   
@@ -2571,6 +3108,7 @@ function openGamePlayOverlayDirect() {
 
 function closeGamePlayOverlay() {
   document.getElementById('gamePlayOverlay').style.display = 'none';
+  hideBackdrop();
 }
 
 function updateGameNavigation() {
@@ -2818,25 +3356,32 @@ function openSelectionOverlay() {
   segmented.forEach((tok) => {
     const el = document.createElement('span');
     el.textContent = tok.text;
-    const clean = tok.text.replace(/[。！？,.，!?]$/, '');
-if (readModeHighlightWords.includes(clean)) el.classList.add('selected');
+    const clean = stripPunct(tok.text);
+    if (highlightWords.includes(clean)) el.classList.add('selected');
     
-el.addEventListener('click', () => {
-  if (readModeHighlightWords.includes(clean)) readModeHighlightWords = readModeHighlightWords.filter(w => w !== clean);
-  else readModeHighlightWords.push(clean);
-  openSelectionOverlay();
-});
+    el.addEventListener('click', () => {
+      if (highlightWords.includes(clean)) {
+        highlightWords = highlightWords.filter(w => w !== clean);
+      } else {
+        highlightWords.push(clean);
+      }
+      openSelectionOverlay();
+    });
     
     container.appendChild(el);
   });
 
+  showBackdrop();
   document.getElementById('selectionOverlay').style.display = 'flex';
 }
 
+
 function closeSelectionOverlay() {
   document.getElementById('selectionOverlay').style.display = 'none';
+  hideBackdrop(); // ← AJOUT
 }
 
+// Modifier openInfoOverlay (vers ligne 1028)
 function openInfoOverlay() {
   const overlay = document.getElementById('infoOverlay');
   const body = document.getElementById('infoWords');
@@ -2852,7 +3397,7 @@ function openInfoOverlay() {
   const highlightBg = (highlightBgColorPicker?.getColor()?.toHEXA().toString()) || '#ef4444';
   const highlightText = (highlightColorPicker?.getColor()?.toHEXA().toString()) || '#ffffff';
   
-  const cleanCurrent = tokens[idx]?.text?.replace(/[。！？、，；：,.!?\u201D]$/u,'') || '';
+  const cleanCurrent = stripPunct(tokens[idx]?.text || '');
   const isH = highlightWords.includes(cleanCurrent);
   
   const pageBg = isH ? highlightBg : normalBg;
@@ -2866,7 +3411,7 @@ function openInfoOverlay() {
     span.textContent = tok.text;
     span.className = 'info-word';
     
-    const clean = tok.text.replace(/[。！？、，；：,.!?\u201D]$/u,'');
+    const clean = stripPunct(tok.text);
     if (highlightWords.includes(clean)) span.classList.add('initialSelected');
     if (i === idx) span.classList.add('current');
     
@@ -2879,11 +3424,13 @@ function openInfoOverlay() {
     body.appendChild(span);
   });
   
+  showBackdrop(); // ← AJOUT
   overlay.style.display = 'flex';
 }
 
 function closeInfoOverlay() {
   document.getElementById('infoOverlay').style.display = 'none';
+  hideBackdrop(); 
 }
 
 function wireInfoOverlayControls() {
@@ -3192,9 +3739,8 @@ caret.style.top = (bestLine.top + (lineHeight - parseInt(caret.style.height || '
 }
 
 // Active à la fin du chargement
-document.addEventListener('DOMContentLoaded', () => {
   enableMobileDnD();
-});
+
 
 
 // ========= Menu =========
@@ -3202,6 +3748,13 @@ function showMenu() {
   __menuHiddenByUser = false;
   
   if (gameMode) {
+    if (isPinyinGameMode() && typeof pinyinFlow !== 'undefined' && pinyinFlow === 'stopOnSelected') {
+      document.getElementById('barDefault').style.display = 'grid';
+      document.getElementById('ghostBar').style.display = 'none';
+      document.getElementById('gameBars').style.display = 'none';
+      document.getElementById('gameBarsNoRead').style.display = 'none';
+      return;
+    }
     if (gameType === 'reorderNoRead') {
       document.getElementById('gameBarsNoRead').style.display = 'block';
     } else {
@@ -3244,6 +3797,1299 @@ function enforceMenuState() {
   else showMenu();
 }
 
+
+// ========= Mode Pinyin =========
+
+function isPinyinGameMode() {
+  return gameMode && gameType && gameType.includes('pinyin');
+}
+
+function startPinyinGateForCurrentToken() {
+  if (!isPinyinGameMode() || pinyinFlow !== 'stopOnSelected') return;
+  
+  const currentToken = tokens[idx];
+  if (!currentToken) return;
+  
+const clean = stripPunct(currentToken.text);
+const pinyinIndex = pinyinSelectedWords.findIndex(tok => stripPunct(tok.text) === clean)
+  
+  if (pinyinIndex === -1) return;
+  
+  pinyinGateActive = true;
+  currentPinyinWordIndex = pinyinIndex;
+  
+  const wordLength = clean.length;
+  pinyinInput = new Array(wordLength).fill('');
+  currentCharacterIndex = 0;
+  pinyinValidated = false;
+  
+  createPinyinInputBoxes(clean);
+  
+  if (pinyinMode === 'keyboard') {
+    showPinyinKeyboard();
+  } else {
+    showToneSelection(clean);
+  }
+}
+
+function resumeAfterPinyinGate() {
+  pinyinGateActive = false;
+  if (isReadBlocked()) {        // 🔇 aucune reprise en selectedOnly
+    playing = false;
+    clearInterval(timer);
+    updatePinyinPlayIcon?.();
+    return;
+  }
+  setTimeout(() => { forcePlay(); }, 100);
+}
+
+// Supprime toute ponctuation (chinoise + occidentale). Fallback si \p{} indisponible.
+function stripPunct(s) {
+  try {
+    // Ponctuation \p{P} + symboles \p{S} (pour capturer les variantes pleine-chasse)
+    return s.replace(/[\p{P}\p{S}]/gu, '');
+  } catch (_) {
+    // Fallback large sans \p{} (inclut 。 ， 、 ！ ？ 《》 “” ‘’ （） 等)
+    return s.replace(/[。．，、；：？！…—～《》〈〉「」『』〔〕【】（）﹁﹂﹃﹄“”‘’·、,.!?;:'"()\-\u2013\u2014\[\]{}<>]/g, '');
+  }
+}
+
+
+function initPinyinGame() {
+  // Filtrer les tokens pour ne garder que les mots sélectionnés (Han uniquement)
+  pinyinSelectedWords = tokens.filter(tok => {
+    const clean = stripPunct(tok.text);
+    return tok.type === 'han' && highlightWords.includes(clean);
+  });
+  
+  if (pinyinSelectedWords.length === 0) {
+    alert("Aucun mot sélectionné pour le test pinyin !");
+    return false;
+  }
+  
+  currentPinyinWordIndex = 0;
+  currentCharacterIndex = 0;
+  pinyinInput = [];
+  pinyinValidated = false;
+  pinyinGateActive = false; // ✅ Ajouter cette ligne
+  
+  // Déterminer le sous-mode
+  if (gameType === 'pinyinKeyboard') pinyinMode = 'keyboard';
+  else if (gameType === 'pinyinToneLetters') pinyinMode = 'toneWithLetters';
+  else if (gameType === 'pinyinTone') pinyinMode = 'toneOnly';
+  
+  showPinyinWord();
+  return true;
+}
+
+function showPinyinWord() {
+  // Ne clear les timers QUE si on n'est pas en train d'avancer automatiquement
+  // (les timers seront déjà cleared dans displayPinyinSequence)
+  
+  // Nettoyer immédiatement pinyin et traduction
+  const pEl = document.getElementById('pinyin');
+  const dEl = document.getElementById('defs');
+  if (pEl) {
+    pEl.style.display = 'none';
+    pEl.textContent = '';
+  }
+  if (dEl) {
+    dEl.style.display = 'none';
+    dEl.textContent = '';
+  }
+
+  // Réinitialiser le clavier physique
+  removePhysicalKeyboard();
+  
+  if (currentPinyinWordIndex >= pinyinSelectedWords.length) {
+    quitPinyinGame();
+    return;
+  }
+  
+  const word = pinyinSelectedWords[currentPinyinWordIndex];
+  const clean = stripPunct(word.text);
+  
+  // Réinitialiser l'input
+  pinyinInput = new Array(clean.length).fill('');
+  currentCharacterIndex = 0;
+  pinyinValidated = false;
+  
+  // Afficher le mot
+  showToken(word);
+  
+  // ✅ S'assurer que tout est visible
+  const charDisplay = document.getElementById('charDisplay');
+  if (charDisplay) {
+    charDisplay.style.opacity = '1';
+    charDisplay.style.visibility = 'visible';
+  }
+  
+  // Créer les boîtes d'input
+  createPinyinInputBoxes(clean);
+  
+  // Afficher l'interface appropriée
+  if (pinyinMode === 'keyboard') {
+    const keyboard = document.getElementById('pinyinKeyboard');
+    if (keyboard) {
+      keyboard.style.display = 'block';
+      keyboard.style.opacity = '1';
+    }
+    showPinyinKeyboard();
+  } else {
+    const toneSelection = document.getElementById('toneSelection');
+    if (toneSelection) {
+      toneSelection.style.display = 'block';
+      toneSelection.style.opacity = '1';
+    }
+    showToneSelection(clean);
+  }
+  
+  // Réactiver le clavier physique si mode keyboard
+  if (pinyinMode === 'keyboard') {
+    setupPhysicalKeyboard();
+  }
+}
+
+function createPinyinInputBoxes(text) {
+  let container = document.getElementById('pinyinInputBoxes');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'pinyinInputBoxes';
+    container.className = 'pinyin-input-boxes';
+    document.getElementById('charContainer').appendChild(container);
+  }
+  
+  // ✅ Toujours afficher le container en mode Pinyin
+  container.style.display = 'flex';
+  container.innerHTML = '';
+  
+  for (let i = 0; i < text.length; i++) {
+    const box = document.createElement('div');
+    box.className = 'pinyin-box';
+    if (i === currentCharacterIndex) box.classList.add('active');
+    box.dataset.index = i;
+    
+    box.addEventListener('click', () => {
+      currentCharacterIndex = i;
+      updatePinyinInputBoxes();
+    });
+    
+    container.appendChild(box);
+  }
+  
+  document.addEventListener('keydown', handlePinyinArrowKeys);
+}
+
+function handlePinyinArrowKeys(e) {
+  if (!isPinyinGameMode() || pinyinValidated) return;
+  
+  const word = pinyinSelectedWords[currentPinyinWordIndex];
+  const clean = stripPunct(word.text);
+  
+  if (e.key === 'ArrowLeft') {
+    e.preventDefault();
+    if (currentCharacterIndex > 0) {
+      currentCharacterIndex--;
+      updatePinyinInputBoxes();
+    }
+  } else if (e.key === 'ArrowRight') {
+    e.preventDefault();
+    if (currentCharacterIndex < clean.length - 1) {
+      currentCharacterIndex++;
+      updatePinyinInputBoxes();
+    }
+  }
+}
+
+function updatePinyinInputBoxes() {
+  const boxes = document.querySelectorAll('.pinyin-box');
+  boxes.forEach((box, i) => {
+    box.textContent = pinyinInput[i] || '';
+    box.classList.remove('active');
+    if (i === currentCharacterIndex && !pinyinValidated) {
+      box.classList.add('active');
+    }
+  });
+}
+
+// ===== Clavier AZERTY =====
+
+function showPinyinKeyboard() {
+let keyboard = document.getElementById('pinyinKeyboard');
+  if (!keyboard) {
+    keyboard = document.createElement('div');
+    keyboard.id = 'pinyinKeyboard';
+    document.getElementById('displayPage').appendChild(keyboard);
+  }
+  
+  // Appliquer la couleur de fond adaptée
+  const pageBg = getContrastingColor(bgColorPicker?.getColor()?.toHEXA().toString() || '#ffffff');
+  const isDark = pageBg === '#ffffff';
+  keyboard.style.background = isDark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.18)';
+  
+  keyboard.innerHTML = `
+    <div class="keyboard-row">
+      ${createKeyButton('a')}${createKeyButton('z')}${createKeyButton('e')}${createKeyButton('r')}${createKeyButton('t')}${createKeyButton('y')}${createKeyButton('u')}${createKeyButton('i')}${createKeyButton('o')}${createKeyButton('p')}
+    </div>
+    <div class="keyboard-row">
+      ${createKeyButton('q')}${createKeyButton('s')}${createKeyButton('d')}${createKeyButton('f')}${createKeyButton('g')}${createKeyButton('h')}${createKeyButton('j')}${createKeyButton('k')}${createKeyButton('l')}${createKeyButton('m')}
+    </div>
+    <div class="keyboard-row">
+      ${createKeyButton('w')}${createKeyButton('x')}${createKeyButton('c')}${createKeyButton('v')}${createKeyButton('b')}${createKeyButton('n')}
+    </div>
+    <div class="keyboard-row">
+      <button class="key-btn backspace wide" data-key="backspace">⌫</button>
+      <button class="key-btn validate wide" data-key="validate">Valider</button>
+    </div>
+    <div class="tone-picker" id="tonePicker"></div>
+  `;
+  
+  keyboard.style.display = 'block';
+  
+  // Event listeners
+  keyboard.querySelectorAll('.key-btn').forEach(btn => {
+    btn.addEventListener('click', handleKeyboardClick);
+  });
+}
+
+function createKeyButton(letter) {
+  return `<button class="key-btn" data-key="${letter}">${letter.toUpperCase()}</button>`;
+}
+
+const VOWELS = ['a', 'e', 'i', 'o', 'u'];
+const TONES = {
+  'a': ['ā', 'á', 'ǎ', 'à', 'a'],
+  'e': ['ē', 'é', 'ě', 'è', 'e'],
+  'i': ['ī', 'í', 'ǐ', 'ì', 'i'],
+  'o': ['ō', 'ó', 'ǒ', 'ò', 'o'],
+  'u': ['ū', 'ú', 'ǔ', 'ù', 'u'],
+  'ü': ['ǖ', 'ǘ', 'ǚ', 'ǜ', 'ü']
+};
+
+function handleKeyboardClick(e) {
+  const key = e.target.dataset.key;
+  if (!key) return;
+
+  const picker = document.getElementById('tonePicker');
+  const isPickerActive = picker && picker.classList.contains('active');
+  const VOWELS = ['a', 'e', 'i', 'o', 'u'];
+
+  // --- Si le tone picker est ouvert ---
+  // ✅ 'validate' et 'space' valident le ton sélectionné
+  if (isPickerActive && (key === 'validate' || key === 'space')) {
+    const options = picker.querySelectorAll('.tone-option');
+    if (options.length) {
+      options[selectedToneIndex]?.click();
+    }
+    return;
+  }
+
+  // Si le picker est ouvert et on clique une touche non-voyelle (hors u/backspace/validate/space),
+  // on prend la voyelle "de base" puis on ferme (fallback)
+  if (isPickerActive && !VOWELS.includes(key) &&
+      key !== 'u' && key !== 'backspace' && key !== 'validate' && key !== 'space' && key !== 'delete') {
+    const base = picker.dataset.vowel || 'a';
+    pinyinInput[currentCharacterIndex] += (base === 'ü' ? 'u' : base);
+    updatePinyinInputBoxes();
+    picker.classList.remove('active');
+    picker.dataset.vowel = '';
+    selectedToneIndex = 0;
+  }
+
+  // --- u / ü chooser ---
+  const uChooser = document.getElementById('uChooser');
+  const isUChooserActive = uChooser && uChooser.classList.contains('active');
+  if (isUChooserActive) {
+    if (key === 'u') {
+      pinyinInput[currentCharacterIndex] += 'u';
+      updatePinyinInputBoxes();
+      uChooser.classList.remove('active');
+      return;
+    } else if (key === 'v') {
+      pinyinInput[currentCharacterIndex] += 'ü';
+      updatePinyinInputBoxes();
+      uChooser.classList.remove('active');
+      return;
+    } else if (key === 'validate' || key === 'space') {
+      // défaut = 'u'
+      pinyinInput[currentCharacterIndex] += 'u';
+      updatePinyinInputBoxes();
+      uChooser.classList.remove('active');
+      return;
+    }
+    // sinon on continue (ex: consonne) et on a déjà inséré 'u' ci-dessus?
+  }
+
+  // --- Touches spéciales de l'UI ---
+  if (key === 'backspace') {
+    if (pinyinInput[currentCharacterIndex]?.length > 0) {
+      pinyinInput[currentCharacterIndex] =
+        pinyinInput[currentCharacterIndex].slice(0, -1);
+      updatePinyinInputBoxes();
+    }
+    return;
+  }
+
+  // (Optionnel si tu ajoutes un bouton Suppr à l'écran)
+  if (key === 'delete') {
+    pinyinInput[currentCharacterIndex] = '';
+    updatePinyinInputBoxes();
+    return;
+  }
+
+  if (key === 'validate' || key === 'space') {
+    if (pinyinInput[currentCharacterIndex]?.length > 0) {
+      moveToNextCharacter();
+    }
+    return;
+  }
+
+  // --- Lettres ---
+  if (VOWELS.includes(key)) {
+    showTonePicker(key, e.target);
+    return;
+  } else if (key === 'u') {
+    showUChoice(e.target);
+    return;
+  }
+
+  // Consonne simple
+  pinyinInput[currentCharacterIndex] += key;
+  updatePinyinInputBoxes();
+}
+
+
+
+function flashKey(key) {
+  const keyBtn = document.querySelector(`.key-btn[data-key="${key}"]`);
+  if (keyBtn) {
+    keyBtn.classList.add('flash');
+    setTimeout(() => keyBtn.classList.remove('flash'), 200);
+  }
+}
+
+function setupPhysicalKeyboard() {
+  // Désactiver si pas en mode pinyin clavier
+  if (!isPinyinGameMode() || pinyinMode !== 'keyboard') return;
+  
+  document.addEventListener('keydown', handlePhysicalKeyboard);
+}
+
+function handlePhysicalKeyboard(e) {
+  if (!isPinyinGameMode() || pinyinMode !== 'keyboard' || pinyinValidated) return;
+
+  const picker = document.getElementById('tonePicker');
+  const isPickerActive = picker && picker.classList.contains('active');
+
+  const key = e.key;
+  const keyLower = key.length === 1 ? key.toLowerCase() : key;
+  const isSpace = (key === ' ' || e.code === 'Space');
+  const VOWELS = ['a', 'e', 'i', 'o', 'u'];
+
+  // ✅ compatibilité AZERTY : touches & é " ' (
+  const TONE_KEYS = ['1', '2', '3', '4', '5'];
+  const NUMPAD_KEYS = ['Numpad1', 'Numpad2', 'Numpad3', 'Numpad4', 'Numpad5'];
+  const AZERTY_KEYS = ['&', 'é', '"', "'", '(']; // pour clavier français
+
+  if (isPickerActive) {
+    const options = picker.querySelectorAll('.tone-option');
+    const baseVowel = picker.dataset.vowel || pendingVowel || 'a';
+
+    // Flèches pour naviguer
+    if (key === 'ArrowDown' || key === 'ArrowUp') {
+      e.preventDefault();
+      if (!options.length) return;
+      options[selectedToneIndex]?.classList.remove('selected');
+      selectedToneIndex =
+        key === 'ArrowDown'
+          ? (selectedToneIndex + 1) % options.length
+          : (selectedToneIndex - 1 + options.length) % options.length;
+      options[selectedToneIndex].classList.add('selected');
+      return;
+    }
+
+    // Entrée / Espace → valident le ton sélectionné
+    if (key === 'Enter' || isSpace) {
+      e.preventDefault();
+      if (options[selectedToneIndex]) options[selectedToneIndex].click();
+      return;
+    }
+
+    // ✅ Nouvelles touches de ton (1–5, numpad1–5, ou &é"'()
+    if (TONE_KEYS.includes(key) || NUMPAD_KEYS.includes(e.code) || AZERTY_KEYS.includes(key)) {
+      e.preventDefault();
+      // Trouver l’index selon la touche pressée
+      let index = TONE_KEYS.includes(key)
+        ? parseInt(key, 10) - 1
+        : AZERTY_KEYS.indexOf(key);
+      if (index < 0) index = parseInt(e.code.replace('Numpad', ''), 10) - 1;
+
+      const toneList = TONES[baseVowel];
+      if (toneList && toneList[index]) {
+        pinyinInput[currentCharacterIndex] += toneList[index];
+        updatePinyinInputBoxes();
+      } else {
+        // ton neutre ou invalide
+        pinyinInput[currentCharacterIndex] += (baseVowel === 'ü' ? 'u' : baseVowel);
+        updatePinyinInputBoxes();
+      }
+
+      picker.classList.remove('active');
+      picker.dataset.vowel = '';
+      selectedToneIndex = 0;
+      tonePickerOpen = false;
+      pendingVowel = null;
+      return;
+    }
+
+    // Taper une autre lettre = fermer la fenêtre
+    if (/^[a-z]$/i.test(keyLower)) {
+      e.preventDefault();
+      pinyinInput[currentCharacterIndex] += (baseVowel === 'ü' ? 'u' : baseVowel);
+      updatePinyinInputBoxes();
+      picker.classList.remove('active');
+      picker.dataset.vowel = '';
+      selectedToneIndex = 0;
+      tonePickerOpen = false;
+      pendingVowel = null;
+    }
+  }
+
+  // Édition / validation / saisie standard
+  if (key === 'Backspace') {
+    e.preventDefault();
+    flashKey('backspace');
+    if (pinyinInput[currentCharacterIndex]?.length > 0) {
+      pinyinInput[currentCharacterIndex] =
+        pinyinInput[currentCharacterIndex].slice(0, -1);
+      updatePinyinInputBoxes();
+    }
+    return;
+  }
+
+  if (key === 'Delete') {
+    e.preventDefault();
+    pinyinInput[currentCharacterIndex] = '';
+    updatePinyinInputBoxes();
+    return;
+  }
+
+  if (key === 'Enter' || isSpace) {
+    e.preventDefault();
+    if (pinyinInput[currentCharacterIndex]?.length > 0) {
+      flashKey('validate');
+      moveToNextCharacter();
+    }
+    return;
+  }
+
+  if (/^[a-z]$/.test(keyLower)) {
+    e.preventDefault();
+    flashKey(keyLower);
+
+    if (VOWELS.includes(keyLower)) {
+      const keyBtn = document.querySelector(`.key-btn[data-key="${keyLower}"]`);
+      if (keyBtn) showTonePicker(keyLower, keyBtn);
+      return;
+    }
+
+    if (keyLower === 'u') {
+      const keyBtn = document.querySelector(`.key-btn[data-key="u"]`);
+      if (keyBtn) showUChoice(keyBtn);
+      return;
+    }
+
+    pinyinInput[currentCharacterIndex] += keyLower;
+    updatePinyinInputBoxes();
+    return;
+  }
+}
+
+
+
+function removePhysicalKeyboard() {
+  document.removeEventListener('keydown', handlePhysicalKeyboard);
+}
+
+function showTonePicker(vowel, buttonElement) {
+  const picker = document.getElementById('tonePicker');
+  picker.innerHTML = '';
+
+  // Mémoriser la voyelle de base pour les validations au clavier
+  picker.dataset.vowel = vowel;
+
+  const tones = TONES[vowel];
+  tones.forEach(tone => {
+    const btn = document.createElement('button');
+    btn.className = 'tone-option';
+    btn.textContent = tone;
+    btn.addEventListener('click', () => {
+      // Choix du ton -> on ajoute la voyelle accentuée
+      pinyinInput[currentCharacterIndex] += tone;
+      updatePinyinInputBoxes();
+      // Fermer le picker et reset état
+      picker.classList.remove('active');
+      picker.dataset.vowel = '';
+      selectedToneIndex = 0;
+      tonePickerOpen = false;
+      pendingVowel = null;
+    });
+    picker.appendChild(btn);
+  });
+
+  // Sélection visuelle par défaut (index 0)
+  selectedToneIndex = 0;
+  const opts = picker.querySelectorAll('.tone-option');
+  if (opts[0]) opts[0].classList.add('selected');
+
+  tonePickerOpen = true;
+  pendingVowel = vowel;
+
+  // Positionner le picker au-dessus de la touche cliquée
+  const rect = buttonElement.getBoundingClientRect();
+  const keyboardRect = document.getElementById('pinyinKeyboard').getBoundingClientRect();
+  picker.style.left = (rect.left - keyboardRect.left) + 'px';
+  picker.style.bottom = (keyboardRect.bottom - rect.top + 10) + 'px';
+  picker.classList.add('active');
+}
+
+
+function showUChoice(buttonElement) {
+  const picker = document.getElementById('tonePicker');
+  picker.innerHTML = '';
+  
+  ['u', 'ü'].forEach(letter => {
+    const btn = document.createElement('button');
+    btn.className = 'tone-option';
+    btn.textContent = letter;
+    btn.addEventListener('click', () => {
+      picker.classList.remove('active');
+      if (letter === 'ü') {
+        showTonePicker('ü', buttonElement);
+      } else {
+        showTonePicker('u', buttonElement);
+      }
+    });
+    picker.appendChild(btn);
+  });
+  
+  const rect = buttonElement.getBoundingClientRect();
+  const keyboardRect = document.getElementById('pinyinKeyboard').getBoundingClientRect();
+  picker.style.left = (rect.left - keyboardRect.left) + 'px';
+  picker.style.bottom = (keyboardRect.bottom - rect.top + 10) + 'px';
+  picker.classList.add('active');
+}
+
+function moveToNextCharacter() {
+  currentCharacterIndex++;
+  
+  const word = pinyinSelectedWords[currentPinyinWordIndex];
+  const clean = stripPunct(word.text);
+  
+  if (currentCharacterIndex >= clean.length) {
+    // Tous les caractères sont saisis, valider le mot
+    validatePinyinWord();
+  } else {
+    updatePinyinInputBoxes();
+  }
+}
+
+// ===== Tons avec lettres =====
+
+function showToneSelection(text) {
+  let container = document.getElementById('toneSelection');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'toneSelection';
+    document.getElementById('displayPage').appendChild(container);
+  }
+  
+  const word = pinyinSelectedWords[currentPinyinWordIndex];
+  const pinyinSyllables = getPinyinSyllables(word);
+  
+  if (pinyinMode === 'toneWithLetters') {
+    displayToneWithLetters(container, pinyinSyllables);
+  } else {
+    displayToneOnly(container);
+  }
+  
+  container.style.display = 'block';
+  
+  // Cacher le clavier si affiché
+  const keyboard = document.getElementById('pinyinKeyboard');
+  if (keyboard) keyboard.style.display = 'none';
+}
+
+function getPinyinSyllables(token) {
+  if (!token.pinyin) return [];
+  // Le pinyin peut contenir plusieurs syllabes séparées par des espaces
+  return token.pinyin.split(' ');
+}
+
+function displayToneWithLetters(container, syllables) {
+  const currentSyllable = syllables[currentCharacterIndex] || '';
+  const baseLetters = removeTone(currentSyllable);
+  
+  // Générer toutes les variations avec tons
+  const variations = generateToneVariations(baseLetters);
+  
+  // Appliquer les couleurs de fond adaptées
+  const pageBg = getContrastingColor(bgColorPicker?.getColor()?.toHEXA().toString() || '#ffffff');
+  const isDark = pageBg === '#ffffff';
+  const btnBg = isDark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.18)';
+  const btnColor = isDark ? '#ffffff' : '#000000';
+  
+container.innerHTML = `
+  <div class="tone-cross-container" style="position: relative; width: 240px; height: 240px; margin: 0 auto; transform: translateY(18px);">
+      <!-- Haut : 1er ton -->
+      <button class="tone-btn" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); background: ${btnBg}; color: ${btnColor}; width: 70px; height: 70px; font-size: 22px;" data-index="0" title="1er ton">${variations[0] || ''}</button>
+      
+      <!-- Gauche : 2e ton -->
+      <button class="tone-btn" style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); background: ${btnBg}; color: ${btnColor}; width: 70px; height: 70px; font-size: 22px;" data-index="1" title="2e ton">${variations[1] || ''}</button>
+      
+      <!-- Centre : ton neutre -->
+      <button class="tone-btn" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: ${btnBg}; color: ${btnColor}; width: 70px; height: 70px; font-size: 22px;" data-index="4" title="Ton neutre">${variations[4] || ''}</button>
+      
+      <!-- Droite : 4e ton -->
+      <button class="tone-btn" style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); background: ${btnBg}; color: ${btnColor}; width: 70px; height: 70px; font-size: 22px;" data-index="3" title="4e ton">${variations[3] || ''}</button>
+      
+      <!-- Bas : 3e ton -->
+      <button class="tone-btn" style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); background: ${btnBg}; color: ${btnColor}; width: 70px; height: 70px; font-size: 22px;" data-index="2" title="3e ton">${variations[2] || ''}</button>
+    </div>
+  `;
+  
+  container.querySelectorAll('.tone-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const index = parseInt(btn.dataset.index);
+      const variant = variations[index];
+      
+      pinyinInput[currentCharacterIndex] = variant;
+      currentCharacterIndex++;
+      updatePinyinInputBoxes();
+      
+      const word = pinyinSelectedWords[currentPinyinWordIndex];
+      const clean = stripPunct(word.text);
+      
+      if (currentCharacterIndex >= clean.length) {
+        validatePinyinWord();
+      } else {
+        displayToneWithLetters(container, syllables);
+      }
+    });
+  });
+}
+
+function displayToneOnly(container) {
+  // Appliquer les couleurs de fond adaptées
+  const pageBg = getContrastingColor(bgColorPicker?.getColor()?.toHEXA().toString() || '#ffffff');
+  const isDark = pageBg === '#ffffff';
+  const btnBg = isDark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.18)';
+  const btnColor = isDark ? '#ffffff' : '#000000';
+  
+container.innerHTML = `
+   <div class="tone-cross-container" style="position: relative; width: 240px; height: 240px; margin: 0 auto; transform: translateY(18px);">
+    <!-- Haut : 1er ton (¯) -->
+    <button class="tone-btn" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); background: ${btnBg}; color: ${btnColor}; width: 70px; height: 70px; font-size: 44px;" data-tone="1" title="1er ton">¯</button>
+    
+    <!-- Gauche : 2e ton (´) -->
+    <button class="tone-btn" style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); background: ${btnBg}; color: ${btnColor}; width: 70px; height: 70px; font-size: 44px;" data-tone="2" title="2e ton">´</button>
+    
+    <!-- Centre : ton neutre (·) -->
+    <button class="tone-btn" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: ${btnBg}; color: ${btnColor}; width: 70px; height: 70px; font-size: 44px;" data-tone="5" title="Ton neutre">·</button>
+    
+    <!-- Droite : 4e ton (\`) -->
+    <button class="tone-btn" style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); background: ${btnBg}; color: ${btnColor}; width: 70px; height: 70px; font-size: 44px;" data-tone="4" title="4e ton">\`</button>
+    
+    <!-- Bas : 3e ton (ˇ) -->
+    <button class="tone-btn" style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); background: ${btnBg}; color: ${btnColor}; width: 70px; height: 70px; font-size: 44px;" data-tone="3" title="3e ton">ˇ</button>
+  </div>
+`;
+  
+  const toneMarks = ['¯', '´', 'ˇ', '`', '·'];
+  
+  container.querySelectorAll('.tone-btn').forEach(btn => {
+    const toneIndex = parseInt(btn.dataset.tone) - 1;
+    btn.addEventListener('click', () => {
+      pinyinInput[currentCharacterIndex] = toneMarks[toneIndex === 4 ? 4 : toneIndex];
+      currentCharacterIndex++;
+      updatePinyinInputBoxes();
+      
+      const word = pinyinSelectedWords[currentPinyinWordIndex];
+      const clean = stripPunct(word.text);
+      
+      if (currentCharacterIndex >= clean.length) {
+        validatePinyinWord();
+      }
+    });
+  });
+}
+
+function removeTone(pinyin) {
+  const toneChars = {
+    'ā':'a', 'á':'a', 'ǎ':'a', 'à':'a',
+    'ē':'e', 'é':'e', 'ě':'e', 'è':'e',
+    'ī':'i', 'í':'i', 'ǐ':'i', 'ì':'i',
+    'ō':'o', 'ó':'o', 'ǒ':'o', 'ò':'o',
+    'ū':'u', 'ú':'u', 'ǔ':'u', 'ù':'u',
+    'ǖ':'ü', 'ǘ':'ü', 'ǚ':'ü', 'ǜ':'ü'
+  };
+  
+  return pinyin.split('').map(c => toneChars[c] || c).join('');
+}
+
+function getMainVowel(pinyin) {
+  const priority = ['a', 'e', 'o'];
+  for (const v of priority) {
+    if (pinyin.includes(v)) return v;
+  }
+  if (pinyin.includes('iu')) return 'u';
+  if (pinyin.includes('ui')) return 'i';
+  for (const v of ['i', 'u', 'ü']) {
+    if (pinyin.includes(v)) return v;
+  }
+  return 'a';
+}
+
+function generateToneVariations(base) {
+  const mainVowel = getMainVowel(base);
+  const tones = TONES[mainVowel];
+  if (!tones) return [base, base, base, base, base];
+  
+  const variations = [];
+  for (let i = 0; i < 5; i++) {
+    // Trouver l'index de la voyelle principale dans la chaîne
+    const vowelIndex = base.indexOf(mainVowel);
+    if (vowelIndex === -1) {
+      variations.push(base);
+    } else {
+      // Remplacer uniquement la première occurrence
+      const variant = base.substring(0, vowelIndex) + tones[i] + base.substring(vowelIndex + 1);
+      variations.push(variant);
+    }
+  }
+  return variations;
+}
+
+// ===== Validation =====
+
+function validatePinyinWord() {
+  const word = pinyinSelectedWords[currentPinyinWordIndex];
+  if (!word) return;
+
+  const clean = stripPunct(word.text);
+  let isCorrect = false;
+
+  if (pinyinMode === 'toneOnly') {
+    const expectedToneCount = clean.length;
+    const userTones = pinyinInput.join('');
+    const correctPinyin = word.pinyin || '';
+    const correctTones = extractTones(correctPinyin);
+    isCorrect = (
+      userTones.length === expectedToneCount &&
+      correctTones.length === expectedToneCount &&
+      correctTones === userTones
+    );
+  } else {
+    const correctPinyin = word.pinyin
+      ? word.pinyin.replace(/\s+/g, '').replace(/[，。！？,.!?;；:：]/g, '')
+      : '';
+    const userPinyin = pinyinInput.join('').replace(/[，。！？,.!?;；:：]/g, '');
+    isCorrect = normalizePinyin(correctPinyin) === normalizePinyin(userPinyin);
+  }
+
+  pinyinValidated = true;
+
+  if (isCorrect) {
+    displayPinyinSequence(word);
+    return;
+  }
+
+  
+  // ❌ MAUVAISE RÉPONSE
+  const boxes = Array.from(document.querySelectorAll('.pinyin-input-box, .pinyin-box'));
+  boxes.forEach(b => {
+    b.classList.remove('active', 'correct');
+    b.classList.add('incorrect');
+    b.style.backgroundColor = 'rgba(255,255,255,0.9)';
+    b.style.borderColor = '#ef4444';
+    b.style.color = '#ef4444';
+    b.style.outline = '3px solid #ef4444';
+    b.style.outlineOffset = '0px';
+    b.style.boxShadow = '0 0 6px rgba(239,68,68,0.8)';
+  });
+
+  const charDisplay = document.getElementById('charDisplay');
+  if (charDisplay) {
+    charDisplay.style.opacity = '1';
+    charDisplay.style.visibility = 'visible';
+  }
+
+  setTimeout(() => {
+    boxes.forEach(b => {
+      b.classList.remove('incorrect');
+      b.style.color = '';
+      b.style.border = '';
+      b.style.borderColor = '';
+      b.style.outline = '';
+      b.style.outlineOffset = '';
+      b.style.boxShadow = '';
+      b.style.backgroundColor = '';
+    });
+
+    pinyinInput = new Array(clean.length).fill('');
+    currentCharacterIndex = 0;
+    pinyinValidated = false;
+    updatePinyinInputBoxes();
+
+    if (pinyinMode === 'keyboard') {
+      showPinyinKeyboard();
+    } else {
+      showToneSelection(clean);
+    }
+  }, 1000);
+}
+
+function advanceToNextPinyinWord() {
+  // Cacher toutes les interfaces de saisie
+  const inputBoxes = document.getElementById('pinyinInputBoxes');
+  const keyboard = document.getElementById('pinyinKeyboard');
+  const toneSelection = document.getElementById('toneSelection');
+  const pEl = document.getElementById('pinyin');
+  const dEl = document.getElementById('defs');
+  
+  if (inputBoxes) inputBoxes.style.display = 'none';
+  if (keyboard) keyboard.style.display = 'none';
+  if (toneSelection) toneSelection.style.display = 'none';
+  if (pEl) { pEl.style.display = 'none'; pEl.textContent = ''; }
+  if (dEl) { dEl.style.display = 'none'; dEl.textContent = ''; }
+  
+  // Passer au mot suivant
+  currentPinyinWordIndex++;
+  showPinyinWord();
+}
+
+function displayPinyinSequence(word) {
+
+  
+  // Annuler tout timer précédent
+  if (autoNextTimer) {
+
+    clearTimeout(autoNextTimer);
+  }
+  if (showDefsTimer) {
+
+    clearTimeout(showDefsTimer);
+  }
+  autoNextTimer = null;
+  showDefsTimer = null;
+
+  const boxes = document.querySelectorAll('.pinyin-box');
+  const pEl = document.getElementById('pinyin');
+  const dEl = document.getElementById('defs');
+  const normalText = (textColorPicker?.getColor()?.toHEXA().toString()) || '#000000';
+
+  // Mise en forme des cases : vert
+  boxes.forEach(box => {
+    box.classList.remove('active', 'incorrect');
+    box.classList.add('correct');
+    box.style.background = '#10b981';
+    box.style.color = '#ffffff';
+    box.style.opacity = '1';
+  });
+
+  const isFastMode = isFastRevealEnabled();
+  const delayMs = isFastMode ? 1000 : 3000;
+  
+
+  // Mode rapide
+  if (isFastMode && pinyinFlow === 'selectedOnly') {
+    
+    if (pEl) { pEl.textContent = ''; pEl.style.display = 'none'; }
+    if (dEl) { dEl.textContent = ''; dEl.style.display = 'none'; }
+    
+    const charDisplay = document.getElementById('charDisplay');
+    const keyboard = document.getElementById('pinyinKeyboard');
+    const toneSelection = document.getElementById('toneSelection');
+    
+    setTimeout(() => {
+      if (charDisplay) charDisplay.style.opacity = '0';
+      boxes.forEach(box => box.style.opacity = '0');
+      if (keyboard) keyboard.style.opacity = '0';
+      if (toneSelection) toneSelection.style.opacity = '0';
+    }, 1000);
+
+    autoNextTimer = setTimeout(() => {
+      
+      if (charDisplay) charDisplay.style.opacity = '1';
+      boxes.forEach(box => box.style.opacity = '1');
+      if (keyboard) keyboard.style.opacity = '1';
+      if (toneSelection) toneSelection.style.opacity = '1';
+      
+      advanceToNextPinyinWord();
+    }, 1000);
+    
+    return;
+  }
+
+  // Mode normal
+  
+  if (pEl) { pEl.textContent = ''; pEl.style.display = 'none'; }
+  if (dEl) { dEl.textContent = ''; dEl.style.display = 'none'; }
+
+  if (pEl && word.pinyin) {
+    pEl.textContent = word.pinyin;
+    pEl.style.display = 'block';
+    pEl.style.visibility = 'visible';
+    pEl.style.color = normalText;
+  }
+
+  showDefsTimer = setTimeout(() => {
+    if (dEl && word.defs) {
+      dEl.textContent = word.defs.join(', ');
+      dEl.style.display = 'block';
+      dEl.style.visibility = 'visible';
+      dEl.style.color = normalText;
+    }
+  }, 1000);
+
+  autoNextTimer = setTimeout(() => {
+    
+    if (pinyinFlow === 'stopOnSelected' && pinyinGateActive) {
+      const inputBoxes = document.getElementById('pinyinInputBoxes');
+      if (inputBoxes) inputBoxes.style.display = 'none';
+      const keyboard = document.getElementById('pinyinKeyboard');
+      if (keyboard) keyboard.style.display = 'none';
+      const toneSelection = document.getElementById('toneSelection');
+      if (toneSelection) toneSelection.style.display = 'none';
+      if (pEl) { pEl.style.display = 'none'; pEl.textContent = ''; }
+      if (dEl) { dEl.style.display = 'none'; dEl.textContent = ''; }
+
+      resumeAfterPinyinGate();
+    } else if (pinyinFlow === 'selectedOnly') {
+      advanceToNextPinyinWord();
+    }
+  }, 3000);
+  
+}
+
+
+function displayPinyinResult(isCorrect) {
+  const boxes = document.querySelectorAll('.pinyin-box');
+  boxes.forEach(box => {
+    box.classList.remove('active', 'incorrect', 'correct'); // nettoie
+    if (isCorrect) {
+      // succès = style vert existant
+      box.classList.add('correct');
+      box.style.background = '#10b981';
+      box.style.color = '#ffffff';
+    } else {
+      // erreur = fond blanc, texte rouge (temporaire)
+      box.style.background = 'rgba(255,255,255,0.9)';
+      box.style.borderColor = '#d1d5db';
+      box.style.color = '#ef4444';
+    }
+  });
+}
+
+
+function normalizePinyin(pinyin) {
+  // Supprimer les espaces ET la ponctuation
+  return pinyin.toLowerCase().replace(/\s+/g, '').replace(/[，。！？,.!?;；:：]/g, '');
+}
+
+function compareTones(correctPinyin, userTones) {
+  const correctTones = extractTones(correctPinyin);
+  return correctTones === userTones;
+}
+
+function extractTones(pinyin) {
+  const toneMap = {
+    'ā': '¯', 'á': '´', 'ǎ': 'ˇ', 'à': '`',
+    'ē': '¯', 'é': '´', 'ě': 'ˇ', 'è': '`',
+    'ī': '¯', 'í': '´', 'ǐ': 'ˇ', 'ì': '`',
+    'ō': '¯', 'ó': '´', 'ǒ': 'ˇ', 'ò': '`',
+    'ū': '¯', 'ú': '´', 'ǔ': 'ˇ', 'ù': '`',
+    'ǖ': '¯', 'ǘ': '´', 'ǚ': 'ˇ', 'ǜ': '`'
+  };
+  
+  // Nettoyer ponctuation mais GARDER les espaces pour compter les syllabes
+  const cleaned = pinyin.replace(/[，。！？,.!?;；:：""''（）()【】\[\]]/g, '');
+  
+  // Séparer en syllabes (par espaces)
+  const syllables = cleaned.split(/\s+/).filter(s => s.length > 0);
+  
+  let tones = '';
+  
+  for (const syllable of syllables) {
+    let foundTone = false;
+    
+    // Chercher un ton dans cette syllabe
+    for (const char of syllable) {
+      if (toneMap[char]) {
+        tones += toneMap[char];
+        foundTone = true;
+        break; // Une seule voyelle tonique par syllabe
+      }
+    }
+    
+    // Si pas de ton trouvé = ton neutre
+    if (!foundTone) {
+      tones += '·';
+    }
+  }
+  
+  return tones;
+}
+
+function goToPreviousPinyinWord() {
+  if (currentPinyinWordIndex > 0) {
+    currentPinyinWordIndex--;
+    showPinyinWord();
+  }
+}
+
+function goToNextPinyinWord() {
+  if (currentPinyinWordIndex < pinyinSelectedWords.length - 1) {
+    currentPinyinWordIndex++;
+    showPinyinWord();
+  }
+}
+
+function quitPinyinGame() {
+  // Nettoyer l'interface pinyin
+  const keyboard = document.getElementById('pinyinKeyboard');
+  const toneSelection = document.getElementById('toneSelection');
+  const inputBoxes = document.getElementById('pinyinInputBoxes');
+  
+  if (keyboard) keyboard.remove();
+  if (toneSelection) toneSelection.remove();
+  if (inputBoxes) inputBoxes.remove();
+  
+  // Réinitialiser les variables
+  pinyinSelectedWords = [];
+  currentPinyinWordIndex = 0;
+  currentCharacterIndex = 0;
+  pinyinInput = [];
+  pinyinValidated = false;
+  
+  // Retour à l'accueil
+  forcePause();
+  togglePinyinBars(false);  // ← Ajouter cette ligne
+  document.getElementById('displayPage').style.display = 'none';
+  document.getElementById('homePage').style.display = 'block';
+  removePhysicalKeyboard();
+}
+
+function updatePinyinPlayIcon() {
+  const btn = document.getElementById('playPinyinBtn');
+  if (!btn) return;
+
+  if (playing) {
+    btn.innerHTML = `
+      <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+        <rect x="7" y="6" width="3" height="12"></rect>
+        <rect x="14" y="6" width="3" height="12"></rect>
+      </svg>`;
+  } else {
+    btn.innerHTML = `
+      <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+        <polygon points="8,6 18,12 8,18"></polygon>
+      </svg>`;
+  }
+}
+
+// ========= Modification de startDisplay() pour gérer le mode pinyin =========
+function startDisplay() {
+  const text = normalizeChineseText(document.getElementById('inputText').value);
+  tokens = attachDictInfo(segmentText(text, dict.wordSet, dict.maxLen), dict.entries);
+  idx = 0;
+
+  if (!tokens.length) {
+    alert("Aucun mot à afficher.");
+    return;
+  }
+
+  // Mode reorderNoRead
+  if (gameMode && gameType === 'reorderNoRead') {
+    document.getElementById('homePage').style.display = 'none';
+    
+    sentenceStarts = computeSentenceStarts(tokens);
+    playedSentences = [];
+    currentSentenceIndex = Math.floor(Math.random() * sentenceStarts.length);
+    playedSentences.push(currentSentenceIndex);
+    idx = sentenceStarts[currentSentenceIndex];
+    originalSentence = getSentenceText(tokens, currentSentenceIndex);
+    
+    const bgColor = (bgColorPicker?.getColor()?.toHEXA().toString()) || '#ffffff';
+    document.body.style.backgroundColor = bgColor;
+    
+    openGamePlayOverlayDirect();
+    return;
+  }
+
+  // Mode Pinyin
+  if (isPinyinGameMode()) {
+    document.getElementById('homePage').style.display = 'none';
+    const dp = document.getElementById('displayPage');
+    dp.style.display = 'block';
+    dp.style.visibility = 'visible';
+    
+    const initialBg = (bgColorPicker?.getColor()?.toHEXA().toString()) || '#ffffff';
+    const contrast0 = getContrastingColor(initialBg);
+    applyControlsTheme(contrast0);
+    
+    // Initialiser le jeu pinyin
+    if (!initPinyinGame()) {
+      document.getElementById('displayPage').style.display = 'none';
+      document.getElementById('homePage').style.display = 'block';
+      return;
+    }
+    
+    // Afficher les barres de navigation pinyin
+    togglePinyinBars(true);
+    
+    // 🚫 JAMAIS de lecture auto en selectedOnly
+    forcePause();
+    
+    return;
+  }
+  
+  // Mode normal avec page de lecture
+  document.getElementById('homePage').style.display = 'none';
+  const dp = document.getElementById('displayPage');
+  dp.style.display = 'block';
+  dp.style.visibility = 'visible';
+
+  // En mode jeu, on réinitialise les mots surlignés
+  // En mode lecture, on garde les mots déjà sélectionnés
+  if (gameMode) {
+    highlightWords = [];
+  }
+
+  const initialBg = (bgColorPicker?.getColor()?.toHEXA().toString()) || '#ffffff';
+  const contrast0 = getContrastingColor(initialBg);
+  applyControlsTheme(contrast0);
+
+  wireInfoOverlayControls();
+
+  if (gameMode) {
+    sentenceStarts = computeSentenceStarts(tokens);
+    playedSentences = [];
+    currentSentenceIndex = 0;
+    toggleGameBars(true);
+    updateGameBarNavigation();
+  } else {
+    toggleGameBars(false);
+    toggleGameBarsNoRead(false);
+  }
+
+  clearInterval(timer);
+  playing = false;
+  showToken(tokens[idx]);
+  if (typeof fitCharLine === 'function') fitCharLine();
+}
+
+function togglePinyinBars(show) {
+  const normalBar = document.getElementById('barDefault');
+  const ghostBar = document.getElementById('ghostBar');
+  const gameBars = document.getElementById('gameBars');
+  const gameBarsNoRead = document.getElementById('gameBarsNoRead');
+  const pinyinBars = document.getElementById('pinyinBars');
+  const displayPage = document.getElementById('displayPage');
+  
+  if (show) {
+    const playBtn = document.getElementById('playPinyinBtn');
+    normalBar.style.display = 'none';
+    ghostBar.style.display = 'none';
+    gameBars.style.display = 'none';
+    gameBarsNoRead.style.display = 'none';
+	if (playBtn) {
+      playBtn.style.visibility = (pinyinFlow === 'stopOnSelected') ? 'visible' : 'hidden';
+    }
+    pinyinBars.style.display = 'block';
+    displayPage.classList.add('game-mode-active');
+    
+    // Appliquer les couleurs aux boutons pinyin
+    const pageBg = (bgColorPicker?.getColor()?.toHEXA().toString()) || '#ffffff';
+    const contrast = getContrastingColor(pageBg);
+    const isDark = contrast === '#ffffff';
+    
+    pinyinBars.querySelectorAll('.game-btn').forEach(btn => {
+      btn.style.color = contrast;
+      btn.style.background = isDark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.18)';
+      btn.style.borderColor = 'none';
+    });
+  } else {
+    normalBar.style.display = 'grid';
+    ghostBar.style.display = 'none';
+    gameBars.style.display = 'none';
+    gameBarsNoRead.style.display = 'none';
+    pinyinBars.style.display = 'none';
+    displayPage.classList.remove('game-mode-active');
+  }
+}
+
+['visibilitychange','resize','orientationchange'].forEach(evt => {
+  window.addEventListener(evt, () => {
+    if (document.hidden) return;
+    const pb = document.getElementById('pinyinBars');
+    if (!pb) return;
+    pb.style.position = 'fixed';
+    pb.style.top = '';
+    pb.style.bottom = 'calc(env(safe-area-inset-bottom, 0px) + 0px)';
+    pb.style.left = '50%';
+    pb.style.transform = 'translateX(-50%)';
+  });
+});
+
+function openPinyinInfoOverlay() {
+  const overlay = document.getElementById('infoOverlay');
+  const body = document.getElementById('infoWords');
+  if (!overlay || !body) return;
+  
+  forcePause();
+  
+  body.innerHTML = '';
+  
+  const normalBg = (bgColorPicker?.getColor()?.toHEXA().toString()) || '#ffffff';
+  const normalText = (textColorPicker?.getColor()?.toHEXA().toString()) || '#000000';
+  
+  overlay.style.setProperty('--info-bg', normalBg);
+  overlay.style.setProperty('--info-fg', normalText);
+  
+  // Afficher tous les tokens, mais rendre cliquables seulement les mots sélectionnés
+  tokens.forEach((tok, i) => {
+    const span = document.createElement('span');
+    span.textContent = tok.text;
+    span.className = 'info-word';
+    
+const clean = stripPunct(tok.text);
+    
+    // Vérifier si c'est un mot sélectionné
+    const selectedIndex = pinyinSelectedWords.findIndex(w => {
+const wClean = stripPunct(w.text);
+      return wClean === clean;
+    });
+    
+    if (selectedIndex >= 0) {
+      span.classList.add('selectable');
+      if (selectedIndex === currentPinyinWordIndex) span.classList.add('current');
+      
+      span.onclick = () => {
+        currentPinyinWordIndex = selectedIndex;
+        overlay.style.display = 'none';
+        showPinyinWord();
+      };
+    }
+    
+    body.appendChild(span);
+  });
+  
+  overlay.style.display = 'flex';
+  showBackdrop();
+}
+
+
 // ========= Events =========
 window.addEventListener('resize', fitCharLine);
 window.addEventListener('orientationchange', () => setTimeout(fitCharLine, 50));
@@ -3262,7 +5108,6 @@ function wireGhostBar() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-highlightWords = [...readModeHighlightWords]; 
   const $ = s => document.querySelector(s);
 
   // Initialize UI
@@ -3285,8 +5130,21 @@ highlightWords = [...readModeHighlightWords];
   document.querySelectorAll('input[name="gameType"]').forEach(radio => {
     radio.addEventListener('change', (e) => {
       gameType = e.target.value;
+      updateUI();
     });
   });
+  
+// Pinyin sub-options selection
+document.querySelectorAll('input[name="pinyinFlow"]').forEach(r => {
+  r.addEventListener('change', (e) => { 
+    pinyinFlow = e.target.value;
+  });
+  
+  // ✅ IMPORTANT : Récupérer la valeur cochée au démarrage
+  if (r.checked) {
+    pinyinFlow = r.value;
+  }
+});
 
   // Vitesse
   $('#speed')?.addEventListener('input', e => {
@@ -3295,12 +5153,12 @@ highlightWords = [...readModeHighlightWords];
   });
 
   // Démarrer
-  $('#startBtn')?.addEventListener('click', () => {
-    startDisplay();
-    if (!gameMode || gameType !== 'reorderNoRead') {
-      forcePlay(true);
-    }
-  });
+$('#startBtn')?.addEventListener('click', () => {
+  startDisplay();
+  if (!isPinyinGameMode() && (!gameMode || gameType !== 'reorderNoRead')) {
+    forcePlay(true);
+  }
+});
 
   // Play / Pause
   $('#pauseBtn')?.addEventListener('click', () => {
@@ -3310,8 +5168,17 @@ highlightWords = [...readModeHighlightWords];
   });
 
   // Navigation mots
-  $('#prevWordBtn')?.addEventListener('click', () => { if (!tokens.length) return; restartFrom(Math.max(0, idx - 1)); forcePause(); });
-  $('#nextWordBtn')?.addEventListener('click', () => { if (!tokens.length) return; restartFrom(Math.min(tokens.length - 1, idx + 1)); forcePause(); });
+  $('#prevWordBtn')?.addEventListener('click', () => { 
+    if (!tokens.length) return; 
+    restartFrom(Math.max(0, idx - 1)); 
+    forcePause(); 
+  });
+  
+  $('#nextWordBtn')?.addEventListener('click', () => { 
+    if (!tokens.length) return; 
+    restartFrom(Math.min(tokens.length - 1, idx + 1)); 
+    forcePause(); 
+  });
 
   // Quitter
   $('#quitBtn')?.addEventListener('click', () => {
@@ -3325,34 +5192,27 @@ highlightWords = [...readModeHighlightWords];
   });
 
   // Quitter le mode jeu
-	  $('#quitGameBtn')?.addEventListener('click', () => {
-  forcePause();
+  $('#quitGameBtn')?.addEventListener('click', () => {
+    forcePause();
+    document.getElementById('charDisplay').innerHTML = '';
+    document.getElementById('pinyin').textContent = '';
+    document.getElementById('defs').textContent = '';
+    idx = 0;
+    closeGameModeOverlay();
+    closeGamePlayOverlay();
+    document.getElementById('displayPage').style.display = 'none';
+    toggleGameBars(false);
+    toggleGameBarsNoRead(false);
+    document.getElementById('homePage').style.display = 'block';
+  });
   
-  document.getElementById('charDisplay').innerHTML = '';
-  document.getElementById('pinyin').textContent = '';
-  document.getElementById('defs').textContent = '';
-  idx = 0;
-  
-  closeGameModeOverlay();
-  closeGamePlayOverlay();
-  
-  document.getElementById('displayPage').style.display = 'none';
-  toggleGameBars(false);
-  toggleGameBarsNoRead(false);
-  
-  document.getElementById('homePage').style.display = 'block';
-  // gameMode reste à true, le mode sélectionné reste inchangé
-});
-  
-$('#quitGameNoReadBtn')?.addEventListener('click', () => {
-  forcePause();
-  closeGamePlayOverlay();
-  
-  document.body.style.backgroundColor = '';
-  idx = 0;
-  
-  document.getElementById('homePage').style.display = 'block';
-});
+  $('#quitGameNoReadBtn')?.addEventListener('click', () => {
+    forcePause();
+    closeGamePlayOverlay();
+    document.body.style.backgroundColor = '';
+    idx = 0;
+    document.getElementById('homePage').style.display = 'block';
+  });
 
   // MODE JEU : Barres de jeu
   $('#prevSentenceBtn')?.addEventListener('click', () => {
@@ -3385,19 +5245,17 @@ $('#quitGameNoReadBtn')?.addEventListener('click', () => {
     goToRandomSentence();
   });
 
-$('#playGameBtn')?.addEventListener('click', () => {
-  if (playing) {
-    forcePause(); // mettre en pause
-  } else {
-    if (idx >= tokens.length - 1) {
-      // si on était à la fin → revenir au début
-      restartFrom(0);
+  $('#playGameBtn')?.addEventListener('click', () => {
+    if (playing) {
+      forcePause();
+    } else {
+      if (idx >= tokens.length - 1) {
+        restartFrom(0);
+      }
+      forcePlay();
     }
-    forcePlay(); // reprendre ou relancer
-  }
-  updatePlayGameBtnIcon();
-});
-
+    updatePlayGameBtnIcon();
+  });
 
   // OVERLAY DE SÉLECTION DE MODE
   $('#reorderModeBtn')?.addEventListener('click', () => {
@@ -3413,34 +5271,27 @@ $('#playGameBtn')?.addEventListener('click', () => {
   });
 
   $('#prevSentenceGame')?.addEventListener('click', () => {
-  goToPreviousSentence();
-  closeGameModeOverlay();
-  // La lecture se relancera automatiquement via goToPreviousSentence()
-});
+    goToPreviousSentence();
+    closeGameModeOverlay();
+  });
 
   $('#nextSentenceGame')?.addEventListener('click', () => {
-  goToNextSentence();
-  closeGameModeOverlay();
-  // La lecture se relancera automatiquement via goToNextSentence()
-});
+    goToNextSentence();
+    closeGameModeOverlay();
+  });
 
   $('#replayGame')?.addEventListener('click', () => {
     replaySentence();
   });
 
   // OVERLAY DE JEU PRINCIPAL
-$('#closeGamePlay')?.addEventListener('click', () => {
-  closeGamePlayOverlay();
-  
-  if (gameType === 'reorderNoRead') {
-    // En mode réorganiser sans lecture, retour direct à l'accueil
-    document.body.style.backgroundColor = '';
-    document.getElementById('homePage').style.display = 'block';
-  } else {
-    // Autres modes : juste fermer l'overlay, garder la page de jeu visible
-    // Ne rien faire de plus, l'overlay est déjà fermé
-  }
-});
+  $('#closeGamePlay')?.addEventListener('click', () => {
+    closeGamePlayOverlay();
+    if (gameType === 'reorderNoRead') {
+      document.body.style.backgroundColor = '';
+      document.getElementById('homePage').style.display = 'block';
+    }
+  });
 
   $('#switchReorder')?.addEventListener('click', () => {
     switchGameMode('reorder');
@@ -3467,16 +5318,14 @@ $('#closeGamePlay')?.addEventListener('click', () => {
   });
 
   $('#prevSentenceInGame')?.addEventListener('click', () => {
-  goToPreviousSentence();
-  closeGamePlayOverlay();
-  // La lecture se relancera automatiquement via goToPreviousSentence()
-});
+    goToPreviousSentence();
+    closeGamePlayOverlay();
+  });
 
   $('#nextSentenceInGame')?.addEventListener('click', () => {
-  goToNextSentence();
-  closeGamePlayOverlay();
-  // La lecture se relancera automatiquement via goToNextSentence()
-});
+    goToNextSentence();
+    closeGamePlayOverlay();
+  });
 
   $('#replayInGame')?.addEventListener('click', () => {
     replaySentence();
@@ -3491,13 +5340,90 @@ $('#closeGamePlay')?.addEventListener('click', () => {
 
   // Overlay sélection
   $('#toggleEdit')?.addEventListener('click', openSelectionOverlay);
+  
+  // Mode Pinyin - Barres de navigation
+  $('#quitPinyinBtn')?.addEventListener('click', () => {
+    quitPinyinGame();
+  });
+
+  $('#nextPinyinWordBtn')?.addEventListener('click', () => {
+    clearTimeout(autoNextTimer);
+    autoNextTimer = null;
+    clearTimeout(showDefsTimer);
+    showDefsTimer = null;
+
+    const p = document.getElementById('pinyin');
+    const d = document.getElementById('defs');
+    if (p) { p.textContent = ''; p.style.display = 'none'; }
+    if (d) { d.textContent = ''; d.style.display = 'none'; }
+
+    if (pinyinFlow === 'selectedOnly') {
+      if (currentPinyinWordIndex < pinyinSelectedWords.length - 1) {
+        currentPinyinWordIndex++;
+        showPinyinWord();
+      }
+    } else {
+      goToNextPinyinWord();
+    }
+  });
+
+  $('#prevPinyinWordBtn')?.addEventListener('click', () => {
+    clearTimeout(autoNextTimer);
+    autoNextTimer = null;
+    clearTimeout(showDefsTimer);
+    showDefsTimer = null;
+
+    const p = document.getElementById('pinyin');
+    const d = document.getElementById('defs');
+    if (p) { p.textContent = ''; p.style.display = 'none'; }
+    if (d) { d.textContent = ''; d.style.display = 'none'; }
+
+    if (pinyinFlow === 'selectedOnly') {
+      if (currentPinyinWordIndex > 0) {
+        currentPinyinWordIndex--;
+        showPinyinWord();
+      }
+    } else {
+      goToPreviousPinyinWord();
+    }
+  });
+
+  $('#playPinyinBtn')?.addEventListener('click', () => {
+    if (!playing) {
+      forcePlay();
+    } else {
+      forcePause();
+    }
+  });
+
+  $('#showPinyinInfoBtn')?.addEventListener('click', () => {
+    openPinyinInfoOverlay();
+  });
+  
   $('#closeOverlay')?.addEventListener('click', closeSelectionOverlay);
   $('#overlayCancelBtn')?.addEventListener('click', closeSelectionOverlay);
-$('#overlayValidateBtn')?.addEventListener('click', () => {
-  highlightWords = [...readModeHighlightWords];  // ← AJOUTER CETTE LIGNE
-  renderSegmented();
-  closeSelectionOverlay();
-});
+  $('#overlayValidateBtn')?.addEventListener('click', () => {
+    highlightWords = [...highlightWords];
+    renderSegmented();
+    closeSelectionOverlay();
+  });
+
+  $('#selectAllOverlay')?.addEventListener('click', () => {
+    const text = normalizeChineseText(document.getElementById('inputText').value);
+    const segmented = attachDictInfo(segmentText(text, dict.wordSet, dict.maxLen), dict.entries);
+    
+    const allWords = segmented
+      .filter(tok => tok.type === 'han')
+      .map(tok => stripPunct(tok.text));
+    
+    if (highlightWords.length === allWords.length) {
+      highlightWords = [];
+    } else {
+      highlightWords = [...allWords];
+    }
+    
+    openSelectionOverlay();
+  });
 
   // Effacer
   $('#clearText')?.addEventListener('click', () => {
@@ -3560,11 +5486,86 @@ $('#overlayValidateBtn')?.addEventListener('click', () => {
     reader.readAsText(file, 'utf-8');
   });
 
+  // 1️⃣ Cocher "Tout afficher sur la sélection" par défaut
+  const alwaysShowSelected = document.getElementById('alwaysShowSelected');
+  if (alwaysShowSelected) alwaysShowSelected.checked = true;
+
+  // 2️⃣ Cacher / montrer les sous-options Pinyin sur l'accueil
+  const readModeRadio = document.getElementById('readMode');
+  const gameModeRadio = document.getElementById('gameMode');
+  const pinyinSubOptions = document.getElementById('pinyinSubOptions');
+
+  const syncPinyinSubOptions = () => {
+    if (!pinyinSubOptions) return;
+    if (readModeRadio?.checked) {
+      pinyinSubOptions.style.display = 'none';
+    } else if (gameModeRadio?.checked) {
+      pinyinSubOptions.style.display = 'block';
+    }
+  };
+
+  syncPinyinSubOptions();
+  readModeRadio?.addEventListener('change', syncPinyinSubOptions);
+  gameModeRadio?.addEventListener('change', syncPinyinSubOptions);
+
+  // 3️⃣ Masquer la barre de vitesse si "Uniquement les mots sélectionnés" est coché
+  const speedControl = document.getElementById('speedControl');
+  const flowStop = document.getElementById('pinyinFlowStop');
+  const flowSelectedOnly = document.getElementById('pinyinFlowSelectedOnly');
+
+  function updateSpeedVisibility() {
+    if (!speedControl) return;
+    if (flowSelectedOnly?.checked) {
+      speedControl.style.display = 'none';
+    } else {
+      speedControl.style.display = '';
+    }
+  }
+
+  flowStop?.addEventListener('change', updateSpeedVisibility);
+  flowSelectedOnly?.addEventListener('change', updateSpeedVisibility);
+  updateSpeedVisibility();
+
+  // 4️⃣ Active le glisser-déposer mobile
+  try { enableMobileDnD(); } catch (_) {}
+
+  // 5️⃣ Assure la présence de l'option "Révélation rapide"
+  try { ensurePinyinFastOption(); } catch (_) {}
+
   // Premier rendu
   renderSegmented();
   wireGhostBar();
   showMenu();
 });
+
+
+// ===== Fonctions utilitaires =====
+function closeTonePicker(acceptBase = true) {
+  const picker = document.getElementById('tonePicker');
+  if (acceptBase && pendingVowel) {
+    pinyinInput[currentCharacterIndex] += (pendingVowel === 'ü' ? 'u' : pendingVowel);
+    updatePinyinInputBoxes(); // <- Correction ici aussi
+  }
+  if (picker) picker.classList.remove('active');
+  tonePickerOpen = false;
+  pendingVowel = null;
+}
+
+function closeUChoice(acceptU = true) {
+  pinyinInput[currentCharacterIndex] += acceptU ? 'u' : 'ü';
+  updatePinyinInputBoxes();
+  const chooser = document.getElementById('uChooser');
+  if (chooser) chooser.classList.remove('active');
+  uChoiceOpen = false;
+}
+
+function isLetterKey(k) {
+  return /^[a-z]$/i.test(k);
+}
+
+function isReadBlocked() {
+  return isPinyinGameMode() && pinyinFlow === 'selectedOnly';
+}
 
 // ========= Pickr =========
 const bgColorPicker = Pickr.create({
